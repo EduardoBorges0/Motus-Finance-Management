@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">Motus</string>
+    <string name="title_activity_expense_classification_nav_bottom">ExpenseClassificationNavBottom
+    </string>
+    <string name="title_activity_expense_classification_bank">ExpenseClassificationBank</string>
+    <string name="title_activity_settings_screen_content">SettingsScreenContent</string>
+
+    MainActivity:
+
+    <string name="Desbloqueie_para_usar_o_Motus">Desbloqueie para usar o Motus</string>
+    <string name="use_sua_digital_para_acessar">Use sua digital para acessar</string>
+    <string name="entrar">Entrar</string>
+
+    CreditOrDebit:
+
+    <string name="nome_do_que_sao_esses_gastos">Nome do banco (nome de sua escolha)</string>
+    <string name="seu_saldo">Seu saldo</string>
+    <string name="selecione_a_data_de_vencimento">Selecione a data de vencimento</string>
+    <string name="credito">Crédito</string>
+    <string name="debito">Débito</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="erro_de_validacao">Erro de validação</string>
+    <string name="por_favor_preencha_todos_os_campos">Por favor, preencha todos os campos</string>
+
+    HomeScreen:
+
+    <string name="adicione_seu_banco_aqui">Adicione seu banco aqui</string>
+    <string name="adicione_seus_gastos">Adicione seus gastos</string>
+    <string name="deletar_gasto">Remover gasto/recebido</string>
+    <string name="voce_ira_deletar_gastos">Você tem certeza que deseja deletar esse gasto/recebido?</string>
+
+    ExpenseClassificationNavBottom:
+
+    <string name="sem_gastos">Sem gastos</string>
+    <string name="voce_nao_gastou_nada_nessa_categoria">Você não gastou nada nessa categoria</string>
+
+    InsertExpense:
+
+    <string name="gasto_recebido">Gasto/Recebido</string>
+    <string name="valor_do_gasto_recebido">Valor do gasto/recebido</string>
+    <string name="gasto">Gasto</string>
+    <string name="recebido">Recebido</string>
+    <string name="fixo">Fixo</string>
+    <string name="variavel">Variável</string>
+    Settings:
+    <string name="mudar_o_idioma">Mudar o Idioma</string>
+
+    <string name="transporte">Transporte</string>
+    <string name="esporte">Esporte</string>
+    <string name="lazer">Lazer</string>
+    <string name="servicos">Serviços</string>
+    <string name="contas">Contas</string>
+    <string name="reserva_de_emergencia">Reserva</string>
+    <string name="mercado">Mercado</string>
+    <string name="saude">Saúde</string>
+    <string name="investimento">Investimento</string>
+    <string name="animal_de_estimacao">Animal</string>
+    <string name="viagens">Viagens</string>
+    <string name="educacao">Educação</string>
+    <string name="outros">Outros</string>
+
+    <string name="title_activity_change_language">ChangeLanguage</string>
+
+    <string name="espanhol">Espanhol</string>
+    <string name="portugues">Português</string>
+    <string name="ingles">Inglês</string>
+    <string name="title_activity_add_image">AddImage</string>
+
+        <string name="month_january">JAN</string>
+        <string name="month_february">FEV</string>
+        <string name="month_march">MAR</string>
+        <string name="month_april">ABR</string>
+        <string name="month_may">MAI</string>
+        <string name="month_june">JUN</string>
+        <string name="month_july">JUL</string>
+        <string name="month_august">AGO</string>
+        <string name="month_september">SET</string>
+        <string name="month_october">OUT</string>
+        <string name="month_november">NOV</string>
+        <string name="month_december">DEZ</string>
+
+    <string name="clique_add_imagem">Clique aqui para adicionar uma imagem</string>
+    <string name="title_activity_chart">Chart</string>
+
+</resources>

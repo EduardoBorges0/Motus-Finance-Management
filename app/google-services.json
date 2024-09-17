@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "915271534886",
+    "project_id": "motus-52e3a",
+    "storage_bucket": "motus-52e3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915271534886:android:72f4ee1dbbd8f173bfd9e7",
+        "android_client_info": {
+          "package_name": "com.app.motus4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXzeqEULVygAsVIQTH62yQlCfxz1Uk83Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

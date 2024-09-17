@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Motus</string>
+    <string name="title_activity_expense_classification_nav_bottom">ExpenseClassificationNavBottom</string>
+    <string name="title_activity_expense_classification_bank">ExpenseClassificationBank</string>
+    <string name="title_activity_settings_screen_content">SettingsScreenContent</string>
+
+    <!-- MainActivity -->
+    <string name="Desbloqueie_para_usar_o_Motus">Unlock to use Motus</string>
+    <string name="use_sua_digital_para_acessar">Use your fingerprint to access</string>
+    <string name="entrar">Enter</string>
+
+    <!-- CreditOrDebit -->
+    <string name="nome_do_que_sao_esses_gastos">Bank name (name of your choice)</string>
+    <string name="seu_saldo">Your balance</string>
+    <string name="selecione_a_data_de_vencimento">Select due date</string>
+    <string name="credito">Credit</string>
+    <string name="debito">Debit</string>
+    <string name="confirmar">Confirm</string>
+    <string name="erro_de_validacao">Validation error</string>
+    <string name="por_favor_preencha_todos_os_campos">Please fill in all fields</string>
+
+    <!-- HomeScreen -->
+    <string name="adicione_seu_banco_aqui">Add your bank here</string>
+    <string name="adicione_seus_gastos">Add your expenses</string>
+    <string name="deletar_gasto">Remove spend/receive</string>
+    <string name= "voce_ira_deletar_gastos">Are you sure you want to delete this expense/receipt?</string>
+
+    <!-- ExpenseClassificationNavBottom -->
+    <string name="sem_gastos">No expenses</string>
+    <string name="voce_nao_gastou_nada_nessa_categoria">You didnt spend anything in this category</string>
+
+    <!-- InsertExpense -->
+    <string name="gasto_recebido">Expense/Received</string>
+    <string name="valor_do_gasto_recebido">Amount of expense/received</string>
+    <string name="gasto">Expense</string>
+    <string name="recebido">Received</string>
+    <string name="fixo">Fixed</string>
+    <string name="variavel">Variable</string>
+
+    Settings:
+    <string name="mudar_o_idioma" tools:ignore="ExtraTranslation">Change Language</string>
+
+    <!-- Expense categories -->
+    <string name="transporte">Transport</string>
+    <string name="esporte">Sport</string>
+    <string name="lazer">Leisure</string>
+    <string name="servicos">Services</string>
+    <string name="contas">Bills</string>
+    <string name="reserva_de_emergencia">Reserve</string>
+    <string name="mercado">Market</string>
+    <string name="saude">Health</string>
+    <string name="investimento">Investment</string>
+    <string name="animal_de_estimacao">Pet</string>
+    <string name="viagens">Trips</string>
+    <string name="educacao">Education</string>
+    <string name="outros">Others</string>
+        <string name="month_january">JAN</string>
+        <string name="month_february">FEB</string>
+        <string name="month_march">MAR</string>
+        <string name="month_april">APR</string>
+        <string name="month_may">MAY</string>
+        <string name="month_june">JUN</string>
+        <string name="month_july">JUL</string>
+        <string name="month_august">AUG</string>
+        <string name="month_september">SEP</string>
+        <string name="month_october">OCT</string>
+        <string name="month_november">NOV</string>
+        <string name="month_december">DEC</string>
+
+    <string name="espanhol" tools:ignore="ExtraTranslation">Espanhol</string>
+    <string name="portugues" tools:ignore="ExtraTranslation">Português</string>
+    <string name="ingles" tools:ignore="ExtraTranslation">English</string>
+    <string name="clique_add_imagem">Click here to add an image</string>
+
+</resources>

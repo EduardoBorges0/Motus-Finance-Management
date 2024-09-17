@@ -1,0 +1,16 @@
+Licença Personalizada
+
+Copyright 2024 Eduardo Borges Duarte Chaves
+
+1. Permissões:
+   - Este código é fornecido para visualização apenas.
+
+2. Restrições:
+   - Qualquer outro uso, modificação, ou redistribuição não é permitida.
+   - Qualquer uso comercial ou não comercial do código é estritamente proibido.
+
+3. Isenção de Garantias:
+   - O código é fornecido "como está", sem garantias de qualquer tipo, expressas ou implícitas.
+
+4. Aceitação:
+   - Ao acessar este código, você concorda em cumprir os termos desta licença.

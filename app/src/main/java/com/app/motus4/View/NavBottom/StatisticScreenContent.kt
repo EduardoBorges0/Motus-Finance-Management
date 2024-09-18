@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -43,20 +42,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import co.yml.charts.axis.AxisData
-import co.yml.charts.axis.DataCategoryOptions
 import co.yml.charts.common.model.PlotType
-import co.yml.charts.common.model.Point
-import co.yml.charts.common.utils.DataUtils
-import co.yml.charts.ui.barchart.BarChart
-import co.yml.charts.ui.barchart.models.BarChartData
-import co.yml.charts.ui.barchart.models.BarChartType
-import com.app.motus4.Models.Room.DataClass.BarData
 import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.app.motus4.Models.Room.DataClass.MonthlyExpense
 import com.app.motus4.R
 import com.app.motus4.View.Chart
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
@@ -65,7 +54,6 @@ import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.simplemoney8.TranslatedExpenseName
 import java.text.NumberFormat
 import java.util.Locale
-import kotlin.math.max
 
 @Composable
 fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewModel) {

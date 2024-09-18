@@ -2,7 +2,9 @@ package com.app.motus4.ViewModels.ExpenseViewModel
 
 import androidx.lifecycle.AndroidViewModel
 import android.app.Application
+import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
@@ -10,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.motus4.Models.RepositoryMonthly
 import com.app.motus4.Models.Room.DataClass.MonthlyExpense
+import com.app.motus4.scheduleDueDateReminder
 import com.app.simplemoney.Models.Repository
 import com.app.simplemoney.Models.Room.Bank
 import com.app.simplemoney6.Models.Room.DataClass.Expense
@@ -97,14 +100,23 @@ class ExpenseViewModel(
             repositoryExpense.insertExpense(expense)
         }
     }
+    fun showNotify(context: Context) {
+        val banksLiveData = repository.getAllBanks()
+        banksLiveData.observeForever { banks ->
+            banks.forEach { bank ->
+                Log.d("DueDateWorker", "DATA ATUAL: ${bank.nameOfExpenses}, Due Date: ${bank.date}")
+                scheduleDueDateReminder(bank.nameOfExpenses.toString(), bank.date.toString(), context = context)
+            }
+        }
+    }
     fun deleteExpenseByBankId(
         bankId: Int,
         fixedOrNo: String,
         expenseDate: String,
         spentOrReceived: String?,
-        bank: Bank
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            val bank = repository.getBankById(bankId) ?: return@launch
             val currentDate = LocalDate.now()
             val currentDateFormatted = currentDate.format(dateFormatter)
 
@@ -121,7 +133,7 @@ class ExpenseViewModel(
             // Se estamos na última data de fechamento, exclui despesas marcadas para deletar
 
             // Verifica se a data de despesa é igual à data atual
-            if ( parsedExpenseDate.isBefore(currentDate) || parsedExpenseDate.isEqual(currentDate) ) {
+            if (parsedExpenseDate.isBefore(currentDate) || parsedExpenseDate.isEqual(currentDate) ) {
                 // Atualiza a data da despesa para o mês seguinte
                 val newDate = parsedExpenseDate.plusMonths(1).format(dateFormatter)
                 Log.d("DATA", "Atualizando data para: $newDate")

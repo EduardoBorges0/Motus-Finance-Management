@@ -63,13 +63,13 @@ class MainActivity : FragmentActivity() {
     private lateinit var expenseViewModel: ExpenseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initializeViewModel()
         CoroutineScope(Dispatchers.Main).launch {
             val language = viewModel.updateLanguage()
             Log.d("language", "Retorne $language")
             setAppLocale(this@MainActivity, language.toString())
         }
+    expenseViewModel.showNotify(applicationContext)
 
         setContent {
             SimpleMoneyTheme {
@@ -176,7 +176,9 @@ class MainActivity : FragmentActivity() {
                     )
                 }
             }
-            composable("home") { HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel) }
+            composable("home") {
+                HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel)
+            }
             composable("creditOrDebit") { CreditOrDebitComposable(navController) }
             composable(
                 "addYourBank?balance={balance}&creditOrDebit={creditOrDebit}&date={date}&nameOfBank={nameOfBank}&img={img}",
@@ -229,31 +231,37 @@ fun SimpleMoneyEnter(navController: NavController) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
     val executor = ContextCompat.getMainExecutor(context)
-    val biometricPrompt =
-        BiometricPrompt(context, executor, object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                Log.d("MY_APP_TAG", "Erro de autenticação: $errString")
-                navController.navigate("home")
-            }
+    val biometricManager = BiometricManager.from(context)
 
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                Log.d("MY_APP_TAG", "Autenticação bem-sucedida!")
-                navController.navigate("home")
-            }
+    val biometricPrompt = BiometricPrompt(context, executor, object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            Log.d("MY_APP_TAG", "Erro de autenticação: $errString")
+            navController.navigate("home")
 
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Log.d("MY_APP_TAG", "Autenticação falhou.")
-            }
-        })
+        }
+
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+            Log.d("MY_APP_TAG", "Autenticação bem-sucedida!")
+            navController.navigate("home")
+        }
+
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            Log.d("MY_APP_TAG", "Autenticação falhou.")
+        }
+    })
 
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(stringResource(id = R.string.Desbloqueie_para_usar_o_Motus))
         .setSubtitle(stringResource(id = R.string.use_sua_digital_para_acessar))
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
         .build()
+
+    val biometricAvailability = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+    val biometricAvailable = biometricAvailability == BiometricManager.BIOMETRIC_SUCCESS
+    val credentialsAvailable = biometricAvailability == BiometricManager.BIOMETRIC_SUCCESS || biometricAvailability == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
 
     Column(
         modifier = Modifier
@@ -277,43 +285,25 @@ fun SimpleMoneyEnter(navController: NavController) {
 
         Spacer(modifier = Modifier.height(476.dp))
 
-        if (screenWidth < 400) {
-            Button(
-                onClick = {
+        Button(
+            onClick = {
+                if (credentialsAvailable) {
                     biometricPrompt.authenticate(promptInfo)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-
-                    .height(60.dp)
-                    .offset(y = -60.dp)
-
-                    .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = DarkBlue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = stringResource(id = R.string.entrar), fontFamily = customFontFamily)
-            }
-        }else{
-            Button(
-                onClick = {
-                    biometricPrompt.authenticate(promptInfo)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 14.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = DarkBlue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = stringResource(id = R.string.entrar), fontFamily = customFontFamily)
-            }
+                } else {
+                    Log.d("ds", "ESTA ERRADO A SENHAAA")
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(horizontal = if (screenWidth < 400) 24.dp else 14.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = DarkBlue,
+                contentColor = Color.White
+            )
+        ) {
+            Text(text = stringResource(id = R.string.entrar), fontFamily = customFontFamily)
         }
     }
 }

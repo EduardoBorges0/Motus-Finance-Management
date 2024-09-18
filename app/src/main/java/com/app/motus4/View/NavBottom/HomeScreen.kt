@@ -240,27 +240,23 @@ fun BankItem(
     }
     val currencyFormat = NumberFormat.getCurrencyInstance(locale)
     var expenseToDelete by remember { mutableStateOf<Expense?>(null) }
-    val context = LocalContext.current
     val expenses by expenseViewModel.getExpensesForBank(bank.id).observeAsState(emptyList())
     var showDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(refreshing) {
         if (refreshing) {
             delay(3000)
             onRefreshComplete()
-
-
             expenses.forEach { expense ->
                         expenseViewModel.deleteExpenseByBankId(
                             expense.bankId!!, expense.type.toString(),
                             bank.date.toString(),
-                            expense.spentOrReceived,
-                            bank,
+                            expense.spentOrReceived
                         )
             }
         }
     }
-
     Box(
         modifier = Modifier
             .padding(horizontal = 5.dp)

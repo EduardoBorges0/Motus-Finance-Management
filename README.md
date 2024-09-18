@@ -37,6 +37,8 @@ Motus is the financial management application you always wanted, fully customize
 <img src = "https://github.com/user-attachments/assets/45372e20-39b0-49c8-911f-ab07e74846b2" width = 230px/>
 
 <img src = "https://github.com/user-attachments/assets/ee5c9fec-b124-4731-8984-8601f8e194ca" width = 230px/>
+
+# Change language
 <img src = "https://github.com/user-attachments/assets/3afc6ea4-14c4-4cdd-91bd-972f2b8b6c5d" width = 230px/>
 
 <img src = "https://github.com/user-attachments/assets/903b0a76-9608-46b8-aa47-bbe614346968" width = 230px/>

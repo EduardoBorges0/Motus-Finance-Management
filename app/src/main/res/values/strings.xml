@@ -66,18 +66,18 @@
     <string name="ingles">Inglês</string>
     <string name="title_activity_add_image">AddImage</string>
 
-        <string name="month_january">JAN</string>
-        <string name="month_february">FEV</string>
-        <string name="month_march">MAR</string>
-        <string name="month_april">ABR</string>
-        <string name="month_may">MAI</string>
-        <string name="month_june">JUN</string>
-        <string name="month_july">JUL</string>
-        <string name="month_august">AGO</string>
-        <string name="month_september">SET</string>
-        <string name="month_october">OUT</string>
-        <string name="month_november">NOV</string>
-        <string name="month_december">DEZ</string>
+    <string name="month_january">JAN</string>
+    <string name="month_february">FEV</string>
+    <string name="month_march">MAR</string>
+    <string name="month_april">ABR</string>
+    <string name="month_may">MAI</string>
+    <string name="month_june">JUN</string>
+    <string name="month_july">JUL</string>
+    <string name="month_august">AGO</string>
+    <string name="month_september">SET</string>
+    <string name="month_october">OUT</string>
+    <string name="month_november">NOV</string>
+    <string name="month_december">DEZ</string>
 
     <string name="clique_add_imagem">Clique aqui para adicionar uma imagem</string>
     <string name="title_activity_chart">Chart</string>

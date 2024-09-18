@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.motus4.Models.RepositoryMonthly
 import com.app.motus4.Models.Room.DataClass.MonthlyExpense
+import com.app.motus4.scheduleAlertReminder
 import com.app.motus4.scheduleDueDateReminder
 import com.app.simplemoney.Models.Repository
 import com.app.simplemoney.Models.Room.Bank
@@ -108,6 +109,10 @@ class ExpenseViewModel(
                 scheduleDueDateReminder(bank.nameOfExpenses.toString(), bank.date.toString(), context = context)
             }
         }
+    }
+
+    fun showNotifyAlert(context: Context){
+        scheduleAlertReminder(context)
     }
     fun deleteExpenseByBankId(
         bankId: Int,

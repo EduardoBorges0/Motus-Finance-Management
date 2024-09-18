@@ -70,7 +70,7 @@ class MainActivity : FragmentActivity() {
             setAppLocale(this@MainActivity, language.toString())
         }
     expenseViewModel.showNotify(applicationContext)
-
+    expenseViewModel.showNotifyAlert(applicationContext)
         setContent {
             SimpleMoneyTheme {
                 Surface {

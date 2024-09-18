@@ -3,6 +3,7 @@ package com.app.motus2.View
 import android.app.DatePickerDialog
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -21,6 +23,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -65,7 +68,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
         modifier = Modifier
 
             .fillMaxSize()
-            .background(Color(0xFFF0F0F0))
+            .background(Color(0xFFF0F1F5))
             .clip(RoundedCornerShape(24.dp))
     ) {
         Button(
@@ -237,16 +240,32 @@ fun DateTextField(
         ),
         readOnly = true,
         trailingIcon = {
-            Icon(
-                imageVector = Icons.Default.DateRange,
-                contentDescription = "Select Date",
-                modifier = Modifier.clickable {
-                    showDatePicker(context) { selectedDate ->
-                        date = selectedDate
-                        onDateSelected(selectedDate)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(end = 15.dp)
+            ) {
+                // Linha separadora
+                Divider(
+                    color = Color(0xFFEBECF0),
+                    modifier = Modifier
+                        .height(24.dp)  // Altura da linha
+                        .width(1.dp)    // Largura da linha
+                )
+
+                Spacer(modifier = Modifier.width(8.dp)) // Espaço entre a linha e o ícone
+
+                // Ícone de calendário
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Select Date",
+                    modifier = Modifier.clickable {
+                        showDatePicker(context) { selectedDate ->
+                            date = selectedDate
+                            onDateSelected(selectedDate)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     )
 }

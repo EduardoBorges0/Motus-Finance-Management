@@ -68,7 +68,7 @@ fun ExpensesComposable(bankId: Int,
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0F0))
+            .background(Color(0xFFF0F1F5))
             .clip(RoundedCornerShape(24.dp))
 
     ) {

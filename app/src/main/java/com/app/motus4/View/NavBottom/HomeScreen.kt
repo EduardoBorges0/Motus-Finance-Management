@@ -18,15 +18,19 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
@@ -36,10 +40,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -164,11 +173,14 @@ fun HomeScreenComposable(viewModel: BankViewModel, navHostController: NavHostCon
 
 
 
-
 @Composable
-fun HomeScreenContent(viewModel: BankViewModel, navHostController: NavHostController, expenseViewModel: ExpenseViewModel) {
+fun HomeScreenContent(
+    viewModel: BankViewModel,
+    navHostController: NavHostController,
+    expenseViewModel: ExpenseViewModel
+) {
     val banks by viewModel.getAllBanks().observeAsState(emptyList())
-
+    var premium by remember { mutableStateOf(false) }
     var refreshing by remember { mutableStateOf(false) }
 
     SwipeRefresh(
@@ -182,13 +194,14 @@ fun HomeScreenContent(viewModel: BankViewModel, navHostController: NavHostContro
                 .fillMaxSize()
                 .background(Color.White)
         ) {
+            // Conteúdo principal
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
                 Box(
                     modifier = Modifier
-                        .padding(top = 40.dp)
+                        .padding(top = 80.dp)
                         .weight(1f)
                 ) {
                     LazyColumn(
@@ -212,6 +225,169 @@ fun HomeScreenContent(viewModel: BankViewModel, navHostController: NavHostContro
                     }
                 }
             }
+
+            // Botão que ativa o PremiumOferta
+            Button(
+                onClick = {
+                    premium = true
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(20.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = DarkBlue,
+                )
+            ) {
+                Text("Motus Premium")
+            }
+
+            // Se premium estiver ativo, desabilitar o conteúdo atrás
+            if (premium) {
+                // Camada transparente para bloquear interações com conteúdo abaixo
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Transparent)
+                        .clickable(enabled = true, onClick = { /* Bloqueia clique atrás */ })
+                )
+
+                // PremiumOferta - sobreposto sobre tudo
+                PremiumOferta { premium = false }
+            }
+        }
+    }
+}
+
+@Composable
+fun PremiumOferta(onCancel: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 30.dp)
+            .verticalScroll(rememberScrollState())
+            .zIndex(1f)
+    ) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(Color(0xFFD0D7E2), shape = RoundedCornerShape(16.dp))
+                .padding(24.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Motus Premium",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Preço do plano premium
+            Text(
+                text = "R$ 15,00/mês",
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Green,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Descrição das funcionalidades
+            Text(
+                text = "Desfrute de funcionalidades exclusivas para gerenciar seus gastos de forma mais eficiente!",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            val cloudUploadIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.baseline_cloud_upload_24)
+
+            PremiumFeatureItem(
+                title = "Backup & Restauração",
+                description = "Faça o backup de seus gastos e bancos, e restaure facilmente sempre que precisar.",
+                icon = cloudUploadIcon
+            )
+
+            val graphs: ImageVector = ImageVector.vectorResource(id = R.drawable.stacked)
+
+            PremiumFeatureItem(
+                title = "Gráficos Detalhados",
+                description = "Veja gráficos detalhados de seus gastos mensais, diários e semanais.",
+                icon = graphs
+            )
+
+            val download: ImageVector = ImageVector.vectorResource(id = R.drawable.baseline_download_24)
+
+            PremiumFeatureItem(
+                title = "Download de Gastos",
+                description = "Baixe seus gastos em formato CSV e Excel para um controle mais aprofundado.",
+                icon = download
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Botão de ação - Assinar
+            Button(
+                onClick = { /* Ação ao assinar o plano premium */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = DarkBlue,
+                )
+            ) {
+                Text(
+                    text = "Assinar Agora",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botão para fechar o popup
+            TextButton(
+                onClick = { onCancel() },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Cancelar", color = Color.Gray)
+            }
+        }
+    }
+}
+
+@Composable
+fun PremiumFeatureItem(title: String, description: String, icon: ImageVector) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.LightGray, shape = CircleShape)
+                .padding(8.dp),
+            tint = DarkBlue
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = description,
+                color = Color.Gray
+            )
         }
     }
 }
@@ -242,6 +418,8 @@ fun BankItem(
     var expenseToDelete by remember { mutableStateOf<Expense?>(null) }
     val expenses by expenseViewModel.getExpensesForBank(bank.id).observeAsState(emptyList())
     var showDialog by remember { mutableStateOf(false) }
+    var showDialogBank by remember { mutableStateOf(false) }
+
 
 
     LaunchedEffect(refreshing) {
@@ -445,12 +623,40 @@ fun BankItem(
                             ) {
                                 Text(text = "OK", color = Color.Black, fontFamily = customFontFamily)
                             }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                showDialog = false
+                            }) {
+                                Text(text = "Cancelar", color = Color.Black)
+                            }
                         }
                     )
                 }
 
 
-
+            if (showDialogBank) {
+                AlertDialog(
+                    onDismissRequest = { showDialogBank = false },
+                    title = { Text(text = stringResource(id = R.string.deletar_banco)) },
+                    text = { Text(text = stringResource(id = R.string.voce_ira_deletar_banco)) },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showDialogBank = false
+                            viewModel.deleteBank(bank)
+                        }) {
+                            Text(text = "OK", color = Color.Black)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showDialogBank = false
+                        }) {
+                            Text(text = "Cancelar", color = Color.Black)
+                        }
+                    }
+                )
+            }
             Button(
                 onClick = {
                     navHostController.navigate("expense?bankId=${bank.id}")
@@ -472,7 +678,7 @@ fun BankItem(
 
         Button(
             onClick = {
-                viewModel.deleteBank(bank)
+             showDialogBank = true
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)

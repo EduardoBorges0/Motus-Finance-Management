@@ -26,6 +26,8 @@
     <string name="adicione_seus_gastos">Add your expenses</string>
     <string name="deletar_gasto">Remove spend/receive</string>
     <string name= "voce_ira_deletar_gastos">Are you sure you want to delete this expense/receipt?</string>
+    <string name= "deletar_banco">Remove bank</string>
+    <string name= "voce_ira_deletar_banco">Are you sure you want to delete this bank</string>
 
     <!-- ExpenseClassificationNavBottom -->
     <string name="sem_gastos">No expenses</string>

@@ -28,7 +28,8 @@
     <string name="adicione_seus_gastos">Adicione seus gastos</string>
     <string name="deletar_gasto">Remover gasto/recebido</string>
     <string name="voce_ira_deletar_gastos">Você tem certeza que deseja deletar esse gasto/recebido?</string>
-
+    <string name="deletar_banco">Remover banco</string>
+    <string name="voce_ira_deletar_banco">Você tem certeza que deseja deletar esse banco?</string>
     ExpenseClassificationNavBottom:
 
     <string name="sem_gastos">Sem gastos</string>
@@ -81,5 +82,8 @@
 
     <string name="clique_add_imagem">Clique aqui para adicionar uma imagem</string>
     <string name="title_activity_chart">Chart</string>
+    <string name="title_activity_register_compose">RegisterCompose</string>
+    <string name="title_activity_register_email_and_password">RegisterEmailAndPassword</string>
+    <string name="title_activity_login_compose">LoginCompose</string>
 
 </resources>

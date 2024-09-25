@@ -18,10 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -46,6 +44,9 @@ import com.app.simplemoney.ui.theme.SimpleMoneyTheme
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney8.Models.RepositoryExpense
 import com.app.motus4.R
+import com.app.motus4.View.RegisterAndLogin.LoginCompose
+import com.app.motus4.View.RegisterAndLogin.RegisterComposable
+import com.app.motus4.View.RegisterAndLogin.RegisterEmailAndPassword
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModelFactory
 import com.app.simplemoney8.Models.RepositoryLanguage
@@ -102,8 +103,7 @@ class MainActivity : FragmentActivity() {
     fun SetupNavController() {
         val navController = rememberNavController()
         val context = LocalContext.current as Activity
-
-        NavHost(navController = navController, startDestination = "main") {
+        NavHost(navController = navController, startDestination = "splash") {
             composable("main") { SimpleMoneyEnter(navController = navController) }
             composable("expenseClassificationNavBottom?classification={classification}",
                 arguments = listOf(navArgument("classification") { type = NavType.StringType })
@@ -115,6 +115,9 @@ class MainActivity : FragmentActivity() {
                     expenseViewModel = expenseViewModel
                 )
             }
+            composable("register"){ RegisterComposable(navController) }
+            composable("loginCompose") { LoginCompose(navController) }
+            composable("registerEmailAndPassword"){ RegisterEmailAndPassword(this@MainActivity, navController) }
             composable("changeLanguage") { ChangeLanguageContent(
                 navController = navController,
                 activity = context,
@@ -206,6 +209,9 @@ class MainActivity : FragmentActivity() {
                     img = img
                 )
             }
+            composable("splash") {
+                RevealImageAnimation(navController = navController)
+            }
             composable("expense?bankId={bankId}",
                 arguments = listOf(navArgument("bankId") { type = NavType.IntType })
             ) { backStackEntry ->
@@ -228,41 +234,50 @@ class MainActivity : FragmentActivity() {
 @Composable
 fun SimpleMoneyEnter(navController: NavController) {
     val context = LocalContext.current as MainActivity
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp
     val executor = ContextCompat.getMainExecutor(context)
     val biometricManager = BiometricManager.from(context)
 
+    // Configuração do BiometricPrompt
     val biometricPrompt = BiometricPrompt(context, executor, object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
-            Log.d("MY_APP_TAG", "Erro de autenticação: $errString")
+            Log.d("BiometricAuth", "Erro de autenticação: $errString")
+            // Redireciona para home em caso de erro
             navController.navigate("home")
-
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
-            Log.d("MY_APP_TAG", "Autenticação bem-sucedida!")
+            Log.d("BiometricAuth", "Autenticação bem-sucedida!")
+            // Redireciona para a tela inicial
             navController.navigate("home")
         }
 
         override fun onAuthenticationFailed() {
             super.onAuthenticationFailed()
-            Log.d("MY_APP_TAG", "Autenticação falhou.")
+            Log.d("BiometricAuth", "Falha na autenticação.")
         }
     })
 
+    // Configurando o prompt da biometria
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle(stringResource(id = R.string.Desbloqueie_para_usar_o_Motus))
-        .setSubtitle(stringResource(id = R.string.use_sua_digital_para_acessar))
-        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+        .setTitle("Desbloqueie para usar o Motus")
+        .setSubtitle("Use sua digital para acessar")
+        .setAllowedAuthenticators(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
         .build()
 
-    val biometricAvailability = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-    val biometricAvailable = biometricAvailability == BiometricManager.BIOMETRIC_SUCCESS
-    val credentialsAvailable = biometricAvailability == BiometricManager.BIOMETRIC_SUCCESS || biometricAvailability == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED
+    // Checando se a biometria está disponível
+    val biometricAvailability = biometricManager.canAuthenticate(
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    )
 
+    val biometricAvailable = biometricAvailability == BiometricManager.BIOMETRIC_SUCCESS
+    val credentialsAvailable = biometricAvailability != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE &&
+            biometricAvailability != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE
+
+    // Layout da tela de login biométrico
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -275,35 +290,38 @@ fun SimpleMoneyEnter(navController: NavController) {
                 .background(DarkBlue)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.outline_account_balance_wallet_24),
+                painter = painterResource(id = R.drawable.mainlogo),
                 contentDescription = "Ícone de carteira",
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(160.dp)
                     .align(Alignment.Center)
             )
         }
 
-        Spacer(modifier = Modifier.height(476.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = {
-                if (credentialsAvailable) {
+                if (biometricAvailable) {
+                    biometricPrompt.authenticate(promptInfo)
+                } else if (credentialsAvailable) {
+                    // Inicia com credenciais do dispositivo (PIN, padrão)
                     biometricPrompt.authenticate(promptInfo)
                 } else {
-                    Log.d("ds", "ESTA ERRADO A SENHAAA")
+                    Log.d("BiometricAuth", "Nenhuma opção de autenticação disponível.")
+                    navController.navigate("home")
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
-                .padding(horizontal = if (screenWidth < 400) 24.dp else 14.dp),
-            shape = RoundedCornerShape(16.dp),
+                .height(60.dp),
+            shape = RoundedCornerShape(0.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkBlue,
                 contentColor = Color.White
             )
         ) {
-            Text(text = stringResource(id = R.string.entrar), fontFamily = customFontFamily)
+            Text(text = "Entrar", fontFamily = customFontFamily)
         }
     }
 }

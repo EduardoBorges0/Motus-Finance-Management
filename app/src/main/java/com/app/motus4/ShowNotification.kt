@@ -46,7 +46,7 @@ fun showNotification(context: Context, title: String, message: String) {
     }
 
     val notification = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(R.drawable.nubank) // Substitua pelo seu ícone
+        .setSmallIcon(R.drawable.logo) // Substitua pelo seu ícone
         .setContentTitle(title)
         .setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -82,7 +82,7 @@ fun showNotificationAlert(context: Context) {
     }
 
     val notification = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(R.drawable.nubank) // Substitua pelo seu ícone
+        .setSmallIcon(R.drawable.logo) // Substitua pelo seu ícone
         .setContentTitle("Já anotou seus gastos/recebidos hoje??")
         .setContentText("Caso não, anote agora!!")
         .setPriority(NotificationCompat.PRIORITY_HIGH)

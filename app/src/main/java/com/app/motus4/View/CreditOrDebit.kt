@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -117,7 +118,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
             TextField(
                 value = balance,
                 onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) {
+                    if (it.all { char -> char.isDigit() || char == '.' }) {
                         balance = it
                     }
                 },
@@ -190,7 +191,10 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(DarkBlue)
             ) {
-                Text(text = stringResource(id = R.string.confirmar), style = TextStyle(color = Color.White), fontFamily = customFontFamily
+                Text(
+                    text = stringResource(id = R.string.confirmar),
+                    style = TextStyle(color = Color.White),
+                    fontFamily = customFontFamily,
                 )
             }
         }
@@ -244,9 +248,8 @@ fun DateTextField(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(end = 15.dp)
             ) {
-                // Linha separadora
                 Divider(
-                    color = Color(0xFFEBECF0),
+                    color = Color(0xFFF0F1F5),
                     modifier = Modifier
                         .height(24.dp)  // Altura da linha
                         .width(1.dp)    // Largura da linha

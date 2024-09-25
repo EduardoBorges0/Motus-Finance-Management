@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,9 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
+private lateinit var auth : FirebaseAuth
 @Composable
 fun SettingsScreenContent(navController: NavController){
+    auth = Firebase.auth
    Box (
        modifier = Modifier.fillMaxSize()
    ){
@@ -43,5 +49,42 @@ fun SettingsScreenContent(navController: NavController){
                modifier = Modifier
                .align(Alignment.Center))
        }
+       if(auth.currentUser == null){
+           Box (modifier = Modifier
+               .padding(horizontal = 15.dp)
+               .padding(top = 170.dp)
+               .clip(RoundedCornerShape(8.dp))
+               .background(DarkBlue)
+               .fillMaxWidth()
+               .height(60.dp)
+               .align(Alignment.Center)
+               .clickable {
+                   navController.navigate("register") { popUpTo("home") { inclusive = true } }
+               }){
+               Text(text = "Cadastrar/Logar",
+                   color = Color.White,
+                   modifier = Modifier
+                       .align(Alignment.Center))
+           }
+       }else{
+           Box (modifier = Modifier
+               .padding(horizontal = 15.dp)
+               .padding(top = 170.dp)
+               .clip(RoundedCornerShape(8.dp))
+               .background(DarkBlue)
+               .fillMaxWidth()
+               .height(60.dp)
+               .align(Alignment.Center)
+               .clickable {
+                   auth.signOut()
+                   navController.navigate("register"){ popUpTo("home") { inclusive = true } }
+               }){
+               Text(text = "Logout",
+                   color = Color.White,
+                   modifier = Modifier
+                       .align(Alignment.Center))
+           }
+       }
+
    }
 }

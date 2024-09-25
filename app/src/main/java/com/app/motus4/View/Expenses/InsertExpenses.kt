@@ -84,7 +84,7 @@ fun ExpensesComposable(bankId: Int,
                 imageVector = Icons.Filled.KeyboardArrowLeft,
                 contentDescription = "return")
         }
-        Column(modifier = Modifier.align(Alignment.Center)) {
+        Column(modifier = Modifier.align(Alignment.Center).padding(top = 30.dp)) {
             AsyncImage(model = bank?.img,
                 contentDescription = "IMG",
                 modifier = Modifier

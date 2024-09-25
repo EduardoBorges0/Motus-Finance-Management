@@ -27,6 +27,8 @@
     <string name= "voce_ira_deletar_gastos">¿Está seguro de que desea eliminar este gasto/recibo?</string>
     <string name="adicione_seu_banco_aqui">Agregue su banco aquí</string>
     <string name="adicione_seus_gastos">Agregue sus gastos</string>
+    <string name="deletar_banco">Eliminar banco</string>
+    <string name="voce_ira_deletar_banco">¿Está seguro de que desea eliminar este banco?</string>
 
     ExpenseClassificationNavBottom:
 

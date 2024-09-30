@@ -40,8 +40,12 @@ import com.app.simplemoney.ui.theme.LightOrangeExpense
 import com.app.simplemoney.ui.theme.OrangeExpense
 import com.app.simplemoney.ui.theme.PurpleExpense
 import com.app.simplemoney.ui.theme.RedExpense
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
+private lateinit var auth: FirebaseAuth
 @Composable
 fun AddYourBankComposable(
     nameOfBank: String?,
@@ -52,6 +56,7 @@ fun AddYourBankComposable(
     img: String?,
     navController: NavController
 ) {
+    auth = Firebase.auth
     Log.d("AddImageContent", "Navigating with image URI: $img")
 
     val bankList = listOf(
@@ -103,6 +108,7 @@ fun AddYourBankComposable(
                         date,
                         nameOfBank
                     )
+
                     navController.navigate("home")
                 }
             )

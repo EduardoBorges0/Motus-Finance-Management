@@ -131,7 +131,6 @@ fun ExpenseClassificationBox(navController: NavController,
                              selectedExpenseType : String?,
                              bank: Bank?){
     var showDialog by remember { mutableStateOf(false) }
-
     Box (
         modifier = Modifier
             .padding(bottom = 1.dp)

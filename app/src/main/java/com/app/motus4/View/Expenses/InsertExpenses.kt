@@ -54,11 +54,13 @@ import com.app.simplemoney8.customFontFamily
 
 
 @Composable
-fun ExpensesComposable(bankId: Int,
-                       viewModel: BankViewModel,
-                       expenseViewModel: ExpenseViewModel,
-                       bank: Bank?,
-                       navController: NavController) {
+fun ExpensesComposable(
+    bankId: Int,
+    viewModel: BankViewModel,
+    expenseViewModel: ExpenseViewModel,
+    bank: Bank?,
+    navController: NavController
+) {
     var expense by remember { mutableStateOf("") }
     var expenseValue by remember { mutableStateOf("") }
     var selectedOptionSpentOrReceived by remember { mutableStateOf<String?>(null) }
@@ -70,7 +72,6 @@ fun ExpensesComposable(bankId: Int,
             .fillMaxSize()
             .background(Color(0xFFF0F1F5))
             .clip(RoundedCornerShape(24.dp))
-
     ) {
         Button(
             onClick = { navController.popBackStack() },
@@ -82,7 +83,8 @@ fun ExpensesComposable(bankId: Int,
         ) {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowLeft,
-                contentDescription = "return")
+                contentDescription = "return"
+            )
         }
         Column(modifier = Modifier.align(Alignment.Center).padding(top = 30.dp)) {
             AsyncImage(model = bank?.img,
@@ -114,7 +116,7 @@ fun ExpensesComposable(bankId: Int,
                 value = expenseValue,
                 onValueChange = {
                     if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) {
-                        expenseValue = it
+                        expenseValue = it // Mantenha a entrada com vírgula
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -190,19 +192,22 @@ fun ExpensesComposable(bankId: Int,
                     if (expense.isEmpty() || expenseValue.isEmpty() || selectedOptionSpentOrReceived == null || selectedExpenseType == null) {
                         showDialog = true
                     } else {
-                        if(selectedOptionSpentOrReceived == "Spent"){
-                            navController.navigate("expenseClassification?bankId=${bankId}&expense=${expense}&expenseValue=${expenseValue}&selectedOptionSpentOrReceived=${selectedOptionSpentOrReceived}&selectedExpenseType=${selectedExpenseType}&date=${bank?.date}")
-                        }else{
+                        // Converte a vírgula em ponto ao enviar
+                        val formattedExpenseValue = expenseValue.replace(',', '.').toDouble()
+
+                        if (selectedOptionSpentOrReceived == "Spent") {
+                            navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$formattedExpenseValue&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
+                        } else {
                             expenseViewModel.insertExpense(
                                 bankId,
                                 expense,
-                                expenseValue.toDouble(),
+                                formattedExpenseValue,
                                 selectedOptionSpentOrReceived.toString(),
                                 selectedExpenseType,
                                 bank?.date.toString(),
                                 ""
                             )
-                            viewModel.updateBalanceForExpense(bankId, expenseValue.toDouble(), selectedOptionSpentOrReceived.toString())
+                            viewModel.updateBalanceForExpense(bankId, formattedExpenseValue, selectedOptionSpentOrReceived.toString())
                             navController.navigate("home")
                         }
                     }

@@ -118,7 +118,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
             TextField(
                 value = balance,
                 onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == '.' }) {
+                    if (it.all { char -> char.isDigit() || char == '.' || char == ','}) {
                         balance = it
                     }
                 },
@@ -179,7 +179,9 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
                     if (balance.isEmpty() || selectedOption == null || date.isEmpty() || nameOfBank.isEmpty()) {
                         showDialog = true
                     } else {
-                        navHostController.navigate("addImage?balance=$balance&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
+                        val formattedExpenseValue = balance.replace(',', '.').toDouble()
+
+                        navHostController.navigate("addImage?balance=$formattedExpenseValue&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
 
                     }
                 },

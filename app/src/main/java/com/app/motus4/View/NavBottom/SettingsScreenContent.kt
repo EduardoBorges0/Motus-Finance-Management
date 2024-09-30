@@ -27,10 +27,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
-private lateinit var auth : FirebaseAuth
 @Composable
 fun SettingsScreenContent(navController: NavController){
-    auth = Firebase.auth
    Box (
        modifier = Modifier.fillMaxSize()
    ){
@@ -49,42 +47,6 @@ fun SettingsScreenContent(navController: NavController){
                modifier = Modifier
                .align(Alignment.Center))
        }
-       if(auth.currentUser == null){
-           Box (modifier = Modifier
-               .padding(horizontal = 15.dp)
-               .padding(top = 170.dp)
-               .clip(RoundedCornerShape(8.dp))
-               .background(DarkBlue)
-               .fillMaxWidth()
-               .height(60.dp)
-               .align(Alignment.Center)
-               .clickable {
-                   navController.navigate("register") { popUpTo("home") { inclusive = true } }
-               }){
-               Text(text = "Cadastrar/Logar",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.Center))
-           }
-       }else{
-           Box (modifier = Modifier
-               .padding(horizontal = 15.dp)
-               .padding(top = 170.dp)
-               .clip(RoundedCornerShape(8.dp))
-               .background(DarkBlue)
-               .fillMaxWidth()
-               .height(60.dp)
-               .align(Alignment.Center)
-               .clickable {
-                   auth.signOut()
-                   navController.navigate("register"){ popUpTo("home") { inclusive = true } }
-               }){
-               Text(text = "Logout",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.Center))
-           }
-       }
-
+       
    }
 }

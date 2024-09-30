@@ -56,6 +56,9 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("co.yml:ycharts:2.1.0")
     implementation ("androidx.work:work-runtime-ktx:2.8.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // OkHttp pode ter uma versão mais recente.
 
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.play.services.location)

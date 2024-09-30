@@ -44,9 +44,6 @@ import com.app.simplemoney.ui.theme.SimpleMoneyTheme
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney8.Models.RepositoryExpense
 import com.app.motus4.R
-import com.app.motus4.View.RegisterAndLogin.LoginCompose
-import com.app.motus4.View.RegisterAndLogin.RegisterComposable
-import com.app.motus4.View.RegisterAndLogin.RegisterEmailAndPassword
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModelFactory
 import com.app.simplemoney8.Models.RepositoryLanguage
@@ -115,9 +112,6 @@ class MainActivity : FragmentActivity() {
                     expenseViewModel = expenseViewModel
                 )
             }
-            composable("register"){ RegisterComposable(navController) }
-            composable("loginCompose") { LoginCompose(navController) }
-            composable("registerEmailAndPassword"){ RegisterEmailAndPassword(this@MainActivity, navController) }
             composable("changeLanguage") { ChangeLanguageContent(
                 navController = navController,
                 activity = context,
@@ -206,7 +200,7 @@ class MainActivity : FragmentActivity() {
                     nameOfBank = nameOfBank,
                     viewModel = viewModel,
                     navController = navController,
-                    img = img
+                    img = img,
                 )
             }
             composable("splash") {

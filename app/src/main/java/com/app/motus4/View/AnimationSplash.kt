@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.motus4.R
 import com.app.simplemoney.ui.theme.DarkBlue
@@ -53,30 +55,24 @@ fun RevealImageAnimation(navController: NavController) {
         )
 
         // Após a animação terminar, navega para a próxima tela (main)
-        if(auth.currentUser != null){
+
             navController.navigate("main") {
                 popUpTo("splash") { inclusive = true } // Remove a SplashScreen da pilha de navegação
             }
-            Log.d("SEU USER", "USER EMAIL: ${auth.currentUser?.uid}")
-        }else{
-            navController.navigate("register") {
-                popUpTo("splash") { inclusive = true } // Remove a SplashScreen da pilha de navegação
-            }
-        }
 
     }
 
-    // Exibe a animação de revelação da imagem
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBlue),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.mainlogo), // Substitua pelo seu recurso de imagem
+            painter = painterResource(id = R.drawable.logo), // Substitua pelo seu recurso de imagem
             contentDescription = "Revealed Image",
             modifier = Modifier
+                .size(100.dp)
                 .alpha(alpha.value)
                 .graphicsLayer {
                     transformOrigin = androidx.compose.ui.graphics.TransformOrigin(0.5f, 0.5f)

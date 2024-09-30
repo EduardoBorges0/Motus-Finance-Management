@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -54,6 +55,7 @@ import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.simplemoney8.TranslatedExpenseName
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.exp
 
 @Composable
 fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewModel) {
@@ -357,16 +359,28 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                     .padding(top = 550.dp)
                     .align(Alignment.BottomCenter)
             ) {
+                if(monthAll.size == 0){
+                    Text(
+                        "Aqui ficará seus gastos mensais dos ultimos 5 meses!!",
+                        modifier = Modifier
+                            .padding(bottom = 120.dp)
+                            .padding(horizontal = 40.dp)
+                            .border(1.dp,  DarkBlue, RoundedCornerShape(8.dp))
+                            .padding(8.dp)
+                        ,)
+                }else{
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(8.dp),
                 ) {
                     items(monthAll) { expense ->
-                        MonthlyStatistic(
-                            monthly = expense?.monthly.toString(),
-                            total = expense?.monthlyExpense!!.toDouble(),
-                            viewModel = bankViewModel
-                        )
+                            MonthlyStatistic(
+                                monthly = expense?.monthly.toString(),
+                                total = expense?.monthlyExpense!!.toDouble(),
+                                viewModel = bankViewModel
+                            )
+                    }
                     }
                 }
             }

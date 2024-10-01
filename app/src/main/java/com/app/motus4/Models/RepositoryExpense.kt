@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Query
 import com.app.simplemoney6.Models.Room.DataClass.Expense
 import com.app.simplemoney8.Models.Room.DaoExpense
+import java.time.LocalDate
 
 class RepositoryExpense(private val daoExpense: DaoExpense) {
 
@@ -16,6 +17,8 @@ class RepositoryExpense(private val daoExpense: DaoExpense) {
     suspend fun getReceived() : Double? = daoExpense.getReceived()
 
     fun markExpensesReadyForDeletion(bankId: Int) = daoExpense.markExpensesReadyForDeletion(bankId)
+
+    suspend fun deleteExpense(currentDate: String) = daoExpense.deleteExpense(currentDate)
 
     fun deleteExpensesReadyForDeletion() = daoExpense.deleteExpensesReadyForDeletion()
 

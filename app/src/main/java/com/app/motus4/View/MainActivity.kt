@@ -55,6 +55,7 @@ import com.app.motus4.setAppLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class MainActivity : FragmentActivity() {
     private lateinit var viewModel: BankViewModel
@@ -101,7 +102,7 @@ class MainActivity : FragmentActivity() {
         val navController = rememberNavController()
         val context = LocalContext.current as Activity
         NavHost(navController = navController, startDestination = "splash") {
-            composable("main") { SimpleMoneyEnter(navController = navController) }
+            composable("main") { SimpleMoneyEnter(viewModel = expenseViewModel, navController = navController) }
             composable("expenseClassificationNavBottom?classification={classification}",
                 arguments = listOf(navArgument("classification") { type = NavType.StringType })
             ) {
@@ -226,18 +227,17 @@ class MainActivity : FragmentActivity() {
 
 
 @Composable
-fun SimpleMoneyEnter(navController: NavController) {
+fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) {
     val context = LocalContext.current as MainActivity
+    val currentDate = LocalDate.now().toString()
     val executor = ContextCompat.getMainExecutor(context)
     val biometricManager = BiometricManager.from(context)
 
-    // Configuração do BiometricPrompt
+
     val biometricPrompt = BiometricPrompt(context, executor, object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
-            // Redireciona para home em caso de erro
-            navController.navigate("home")
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -308,7 +308,7 @@ fun SimpleMoneyEnter(navController: NavController) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
+                .height(70.dp),
             shape = RoundedCornerShape(0.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkBlue,

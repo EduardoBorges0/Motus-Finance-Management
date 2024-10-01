@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.app.simplemoney6.Models.Room.DataClass.Expense
+import java.time.LocalDate
 
 @Dao
 interface DaoExpense {
@@ -39,6 +40,10 @@ interface DaoExpense {
 
     @Query("DELETE FROM table_expenses WHERE readyForDeletion = 1")
     fun deleteExpensesReadyForDeletion()
+
+
+    @Query("DELETE FROM table_expenses WHERE date = :currentDate")
+    suspend fun deleteExpense(currentDate: String)
 
 
     @Query("SELECT SUM(value) FROM table_expenses WHERE spentOrReceived = 'Spent'")

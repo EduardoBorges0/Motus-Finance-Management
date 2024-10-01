@@ -239,181 +239,241 @@ fun BankItem(
         lang = viewModel.updateLanguage() ?: "pt"
     }
 
-    val locale = when (lang) {
-        "pt" -> Locale("pt", "BR")
-        "en" -> Locale("en", "US")
-        "es" -> Locale("es", "ES")
-        else -> Locale.getDefault()
+
+
+        val locale = when (lang) {
+            "pt" -> Locale("pt", "BR")
+            "en" -> Locale("en", "US")
+            "es" -> Locale("es", "ES")
+            else -> Locale.getDefault()
+        }
+        val currencyFormat = NumberFormat.getCurrencyInstance(locale)
+        var expenseToDelete by remember { mutableStateOf<Expense?>(null) }
+        val expenses by expenseViewModel.getExpensesForBank(bank.id).observeAsState(emptyList())
+        var showDialog by remember { mutableStateOf(false) }
+        var showDialogBank by remember { mutableStateOf(false) }
+    expenses.forEach { expense ->
+        expenseViewModel.deleteExpenseByBankId(
+            expense.bankId!!, expense.type.toString(),
+            bank.date.toString(),
+            expense.spentOrReceived
+        )
     }
-    val currencyFormat = NumberFormat.getCurrencyInstance(locale)
-    var expenseToDelete by remember { mutableStateOf<Expense?>(null) }
-    val expenses by expenseViewModel.getExpensesForBank(bank.id).observeAsState(emptyList())
-    var showDialog by remember { mutableStateOf(false) }
-    var showDialogBank by remember { mutableStateOf(false) }
 
 
-
-    LaunchedEffect(refreshing) {
-        if (refreshing) {
-            delay(3000)
-            onRefreshComplete()
-            expenses.forEach { expense ->
-                        expenseViewModel.deleteExpenseByBankId(
-                            expense.bankId!!, expense.type.toString(),
-                            bank.date.toString(),
-                            expense.spentOrReceived
-                        )
+        LaunchedEffect(refreshing) {
+            if (refreshing) {
+                delay(3000)
+                onRefreshComplete()
+                expenses.forEach { expense ->
+                    expenseViewModel.deleteExpenseByBankId(
+                        expense.bankId!!, expense.type.toString(),
+                        bank.date.toString(),
+                        expense.spentOrReceived
+                    )
+                }
             }
         }
-    }
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 5.dp)
-            .padding(top = 20.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(bank.color.toColor())
-            .padding(18.dp)
-            .fillMaxSize()
-            .heightIn(min = 260.dp)
-    ) {
-       if(bank.img == "vazio"){
-           Column(
-               modifier = Modifier
-                   .fillMaxSize()
-                   .align(Alignment.TopCenter)
-                   .padding(horizontal = 10.dp)
-           ) {
-               Text(
-                   text = "${bank.creditOrDebit}",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(top = 25.dp)
-,                   fontFamily = customFontFamily
-               )
-               Text(
-                   text = "${bank.nameOfExpenses}",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(top = 5.dp),
-                   fontFamily = customFontFamily
-               )
-           }
-       }else {
-           Column(
-               modifier = Modifier
-                   .fillMaxSize()
-                   .align(Alignment.TopCenter)
-                   .padding(horizontal = 10.dp)
-           ) {
-               AsyncImage(
-                   model = bank.img,
-                   contentDescription = "bankImage",
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .size(70.dp)
-               )
-               Text(
-                   text = "${bank.creditOrDebit}",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(top = 10.dp),
-                   fontFamily = customFontFamily
-               )
-               Text(
-                   text = "${bank.nameOfExpenses}",
-                   color = Color.White,
-                   modifier = Modifier
-                       .align(Alignment.CenterHorizontally)
-                       .padding(top = 5.dp),
-                   fontFamily = customFontFamily
-               )
-           }
-       }
-        if(bank.balance!! < 0){
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 5.dp)
+                .padding(top = 20.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(bank.color.toColor())
+                .padding(18.dp)
+                .fillMaxSize()
+                .heightIn(min = 260.dp)
+        ) {
+            if (bank.img == "vazio") {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.TopCenter)
+                        .padding(horizontal = 10.dp)
+                ) {
+                    Text(
+                        text = "${bank.creditOrDebit}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 25.dp), fontFamily = customFontFamily
+                    )
+                    Text(
+                        text = "${bank.nameOfExpenses}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 5.dp),
+                        fontFamily = customFontFamily
+                    )
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.TopCenter)
+                        .padding(horizontal = 10.dp)
+                ) {
+                    AsyncImage(
+                        model = bank.img,
+                        contentDescription = "bankImage",
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(70.dp)
+                    )
+                    Text(
+                        text = "${bank.creditOrDebit}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 10.dp),
+                        fontFamily = customFontFamily
+                    )
+                    Text(
+                        text = "${bank.nameOfExpenses}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 5.dp),
+                        fontFamily = customFontFamily
+                    )
+                }
+            }
+            if (bank.balance!! < 0) {
+                Text(
+                    text = currencyFormat.format(bank.balance).toString(),
+                    color = Color.Red,
+                    modifier = Modifier
+                        .padding(top = 25.dp)
+                        .padding(horizontal = 10.dp),
+                    fontFamily = customFontFamily
+                )
+            } else {
+                Text(
+                    text = currencyFormat.format(bank.balance).toString(),
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(top = 25.dp)
+                        .padding(horizontal = 10.dp),
+                    fontFamily = customFontFamily
+                )
+            }
+
             Text(
-                text = currencyFormat.format(bank.balance).toString(),
-                color = Color.Red,
-                modifier = Modifier
-                    .padding(top = 25.dp)
-                    .padding(horizontal = 10.dp),
-                fontFamily = customFontFamily
-            )
-        }else{
-            Text(
-                text = currencyFormat.format(bank.balance).toString(),
+                text = "${bank.date}",
                 color = Color.White,
                 modifier = Modifier
-                    .padding(top = 25.dp)
+                    .padding(top = 2.dp)
                     .padding(horizontal = 10.dp),
                 fontFamily = customFontFamily
             )
-        }
 
-        Text(
-            text = "${bank.date}",
-            color = Color.White,
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .padding(horizontal = 10.dp),
-            fontFamily = customFontFamily
-        )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(top = 120.dp)
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(top = 120.dp)
+            ) {
+                expenses.forEach { expense ->
+                    val isVisible = !expense.readyForDeletion
 
-        ) {
-            expenses.forEach { expense ->
-                val isVisible = !expense.readyForDeletion
-
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(if (expense.readyForDeletion) Color.Red else bank.colorSpentsOrReceived.toColor())
-                        .height(if (isVisible) 55.dp else 0.dp) // Controla a altura para ocultar o item
-                        .fillMaxWidth()
-                        .alpha(if (isVisible) 1f else 0f) // Controla a visibilidade com alpha
-                        .clickable {
-                            if (isVisible) {
-                                showDialog = true
-                                expenseToDelete = expense
-                            }
-                        },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (isVisible) {
-                        Text(
-                            text = "${expense.description}",
-                            color = Color.White,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 10.dp),
-                            fontFamily = customFontFamily
-                        )
-                        Text(
-                            text = if (expense.spentOrReceived == "Spent") {
-                                "- ${currencyFormat.format(expense.value)}"
-                            } else {
-                                currencyFormat.format(expense.value).toString()
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 20.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(if (expense.readyForDeletion) Color.Red else bank.colorSpentsOrReceived.toColor())
+                            .height(if (isVisible) 55.dp else 0.dp) // Controla a altura para ocultar o item
+                            .fillMaxWidth()
+                            .alpha(if (isVisible) 1f else 0f) // Controla a visibilidade com alpha
+                            .clickable {
+                                if (isVisible) {
+                                    showDialog = true
+                                    expenseToDelete = expense
+                                }
                             },
-                            color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
-                            modifier = Modifier.padding(end = 10.dp),
-                            fontFamily = customFontFamily
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (isVisible) {
+                            Text(
+                                text = "${expense.description}",
+                                color = Color.White,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 10.dp),
+                                fontFamily = customFontFamily
+                            )
+                            Text(
+                                text = if (expense.spentOrReceived == "Spent") {
+                                    "- ${currencyFormat.format(expense.value)}"
+                                } else {
+                                    currencyFormat.format(expense.value).toString()
+                                },
+                                color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
+                                modifier = Modifier.padding(end = 10.dp),
+                                fontFamily = customFontFamily
+                            )
+                        }
+                    }
+
+                    if (showDialog && expenseToDelete != null) {
+                        AlertDialog(
+                            onDismissRequest = { showDialog = false },
+                            title = {
+                                Text(
+                                    text = stringResource(id = R.string.deletar_gasto),
+                                    fontFamily = customFontFamily
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = stringResource(id = R.string.voce_ira_deletar_gastos),
+                                    fontFamily = customFontFamily
+                                )
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false
+                                        expenseToDelete?.let { expense ->
+                                            val value = expense.value ?: 0.0
+                                            expenseViewModel.deleteExpenseById(
+                                                bank,
+                                                expense.id,
+                                                value,
+                                                expense.spentOrReceived.toString()
+                                            )
+                                        }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "OK",
+                                        color = Color.Black,
+                                        fontFamily = customFontFamily
+                                    )
+                                }
+                            }
                         )
                     }
                 }
 
+
+
                 if (showDialog && expenseToDelete != null) {
                     AlertDialog(
                         onDismissRequest = { showDialog = false },
-                        title = { Text(text = stringResource(id = R.string.deletar_gasto), fontFamily = customFontFamily) },
-                        text = { Text(text = stringResource(id = R.string.voce_ira_deletar_gastos), fontFamily = customFontFamily) },
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.deletar_gasto),
+                                fontFamily = customFontFamily
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = stringResource(id = R.string.voce_ira_deletar_gastos),
+                                fontFamily = customFontFamily
+                            )
+                        },
                         confirmButton = {
                             TextButton(
                                 onClick = {
@@ -421,38 +481,19 @@ fun BankItem(
                                     expenseToDelete?.let { expense ->
                                         val value = expense.value ?: 0.0
                                         expenseViewModel.deleteExpenseById(
-                                            bank, expense.id, value, expense.spentOrReceived.toString()
+                                            bank,
+                                            expense.id,
+                                            value,
+                                            expense.spentOrReceived.toString()
                                         )
                                     }
                                 }
                             ) {
-                                Text(text = "OK", color = Color.Black, fontFamily = customFontFamily)
-                            }
-                        }
-                    )
-                }
-            }
-
-
-
-            if (showDialog && expenseToDelete != null) {
-                    AlertDialog(
-                        onDismissRequest = { showDialog = false },
-                        title = { Text(text = stringResource(id = R.string.deletar_gasto), fontFamily = customFontFamily) },
-                        text = { Text(text = stringResource(id = R.string.voce_ira_deletar_gastos), fontFamily = customFontFamily) },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    showDialog = false
-                                    expenseToDelete?.let { expense ->
-                                        val value = expense.value ?: 0.0
-                                        expenseViewModel.deleteExpenseById(
-                                            bank, expense.id, value, expense.spentOrReceived.toString()
-                                        )
-                                    }
-                                }
-                            ) {
-                                Text(text = "OK", color = Color.Black, fontFamily = customFontFamily)
+                                Text(
+                                    text = "OK",
+                                    color = Color.Black,
+                                    fontFamily = customFontFamily
+                                )
                             }
                         },
                         dismissButton = {
@@ -466,64 +507,69 @@ fun BankItem(
                 }
 
 
-            if (showDialogBank) {
-                AlertDialog(
-                    onDismissRequest = { showDialogBank = false },
-                    title = { Text(text = stringResource(id = R.string.deletar_banco)) },
-                    text = { Text(text = stringResource(id = R.string.voce_ira_deletar_banco)) },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            showDialogBank = false
-                            viewModel.deleteBank(bank)
-                        }) {
-                            Text(text = "OK", color = Color.Black)
+                if (showDialogBank) {
+                    AlertDialog(
+                        onDismissRequest = { showDialogBank = false },
+                        title = { Text(text = stringResource(id = R.string.deletar_banco)) },
+                        text = { Text(text = stringResource(id = R.string.voce_ira_deletar_banco)) },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showDialogBank = false
+                                viewModel.deleteBank(bank)
+                            }) {
+                                Text(text = "OK", color = Color.Black)
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                showDialogBank = false
+                            }) {
+                                Text(text = "Cancelar", color = Color.Black)
+                            }
                         }
+                    )
+                }
+                Button(
+                    onClick = {
+                        navHostController.navigate("expense?bankId=${bank.id}")
                     },
-                    dismissButton = {
-                        TextButton(onClick = {
-                            showDialogBank = false
-                        }) {
-                            Text(text = "Cancelar", color = Color.Black)
-                        }
-                    }
-                )
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 40.dp)
+                        .padding(top = 40.dp)
+                        .height(50.dp)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = bank.colorSpentsOrReceived.toColor()
+                    )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.adicione_seus_gastos),
+                        color = Color.White,
+                        fontFamily = customFontFamily
+                    )
+                }
             }
+
             Button(
                 onClick = {
-                    navHostController.navigate("expense?bankId=${bank.id}")
+                    showDialogBank = true
                 },
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 40.dp)
-                    .padding(top = 40.dp)
-                    .height(50.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = bank.colorSpentsOrReceived.toColor()
-                )
+                    .align(Alignment.TopEnd)
+                    .padding(top = 10.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(Color.Transparent)
             ) {
-                Text(text = stringResource(id = R.string.adicione_seus_gastos), color = Color.White, fontFamily = customFontFamily)
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = "IconBank",
+                    tint = Color.White
+                )
             }
         }
 
-        Button(
-            onClick = {
-             showDialogBank = true
-            },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(Color.Transparent)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                contentDescription = "IconBank",
-                tint = Color.White
-            )
-        }
-    }
 }
 
 

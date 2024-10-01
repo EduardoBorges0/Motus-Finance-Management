@@ -8,19 +8,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -28,6 +33,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,9 +46,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import co.yml.charts.common.model.PlotType
 import co.yml.charts.ui.piechart.charts.PieChart
@@ -53,6 +64,7 @@ import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.simplemoney8.TranslatedExpenseName
+import com.app.simplemoney8.customFontFamily
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.exp
@@ -91,7 +103,6 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
     // Converte a lista de pares para um Map
     val expenseMonthMap: Map<Float, String> = expenseMonthPairs.toMap()
 
-
     Log.d("PARES", "OS PARES SAO ESSES $expenseMonthPairs")
     LaunchedEffect(Unit) {
         val totalSpentValue = viewModel.getTotalSpent() ?: 0.0
@@ -111,11 +122,10 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
         }
     }
     val maxValue = monthAll
-        .mapNotNull { it?.monthlyExpense?.toDouble() } // Filtra valores nulos e converte para Double
-        .maxOfOrNull { it } // Encontra o maior valor ou null se a lista estiver vazia
+        .mapNotNull { it?.monthlyExpense?.toDouble() }
+        .maxOfOrNull { it }
 
     val maxValueZero = maxValue ?: 0.0
-
 
     val pieChartData = PieChartData(
         slices = classifications.map { classification ->
@@ -144,6 +154,7 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
         showSliceLabels = false,
         animationDuration = 1500
     )
+
     if (screenWidth < 400) {
         Box(
             modifier = Modifier
@@ -174,11 +185,12 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                 )
 
                 2 -> Chart(data = expenseMonthMap, maxValue = maxValueZero.toInt(), viewModel)
+
             }
 
             Button(
                 onClick = {
-                    currentChartIndex.value = (currentChartIndex.value + 1) % 3
+                    currentChartIndex.value = (currentChartIndex.value + 1) % 3 // Permite rotação até 3
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -213,6 +225,7 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                     modifier = Modifier.size(50.dp)
                 )
             }
+
             AnimatedVisibility(
                 visible = currentChartIndex.value < 2,
                 enter = fadeIn() + expandVertically(),
@@ -233,39 +246,46 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                     }
                 }
             }
+
             AnimatedVisibility(
                 visible = currentChartIndex.value == 2,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .padding(top = 450.dp)
+                    .padding(top = 550.dp)
                     .align(Alignment.BottomCenter)
-
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp),
-                ) {
-                    items(monthAll) { expense ->
-                        MonthlyStatistic(
-                            monthly = expense?.monthly.toString(),
-                            total = expense?.monthlyExpense!!.toDouble(),
-                            viewModel = bankViewModel
-                        )
+                if(monthAll.size == 0){
+                    Text("Aqui ficará seus gastos dos últimos 5 meses!!",
+                        modifier = Modifier
+                            .padding(bottom = 140.dp)
+                            .padding(horizontal = 70.dp)
+                            .border(1.dp, DarkBlue, RoundedCornerShape(8.dp))
+                            .padding(10.dp))
+                }else{
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(8.dp),
+                    ) {
+                        items(monthAll) { expense ->
+                            MonthlyStatistic(
+                                monthly = expense?.monthly.toString(),
+                                total = expense?.monthlyExpense!!.toDouble(),
+                                viewModel = bankViewModel
+                            )
+                        }
                     }
                 }
+
             }
-
-
         }
-    }else{
+    } else {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            // Display charts based on the index
             when (currentChartIndex.value) {
                 0 -> PieChart(
                     modifier = Modifier
@@ -290,9 +310,9 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                 )
 
                 2 -> Chart(data = expenseMonthMap, maxValue = maxValueZero.toInt(), viewModel)
+
             }
 
-            // Navigation buttons
             Button(
                 onClick = {
                     currentChartIndex.value = (currentChartIndex.value + 1) % 3
@@ -331,7 +351,6 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                 )
             }
 
-            // AnimatedVisibility for LazyVerticalGrid
             AnimatedVisibility(
                 visible = currentChartIndex.value < 2,
                 enter = fadeIn() + expandVertically(),
@@ -343,13 +362,16 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp)
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
                 ) {
                     items(classificationPercentages.entries.sortedByDescending { it.value }) { entry ->
                         ClassificationItem(classification = entry.key, total = entry.value.toDouble())
                     }
                 }
             }
+
             AnimatedVisibility(
                 visible = currentChartIndex.value == 2,
                 enter = fadeIn() + expandVertically(),
@@ -360,31 +382,28 @@ fun StatisticScreenContent(viewModel: ExpenseViewModel, bankViewModel: BankViewM
                     .align(Alignment.BottomCenter)
             ) {
                 if(monthAll.size == 0){
-                    Text(
-                        "Aqui ficará seus gastos mensais dos ultimos 5 meses!!",
+                    Text("Aqui ficará seus gastos dos últimos 5 meses!!",
                         modifier = Modifier
-                            .padding(bottom = 120.dp)
-                            .padding(horizontal = 40.dp)
-                            .border(1.dp,  DarkBlue, RoundedCornerShape(8.dp))
-                            .padding(8.dp)
-                        ,)
+                            .padding(bottom = 140.dp)
+                            .padding(horizontal = 70.dp)
+                            .border(1.dp, DarkBlue, RoundedCornerShape(8.dp))
+                            .padding(10.dp))
                 }else{
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp),
-                ) {
-                    items(monthAll) { expense ->
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(8.dp),
+                    ) {
+                        items(monthAll) { expense ->
                             MonthlyStatistic(
                                 monthly = expense?.monthly.toString(),
                                 total = expense?.monthlyExpense!!.toDouble(),
                                 viewModel = bankViewModel
                             )
-                    }
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 }

@@ -135,11 +135,7 @@ class ExpenseViewModel(
                 date?.month == currentDate.month
             }
 
-            // Se estamos na última data de fechamento, exclui despesas marcadas para deletar
-
-            // Verifica se a data de despesa é igual à data atual
             if (parsedExpenseDate.isBefore(currentDate) || parsedExpenseDate.isEqual(currentDate) ) {
-                // Atualiza a data da despesa para o mês seguinte
                 val newDate = parsedExpenseDate.plusMonths(1).format(dateFormatter)
                 Log.d("DATA", "Atualizando data para: $newDate")
 
@@ -165,7 +161,7 @@ class ExpenseViewModel(
                     }
                 }
             }
-            if (closures.max() == currentDateFormatted) {
+            if (closures.isNotEmpty() && closures.maxOrNull() == currentDateFormatted) {
                 val totalSpentBack = repositoryExpense.getSpent() ?: 0.0
                 val totalReceivedBack = repositoryExpense.getReceived() ?: 0.0
                 val sum = totalSpentBack - totalReceivedBack
@@ -185,6 +181,7 @@ class ExpenseViewModel(
             }
         }
     }
+
     fun getAllMonthlyExpense() : LiveData<List<MonthlyExpense?>>{
         return repositoryMonthly.getAllMonthlyExpense()
     }

@@ -47,6 +47,5 @@ fun SettingsScreenContent(navController: NavController){
                modifier = Modifier
                .align(Alignment.Center))
        }
-       
    }
 }

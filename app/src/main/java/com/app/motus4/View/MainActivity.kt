@@ -155,7 +155,7 @@ class MainActivity : FragmentActivity() {
             composable("home") {
                 HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel)
             }
-            composable("creditOrDebit") { CreditOrDebitComposable(navController, formatNumber = FormatNumber()) }
+            composable("creditOrDebit") { CreditOrDebitComposable(navController) }
             composable(
                 "addYourBank?balance={balance}&creditOrDebit={creditOrDebit}&date={date}&nameOfBank={nameOfBank}",
                 arguments = listOf(
@@ -193,7 +193,7 @@ class MainActivity : FragmentActivity() {
                 }
 
                 bank.value?.let { bank ->
-                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController, formatNumber = FormatNumber() ,expenseViewModel = expenseViewModel)
+                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController ,expenseViewModel = expenseViewModel)
                 }
             }
         }
@@ -212,7 +212,6 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
-            navController.navigate("home")
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

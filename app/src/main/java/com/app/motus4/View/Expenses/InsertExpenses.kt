@@ -1,6 +1,7 @@
 package com.app.simplemoney8.View.Expenses
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -51,7 +53,6 @@ import com.app.simplemoney.Models.Room.Bank
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
-import com.app.motus4.View.FormatNumber
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.simplemoney8.customFontFamily
 
@@ -63,7 +64,6 @@ fun ExpensesComposable(
     expenseViewModel: ExpenseViewModel,
     bank: Bank?,
     navController: NavController,
-    formatNumber: FormatNumber
 ) {
     var expense by remember { mutableStateOf("") }
     var expenseValue by remember { mutableStateOf("0.00") }
@@ -91,10 +91,11 @@ fun ExpensesComposable(
             )
         }
         Column(modifier = Modifier.align(Alignment.Center).padding(top = 30.dp)) {
-            AsyncImage(model = bank?.img,
+            Image(painter = painterResource(bank?.img!!.toInt()),
                 contentDescription = "IMG",
                 modifier = Modifier
                     .size(76.dp)
+                    .clip(RoundedCornerShape(24.dp))
                     .align(Alignment.CenterHorizontally))
             TextField(
                 value = expense,
@@ -181,7 +182,7 @@ fun ExpensesComposable(
                             val integerWithThousandsSeparator =
                                 integerPart.reversed().chunked(3).joinToString(".").reversed()
 
-                            "$integerWithThousandsSeparator,$decimalPart"
+                            "$integerWithThousandsSeparator.$decimalPart"
                         }
                     }
                 },

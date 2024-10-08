@@ -53,7 +53,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
-import com.app.motus4.View.FormatNumber
 import com.app.simplemoney8.customFontFamily
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -61,7 +60,7 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun CreditOrDebitComposable(navHostController: NavHostController, formatNumber: FormatNumber) {
+fun CreditOrDebitComposable(navHostController: NavHostController) {
     var balance by remember { mutableStateOf("0.00") }
     var date by remember { mutableStateOf("") }
 
@@ -150,7 +149,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController, formatNumber: 
                             val integerWithThousandsSeparator =
                                 integerPart.reversed().chunked(3).joinToString(".").reversed()
 
-                            "$integerWithThousandsSeparator,$decimalPart"
+                            "$integerWithThousandsSeparator.$decimalPart"
                         }
                     }
                 },

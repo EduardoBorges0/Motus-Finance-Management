@@ -62,9 +62,9 @@ fun AddYourBankComposable(
     val bankList = listOf(
         BankInfo("PE", "#9D62D9", R.drawable.nubank, PurpleExpense, "#820BD0"),
         BankInfo("LD", "#232323", R.drawable.picpay, LightDarkExpense, "#21C25E"),
-        BankInfo("RE", "#CC2A4A", R.drawable.bradesco, RedExpense, "#CC092F"),
-        BankInfo("Santander", "#FE0002", R.drawable.santander, RedSantander, "#EA2142"),
-        BankInfo("c6", "#242424", R.drawable.c6, GreyC6, "#2E3191"),
+        BankInfo("Bradesco", "#F0022C", R.drawable.bradesco, RedExpense, "#CC092F"),
+        BankInfo("Santander", "#FE0002", R.drawable.santander, RedSantander, "#FFFFFF"),
+        BankInfo("c6", "#1F1F1F", R.drawable.c6, GreyC6, "#464646"),
         BankInfo("DE", "#111112", R.drawable.xp, DarkExpense, "#252525"),
         BankInfo("OE", "#FE6200", R.drawable.itau, OrangeExpense, "#2E3191")
     )
@@ -140,7 +140,7 @@ fun BankBox(
                 .align(Alignment.TopEnd)
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
-                .size(80.dp)
+                .size(60.dp)
         )
     }
 }

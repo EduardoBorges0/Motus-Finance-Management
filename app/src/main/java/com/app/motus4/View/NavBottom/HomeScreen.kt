@@ -60,6 +60,7 @@ import com.app.simplemoney.ui.theme.GoldYellow
 import com.app.motus4.R
 import com.app.motus2.View.NavBottom.ProfileScreenContent
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
+import com.app.simplemoney.ui.theme.negative
 import com.app.simplemoney6.Models.Room.DataClass.Expense
 import com.app.simplemoney8.customFontFamily
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -308,14 +309,16 @@ fun BankItem(
                 }
 
             if (bank.balance!! < 0) {
-                Text(
-                    text = currencyFormat.format(bank.balance).toString(),
-                    color = Color.Red,
-                    modifier = Modifier
-                        .padding(top = 25.dp)
-                        .padding(horizontal = 10.dp),
-                    fontFamily = customFontFamily
-                )
+                if(bank.name == "Bradesco"){
+                    Text(
+                        text = currencyFormat.format(bank.balance).toString(),
+                        color = negative,
+                        modifier = Modifier
+                            .padding(top = 25.dp)
+                            .padding(horizontal = 10.dp),
+                        fontFamily = customFontFamily
+                    )
+                }
             } else {
                 Text(
                     text = currencyFormat.format(bank.balance).toString(),
@@ -365,22 +368,36 @@ fun BankItem(
                         if (isVisible) {
                             Text(
                                 text = "${expense.description}",
-                                color = Color.White,
+                                    color = if(bank.name == "Santander") Color.Black else Color.White ,
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(start = 10.dp),
                                 fontFamily = customFontFamily
                             )
-                            Text(
-                                text = if (expense.spentOrReceived == "Spent") {
-                                    "- ${currencyFormat.format(expense.value)}"
-                                } else {
-                                    currencyFormat.format(expense.value).toString()
-                                },
-                                color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
-                                modifier = Modifier.padding(end = 10.dp),
-                                fontFamily = customFontFamily
-                            )
+                            if(bank.name == "Bradesco"){
+                                Text(
+                                    text = if (expense.spentOrReceived == "Spent") {
+                                        "- ${currencyFormat.format(expense.value)}"
+                                    } else {
+                                        currencyFormat.format(expense.value).toString()
+                                    },
+                                    color = if (expense.spentOrReceived == "Spent") negative else Color.Green,
+                                    modifier = Modifier.padding(end = 10.dp),
+                                    fontFamily = customFontFamily
+                                )
+                            }else{
+                                Text(
+                                    text = if (expense.spentOrReceived == "Spent") {
+                                        "- ${currencyFormat.format(expense.value)}"
+                                    } else {
+                                        currencyFormat.format(expense.value).toString()
+                                    },
+                                    color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
+                                    modifier = Modifier.padding(end = 10.dp),
+                                    fontFamily = customFontFamily
+                                )
+                            }
+
                         }
                     }
 
@@ -514,7 +531,7 @@ fun BankItem(
                 ) {
                     Text(
                         text = stringResource(id = R.string.adicione_seus_gastos),
-                        color = Color.White,
+                        color = if (bank.name == "Santander") Color.Black else Color.White,
                         fontFamily = customFontFamily
                     )
                 }

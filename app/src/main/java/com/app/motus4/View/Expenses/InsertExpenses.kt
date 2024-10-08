@@ -1,5 +1,6 @@
 package com.app.simplemoney8.View.Expenses
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -49,6 +51,7 @@ import com.app.simplemoney.Models.Room.Bank
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
+import com.app.motus4.View.FormatNumber
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.simplemoney8.customFontFamily
 
@@ -59,10 +62,11 @@ fun ExpensesComposable(
     viewModel: BankViewModel,
     expenseViewModel: ExpenseViewModel,
     bank: Bank?,
-    navController: NavController
+    navController: NavController,
+    formatNumber: FormatNumber
 ) {
     var expense by remember { mutableStateOf("") }
-    var expenseValue by remember { mutableStateOf("") }
+    var expenseValue by remember { mutableStateOf("0.00") }
     var selectedOptionSpentOrReceived by remember { mutableStateOf<String?>(null) }
     var selectedExpenseType by remember { mutableStateOf<String?>(null) }
     var showDialog by remember { mutableStateOf(false) }
@@ -112,37 +116,7 @@ fun ExpensesComposable(
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
             )
-            TextField(
-                value = expenseValue,
-                onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) {
-                        expenseValue = it // Mantenha a entrada com vírgula
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                label = { Text(text = stringResource(id = R.string.valor_do_gasto_recebido)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 40.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 20.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .padding(bottom = 30.dp),
-                textStyle = TextStyle(color = Color.Black),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    cursorColor = DarkBlue,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             Row(
                 modifier = Modifier
@@ -185,30 +159,110 @@ fun ExpensesComposable(
             }
 
             Spacer(modifier = Modifier.height(32.dp))
+            TextField(
+                value = expenseValue,
+                onValueChange = {
+                    // Permite apenas dígitos, ponto e vírgula
+                    if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) {
+                        val cleanedInput = it.replace(",", "").replace(".", "")
 
+                        // Garante no mínimo 2 casas decimais
+                        val parsedValue = cleanedInput.toLongOrNull() ?: 0L
+
+                        // Formata como valor monetário (centavos)
+                        expenseValue = if (parsedValue == 0L) {
+                            "0,00"
+                        } else {
+                            val formattedValue = parsedValue.toString().padStart(3, '0')
+                            val integerPart = formattedValue.dropLast(2)
+                            val decimalPart = formattedValue.takeLast(2)
+
+                            // Adiciona pontos como separador de milhar
+                            val integerWithThousandsSeparator =
+                                integerPart.reversed().chunked(3).joinToString(".").reversed()
+
+                            "$integerWithThousandsSeparator,$decimalPart"
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp)),
+                textStyle = TextStyle(color = Color.Black, textAlign = TextAlign.Center, fontSize = 50.sp),
+
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    cursorColor = DarkBlue,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                )
+            )
             // Botão de confirmação
             Button(
                 onClick = {
                     if (expense.isEmpty() || expenseValue.isEmpty() || selectedOptionSpentOrReceived == null || selectedExpenseType == null) {
                         showDialog = true
                     } else {
-                        // Converte a vírgula em ponto ao enviar
-                        val formattedExpenseValue = expenseValue.replace(',', '.').toDouble()
-
-                        if (selectedOptionSpentOrReceived == "Spent") {
-                            navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$formattedExpenseValue&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
-                        } else {
-                            expenseViewModel.insertExpense(
-                                bankId,
-                                expense,
-                                formattedExpenseValue,
-                                selectedOptionSpentOrReceived.toString(),
-                                selectedExpenseType,
-                                bank?.date.toString(),
-                                ""
-                            )
-                            viewModel.updateBalanceForExpense(bankId, formattedExpenseValue, selectedOptionSpentOrReceived.toString())
-                            navController.navigate("home")
+                        val cleanedBalance = expenseValue.replace(",", ".")
+                        if(cleanedBalance.count{ it == '.' } == 2){
+                            val removed = cleanedBalance.replaceFirst(".", "")
+                            if (selectedOptionSpentOrReceived == "Spent") {
+                                navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$removed&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
+                            } else {
+                                expenseViewModel.insertExpense(
+                                    bankId,
+                                    expense,
+                                    removed.toDouble(),
+                                    selectedOptionSpentOrReceived.toString(),
+                                    selectedExpenseType,
+                                    bank?.date.toString(),
+                                    ""
+                                )
+                                viewModel.updateBalanceForExpense(bankId, cleanedBalance.toDouble(), selectedOptionSpentOrReceived.toString())
+                                navController.navigate("home")
+                            }
+                        }
+                        else if ( cleanedBalance.count{ it == '.' } == 3 ){
+                            val removed = cleanedBalance.replaceFirst(".", "")
+                            val removedSecond = removed.replaceFirst(".", "")
+                            if (selectedOptionSpentOrReceived == "Spent") {
+                                navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$removedSecond&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
+                            } else {
+                                expenseViewModel.insertExpense(
+                                    bankId,
+                                    expense,
+                                    removedSecond.toDouble(),
+                                    selectedOptionSpentOrReceived.toString(),
+                                    selectedExpenseType,
+                                    bank?.date.toString(),
+                                    ""
+                                )
+                                viewModel.updateBalanceForExpense(bankId, removedSecond.toDouble(), selectedOptionSpentOrReceived.toString())
+                                navController.navigate("home")
+                            }
+                        }
+                        else{
+                            if (selectedOptionSpentOrReceived == "Spent") {
+                                navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$cleanedBalance&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
+                            } else {
+                                expenseViewModel.insertExpense(
+                                    bankId,
+                                    expense,
+                                    cleanedBalance.toDouble(),
+                                    selectedOptionSpentOrReceived.toString(),
+                                    selectedExpenseType,
+                                    bank?.date.toString(),
+                                    ""
+                                )
+                                viewModel.updateBalanceForExpense(bankId, cleanedBalance.toDouble(), selectedOptionSpentOrReceived.toString())
+                                navController.navigate("home")
+                            }
                         }
                     }
                 },
@@ -247,7 +301,7 @@ fun OptionReceivedOrSpent(text: String, isSelected: Boolean, onClick: () -> Unit
     Row(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

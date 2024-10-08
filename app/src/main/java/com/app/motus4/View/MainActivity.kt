@@ -118,28 +118,6 @@ class MainActivity : FragmentActivity() {
                 activity = context,
                 viewModel = viewModel
             ) }
-            composable("addImage?balance={balance}&creditOrDebit={creditOrDebit}&date={date}&nameOfBank={nameOfBank}",
-                arguments = listOf(
-                    navArgument("balance") { type = NavType.StringType },
-                    navArgument("creditOrDebit") { type = NavType.StringType },
-                    navArgument("date") { type = NavType.StringType },
-                    navArgument("nameOfBank") { type = NavType.StringType }
-                )
-            ) { backStackEntry ->
-                val balance = backStackEntry.arguments?.getString("balance") ?: ""
-                val creditOrDebit = backStackEntry.arguments?.getString("creditOrDebit") ?: ""
-                val date = backStackEntry.arguments?.getString("date") ?: ""
-                val nameOfBank = backStackEntry.arguments?.getString("nameOfBank") ?: ""
-
-                AddImageContent(
-                    nameOfBank = nameOfBank,
-                    viewModel = viewModel,
-                    balance = balance.toDouble(),
-                    creditOrDebit = creditOrDebit,
-                    date = date,
-                    navController =  navController
-                )
-            }
             composable(
                 "expenseClassification?bankId={bankId}&expense={expense}&expenseValue={expenseValue}&selectedOptionSpentOrReceived={selectedOptionSpentOrReceived}&selectedExpenseType={selectedExpenseType}",
                 arguments = listOf(
@@ -177,22 +155,20 @@ class MainActivity : FragmentActivity() {
             composable("home") {
                 HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel)
             }
-            composable("creditOrDebit") { CreditOrDebitComposable(navController) }
+            composable("creditOrDebit") { CreditOrDebitComposable(navController, formatNumber = FormatNumber()) }
             composable(
-                "addYourBank?balance={balance}&creditOrDebit={creditOrDebit}&date={date}&nameOfBank={nameOfBank}&img={img}",
+                "addYourBank?balance={balance}&creditOrDebit={creditOrDebit}&date={date}&nameOfBank={nameOfBank}",
                 arguments = listOf(
                     navArgument("balance") { type = NavType.StringType },
                     navArgument("creditOrDebit") { type = NavType.StringType },
                     navArgument("date") { type = NavType.StringType },
                     navArgument("nameOfBank") { type = NavType.StringType },
-                    navArgument("img") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
                 val balance = backStackEntry.arguments?.getString("balance") ?: ""
                 val creditOrDebit = backStackEntry.arguments?.getString("creditOrDebit") ?: ""
                 val date = backStackEntry.arguments?.getString("date") ?: ""
                 val nameOfBank = backStackEntry.arguments?.getString("nameOfBank") ?: ""
-                val img = backStackEntry.arguments?.getString("img") ?: ""
 
                 AddYourBankComposable(
                     balance = balance.toDouble(),
@@ -200,8 +176,7 @@ class MainActivity : FragmentActivity() {
                     date = date,
                     nameOfBank = nameOfBank,
                     viewModel = viewModel,
-                    navController = navController,
-                    img = img,
+                    navController = navController
                 )
             }
             composable("splash") {
@@ -218,7 +193,7 @@ class MainActivity : FragmentActivity() {
                 }
 
                 bank.value?.let { bank ->
-                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController, expenseViewModel = expenseViewModel)
+                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController, formatNumber = FormatNumber() ,expenseViewModel = expenseViewModel)
                 }
             }
         }
@@ -229,7 +204,6 @@ class MainActivity : FragmentActivity() {
 @Composable
 fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) {
     val context = LocalContext.current as MainActivity
-    val currentDate = LocalDate.now().toString()
     val executor = ContextCompat.getMainExecutor(context)
     val biometricManager = BiometricManager.from(context)
 
@@ -238,6 +212,7 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
+            navController.navigate("home")
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -253,7 +228,6 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
         }
     })
 
-    // Configurando o prompt da biometria
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle("Desbloqueie para usar o Motus")
         .setSubtitle("Use sua digital para acessar")
@@ -262,7 +236,6 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
         )
         .build()
 
-    // Checando se a biometria está disponível
     val biometricAvailability = biometricManager.canAuthenticate(
         BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
     )

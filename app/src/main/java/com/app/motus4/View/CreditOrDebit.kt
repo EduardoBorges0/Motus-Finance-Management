@@ -2,6 +2,7 @@ package com.app.motus2.View
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -52,15 +53,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
+import com.app.motus4.View.FormatNumber
 import com.app.simplemoney8.customFontFamily
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Calendar
+import java.util.Locale
 
 @Composable
-fun CreditOrDebitComposable(navHostController: NavHostController) {
-    var balance by remember { mutableStateOf("") }
+fun CreditOrDebitComposable(navHostController: NavHostController, formatNumber: FormatNumber) {
+    var balance by remember { mutableStateOf("0.00") }
     var date by remember { mutableStateOf("") }
 
-    var selectedOption by remember { mutableStateOf<String?>(null) }
+    var selectedOption by remember { mutableStateOf("")}
     var nameOfBank by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
@@ -99,41 +104,11 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 30.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color.White),
                 textStyle = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
                 label = {
                     Text(text = stringResource(id = R.string.nome_do_que_sao_esses_gastos), color = Color.Gray)
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    cursorColor = DarkBlue,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                )
-            )
-            TextField(
-                value = balance,
-                onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == '.' || char == ','}) {
-                        balance = it
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White),
-                textStyle = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
-                label = {
-                    Text(text = stringResource(id = R.string.seu_saldo), color = Color.Gray)
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -153,36 +128,75 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Row(
+            TextField(
+                value = balance,
+                onValueChange = {
+                    // Permite apenas dígitos, ponto e vírgula
+                    if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) {
+                        val cleanedInput = it.replace(",", "").replace(".", "")
+
+                        // Garante no mínimo 2 casas decimais
+                        val parsedValue = cleanedInput.toLongOrNull() ?: 0L
+
+                        // Formata como valor monetário (centavos)
+                        balance = if (parsedValue == 0L) {
+                            "0,00"
+                        } else {
+                            val formattedValue = parsedValue.toString().padStart(3, '0')
+                            val integerPart = formattedValue.dropLast(2)
+                            val decimalPart = formattedValue.takeLast(2)
+
+                            // Adiciona pontos como separador de milhar
+                            val integerWithThousandsSeparator =
+                                integerPart.reversed().chunked(3).joinToString(".").reversed()
+
+                            "$integerWithThousandsSeparator,$decimalPart"
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                OptionRow(
-                    text = stringResource(id = R.string.credito),
-                    isSelected = selectedOption == "Credit",
-                    onClick = { selectedOption = "Credit" }
+                    .clip(RoundedCornerShape(16.dp)),
+                textStyle = TextStyle(color = Color.Black, textAlign = TextAlign.Center, fontSize = 50.sp),
+
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    cursorColor = DarkBlue,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
                 )
-                OptionRow(
-                    text = stringResource(id = R.string.debito),
-                    isSelected = selectedOption == "Debit",
-                    onClick = { selectedOption = "Debit" }
-                )
-            }
+            )
+
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = {
-                    if (balance.isEmpty() || selectedOption == null || date.isEmpty() || nameOfBank.isEmpty()) {
+                    if (balance.isEmpty() || date.isEmpty() || nameOfBank.isEmpty()) {
                         showDialog = true
                     } else {
-                        val formattedExpenseValue = balance.replace(',', '.').toDouble()
+                        val cleanedBalance = balance.replace(",", ".")
+                        if(cleanedBalance.count{ it == '.' } == 2){
+                            val removed = cleanedBalance.replaceFirst(".", "")
+                            Log.d("REMOVEU", "VAI VAI ${removed}")
+                            navHostController.navigate("addYourBank?balance=$removed&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
 
-                        navHostController.navigate("addImage?balance=$formattedExpenseValue&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
-
+                        }
+                        else if ( cleanedBalance.count{ it == '.' } == 3 ){
+                            val removed = cleanedBalance.replaceFirst(".", "")
+                            val removedSecond = removed.replaceFirst(".", "")
+                            Log.d("REMOVEU 3", "VAI VAI ${removedSecond}")
+                            navHostController.navigate("addYourBank?balance=$removedSecond&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
+                        }
+                            else{
+                            navHostController.navigate("addYourBank?balance=$cleanedBalance&creditOrDebit=$selectedOption&date=$date&nameOfBank=$nameOfBank")
+                        }
                     }
                 },
                 shape = RoundedCornerShape(24.dp),
@@ -319,3 +333,4 @@ fun OptionRow(text: String, isSelected: Boolean, onClick: () -> Unit) {
         )
     }
 }
+

@@ -39,7 +39,7 @@ class BankViewModel(application: Application, private val repository: Repository
      fun getAllBankClosureDates(): List<String> = repository.getAllBankClosureDates()
 
     fun insertBank(name: String, color: String, img: String, creditOrDebit: String?, balance: Double?, colorSpentOrReceived : String, date : String?, nameOfExpenses : String?) {
-        Log.d("BankViewModel", "Inserting expense: name=$name, color=$color, img=$img, creditOrDebit=$creditOrDebit, date = $date, colorSpentOrReceveid = $colorSpentOrReceived")
+        Log.d("BankViewModel", "Inserting expense: name=$name, color=$color, img=$img, creditOrDebit=$creditOrDebit, date = $date, colorSpentOrReceveid = $colorSpentOrReceived, balance = $balance")
 
         val bank = Bank(name = name, color = color, img = img, creditOrDebit = creditOrDebit, balance = balance, colorSpentsOrReceived = colorSpentOrReceived, date = date, nameOfExpenses = nameOfExpenses)
         viewModelScope.launch(Dispatchers.IO) {

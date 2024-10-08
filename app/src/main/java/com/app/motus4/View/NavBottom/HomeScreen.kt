@@ -284,52 +284,20 @@ fun BankItem(
                 .fillMaxSize()
                 .heightIn(min = 260.dp)
         ) {
-            if (bank.img == "vazio") {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.TopCenter)
                         .padding(horizontal = 10.dp)
                 ) {
-                    Text(
-                        text = "${bank.creditOrDebit}",
-                        color = Color.White,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 25.dp), fontFamily = customFontFamily
-                    )
-                    Text(
-                        text = "${bank.nameOfExpenses}",
-                        color = Color.White,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 5.dp),
-                        fontFamily = customFontFamily
-                    )
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = 10.dp)
-                ) {
-                    AsyncImage(
-                        model = bank.img,
+                    Image(
+                        painter = painterResource(bank.img.toInt()),
                         contentDescription = "bankImage",
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .size(70.dp)
                     )
                     Text(
-                        text = "${bank.creditOrDebit}",
-                        color = Color.White,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 10.dp),
-                        fontFamily = customFontFamily
-                    )
-                    Text(
                         text = "${bank.nameOfExpenses}",
                         color = Color.White,
                         modifier = Modifier
@@ -338,7 +306,7 @@ fun BankItem(
                         fontFamily = customFontFamily
                     )
                 }
-            }
+
             if (bank.balance!! < 0) {
                 Text(
                     text = currencyFormat.format(bank.balance).toString(),

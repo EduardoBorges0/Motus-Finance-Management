@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -33,13 +34,14 @@ import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
 
 import com.app.motus4.R
-import com.app.simplemoney.ui.theme.BlueSonic
 import com.app.simplemoney.ui.theme.DarkExpense
+import com.app.simplemoney.ui.theme.GreyC6
 import com.app.simplemoney.ui.theme.LightDarkExpense
 import com.app.simplemoney.ui.theme.LightOrangeExpense
 import com.app.simplemoney.ui.theme.OrangeExpense
 import com.app.simplemoney.ui.theme.PurpleExpense
 import com.app.simplemoney.ui.theme.RedExpense
+import com.app.simplemoney.ui.theme.RedSantander
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -53,23 +55,20 @@ fun AddYourBankComposable(
     balance: Double?,
     creditOrDebit: String?,
     date: String?,
-    img: String?,
     navController: NavController
 ) {
     auth = Firebase.auth
-    Log.d("AddImageContent", "Navigating with image URI: $img")
 
     val bankList = listOf(
-        BankInfo("PE", "#9D62D9", img.toString(), PurpleExpense, "#820BD0"),
-        BankInfo("BB", "#548DE3", img.toString(), BlueSonic, "#3156A7"),
-        BankInfo("LO", "#F29979", img.toString(), LightOrangeExpense, "#FF7B01"),
-        BankInfo("LD", "#232323", img.toString(), LightDarkExpense, "#21C25E"),
-        BankInfo("RE", "#CC2A4A", img.toString(), RedExpense, "#CC092F"),
-        BankInfo("DE", "#111112", img.toString(), DarkExpense, "#252525"),
-        BankInfo("OE", "#FE6200", img.toString(), OrangeExpense, "#2E3191"),
-
-
+        BankInfo("PE", "#9D62D9", R.drawable.nubank, PurpleExpense, "#820BD0"),
+        BankInfo("LD", "#232323", R.drawable.picpay, LightDarkExpense, "#21C25E"),
+        BankInfo("RE", "#CC2A4A", R.drawable.bradesco, RedExpense, "#CC092F"),
+        BankInfo("Santander", "#FE0002", R.drawable.santander, RedSantander, "#EA2142"),
+        BankInfo("c6", "#242424", R.drawable.c6, GreyC6, "#2E3191"),
+        BankInfo("DE", "#111112", R.drawable.xp, DarkExpense, "#252525"),
+        BankInfo("OE", "#FE6200", R.drawable.itau, OrangeExpense, "#2E3191")
     )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +107,6 @@ fun AddYourBankComposable(
                         date,
                         nameOfBank
                     )
-
                     navController.navigate("home")
                 }
             )
@@ -135,14 +133,14 @@ fun BankBox(
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
-        AsyncImage(
-            model = bankInfo.imageRes,
+        Image(
+            painter = painterResource(id = bankInfo.imageRes),
             contentDescription = bankInfo.name,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
-                .size(60.dp)
+                .size(80.dp)
         )
     }
 }
@@ -150,7 +148,7 @@ fun BankBox(
 data class BankInfo(
     val name: String,
     val color: String,
-    val imageRes: String,
+    val imageRes: Int, // Alterado para Int para aceitar recursos do drawable
     val backgroundColor: Color,
     val colorSpentsOrReceived: String
 )

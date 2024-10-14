@@ -35,6 +35,7 @@ import com.app.motus2.View.ChangeLanguageContent
 import com.app.motus2.View.CreditOrDebitComposable
 import com.app.motus2.View.ExpenseClassificationBank
 import com.app.motus4.Models.RepositoryMonthly
+import com.app.motus4.Models.RepositoryPayment
 import com.app.simplemoney.Models.Repository
 import com.app.simplemoney.Models.Room.Bank
 import com.app.simplemoney.Models.Room.DatabaseProvider
@@ -46,6 +47,8 @@ import com.app.simplemoney8.Models.RepositoryExpense
 import com.app.motus4.R
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModelFactory
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModel
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModelFactory
 import com.app.simplemoney8.Models.RepositoryLanguage
 import com.app.simplemoney8.View.Expenses.ExpenseClassificationComposable
 import com.app.simplemoney8.View.Expenses.ExpensesComposable
@@ -60,6 +63,7 @@ import java.time.LocalDate
 class MainActivity : FragmentActivity() {
     private lateinit var viewModel: BankViewModel
     private lateinit var expenseViewModel: ExpenseViewModel
+    private lateinit var paymentViewModel: PaymentViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeViewModel()
@@ -84,18 +88,22 @@ class MainActivity : FragmentActivity() {
         val daoExpense = DatabaseProvider.getDaoExpense(application)
         val daoLanguage = DatabaseProvider.getDaoLanguage(application)
         val daoMonthly = DatabaseProvider.getDaoMonthly(application)
+        val daoPayment = DatabaseProvider.getDaoPayment(application)
+
 
         val repository = Repository(dao)
         val expenseRepository = RepositoryExpense(daoExpense)
         val monthlyRepository = RepositoryMonthly(daoMonthly)
         val repositoryLanguage = RepositoryLanguage(daoLanguage)
+        val repositoryPayment = RepositoryPayment(daoPayment)
 
         val factory = BankViewModelFactory(application, repository, repositoryLanguage)
-        val factoryExpense = ExpenseViewModelFactory(application, repository, expenseRepository, monthlyRepository)
-
+        val factoryExpense = ExpenseViewModelFactory(application, repository, expenseRepository, monthlyRepository, repositoryPayment)
+        val factoryPayment = PaymentViewModelFactory(application, repositoryPayment, repositoryExpense = expenseRepository)
         viewModel = ViewModelProvider(this, factory)[BankViewModel::class.java]
         expenseViewModel = ViewModelProvider(this, factoryExpense)[ExpenseViewModel::class.java]
-      }
+        paymentViewModel = ViewModelProvider(this, factoryPayment)[PaymentViewModel::class.java]
+    }
 
     @Composable
     fun SetupNavController() {
@@ -112,6 +120,9 @@ class MainActivity : FragmentActivity() {
                     navController = navController,
                     expenseViewModel = expenseViewModel
                 )
+            }
+            composable("payment"){
+                SelectPayment(navController, paymentViewModel)
             }
             composable("changeLanguage") { ChangeLanguageContent(
                 navController = navController,
@@ -148,12 +159,13 @@ class MainActivity : FragmentActivity() {
                         selectedExpenseType = selectedExpenseType,
                         viewModel = viewModel,
                         bank = bank,
-                        expenseViewModel = expenseViewModel
+                        expenseViewModel = expenseViewModel,
+                        paymentViewModel = paymentViewModel
                     )
                 }
             }
             composable("home") {
-                HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel)
+                HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel, paymentViewModel)
             }
             composable("creditOrDebit") { CreditOrDebitComposable(navController) }
             composable(
@@ -193,7 +205,7 @@ class MainActivity : FragmentActivity() {
                 }
 
                 bank.value?.let { bank ->
-                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController ,expenseViewModel = expenseViewModel)
+                    ExpensesComposable(bankId = bankId, viewModel = viewModel, bank = bank, navController = navController , paymentViewModel = paymentViewModel, expenseViewModel = expenseViewModel)
                 }
             }
         }
@@ -212,6 +224,8 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
+            navController.navigate("home")
+
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -243,7 +257,6 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
     val credentialsAvailable = biometricAvailability != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE &&
             biometricAvailability != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE
 
-    // Layout da tela de login biométrico
     Column(
         modifier = Modifier
             .fillMaxSize()

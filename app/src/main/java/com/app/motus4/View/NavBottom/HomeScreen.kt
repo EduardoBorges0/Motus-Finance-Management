@@ -48,8 +48,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import co.yml.charts.common.extensions.isNotNull
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.app.simplemoney.Models.Room.Bank
@@ -59,13 +61,19 @@ import com.app.simplemoney.ui.theme.DarkBlueDivisor
 import com.app.simplemoney.ui.theme.GoldYellow
 import com.app.motus4.R
 import com.app.motus2.View.NavBottom.ProfileScreenContent
+import com.app.motus4.Models.Room.DataClass.ModelPayment
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModel
 import com.app.simplemoney.ui.theme.negative
 import com.app.simplemoney6.Models.Room.DataClass.Expense
 import com.app.simplemoney8.customFontFamily
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -76,7 +84,7 @@ fun String.toColor(): Color {
 }
 
 @Composable
-fun HomeScreenComposable(viewModel: BankViewModel, navHostController: NavHostController, expenseViewModel: ExpenseViewModel) {
+fun HomeScreenComposable(viewModel: BankViewModel, navHostController: NavHostController, expenseViewModel: ExpenseViewModel, paymentViewModel: PaymentViewModel) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("", "", "", "")
 
@@ -156,7 +164,7 @@ fun HomeScreenComposable(viewModel: BankViewModel, navHostController: NavHostCon
                     .padding(innerPadding)
             ) {
                 when (selectedTab) {
-                    0 -> HomeScreenContent(viewModel, navHostController, expenseViewModel)
+                    0 -> HomeScreenContent(viewModel, navHostController, expenseViewModel, paymentViewModel)
                     1 -> StatisticScreenContent(expenseViewModel, viewModel)
                     2 -> ProfileScreenContent(viewModel, navHostController, expenseViewModel)
                     3 -> SettingsScreenContent(navController = navHostController)
@@ -170,11 +178,33 @@ fun HomeScreenComposable(viewModel: BankViewModel, navHostController: NavHostCon
 fun HomeScreenContent(
     viewModel: BankViewModel,
     navHostController: NavHostController,
-    expenseViewModel: ExpenseViewModel
+    expenseViewModel: ExpenseViewModel,
+    paymentViewModel: PaymentViewModel
 ) {
+    var showDialog by remember { mutableStateOf(false) }
     val banks by viewModel.getAllBanks().observeAsState(emptyList())
-    var premium by remember { mutableStateOf(false) }
     var refreshing by remember { mutableStateOf(false) }
+
+
+    // Obtenha o LiveData usando observeAsState
+    val payment by paymentViewModel.livedata.observeAsState()
+
+    var lang by remember { mutableStateOf("pt") }
+
+    LaunchedEffect(Unit) {
+        // Update the language setting
+        paymentViewModel.getPayment()
+        lang = viewModel.updateLanguage() ?: "pt"
+    }
+
+    val locale = when (lang) {
+        "pt" -> Locale("pt", "BR")
+        "en" -> Locale("en", "US")
+        "es" -> Locale("es", "ES")
+        else -> Locale.getDefault()
+    }
+
+    val currencyFormat = NumberFormat.getCurrencyInstance(locale)
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
@@ -187,11 +217,59 @@ fun HomeScreenContent(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            // Conteúdo principal
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
+                if (payment != null) {
+                    val paymentValue = payment?.payment // Assegure-se de que não seja nulo
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .border(1.dp, DarkBlue, RoundedCornerShape(8.dp))
+                            .padding(16.dp)
+                    ) {
+                        payment.let {
+                            Log.d("ISSO AI", "${it?.payment}")
+                            Text(
+                                text = currencyFormat.format(it?.payment).toString(),
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .padding(end = 40.dp) // Add space for the icon
+                            )                        }
+                        // Close button "X"
+                        IconButton(
+                            onClick = {
+                                showDialog = true
+                            },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .size(24.dp) // Set icon size
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Close Icon",
+                                tint = Color.Black
+                            )
+                        }
+                    }
+                } else {
+                    Button(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .border(1.dp, DarkBlue, RoundedCornerShape(16.dp)),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Black
+                        ),
+                        onClick = {
+                            navHostController.navigate("payment")
+                        }
+                    ) {
+                        Text("Selecione aqui seu salário!!")
+                    }
+                }
                 Box(
                     modifier = Modifier
                         .padding(top = 80.dp)
@@ -219,7 +297,34 @@ fun HomeScreenContent(
                 }
             }
 
-            // Botão que ativa o PremiumOferta
+            // Dialog for deleting payment
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text(text = stringResource(id = R.string.deletar_banco)) },
+                    text = { Text(text = stringResource(id = R.string.voce_ira_deletar_banco)) },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showDialog = false
+                            CoroutineScope(Dispatchers.IO).launch {
+                                paymentViewModel.deletePayment(payment!!.id)
+                                withContext(Dispatchers.Main) {
+                                    paymentViewModel.getPayment() // Chama novamente para atualizar o LiveData
+                                }
+                            }
+                        }) {
+                            Text(text = "OK", color = Color.Black)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showDialog = false
+                        }) {
+                            Text(text = "Cancelar", color = Color.Black)
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -239,9 +344,6 @@ fun BankItem(
     LaunchedEffect(Unit) {
         lang = viewModel.updateLanguage() ?: "pt"
     }
-
-
-
         val locale = when (lang) {
             "pt" -> Locale("pt", "BR")
             "en" -> Locale("en", "US")

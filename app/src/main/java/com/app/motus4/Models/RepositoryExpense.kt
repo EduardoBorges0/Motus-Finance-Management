@@ -14,6 +14,7 @@ class RepositoryExpense(private val daoExpense: DaoExpense) {
         daoExpense.insertExpense(expense)
     }
     suspend fun getSpent() : Double? = daoExpense.getSpent()
+
     suspend fun getReceived() : Double? = daoExpense.getReceived()
 
     fun markExpensesReadyForDeletion(bankId: Int) = daoExpense.markExpensesReadyForDeletion(bankId)

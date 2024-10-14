@@ -1,4 +1,6 @@
-package com.app.motus4.ViewModels.ExpenseViewModel
+package com.app.motus4.ViewModels.PaymentViewModel
+
+
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -8,17 +10,15 @@ import com.app.motus4.Models.RepositoryPayment
 import com.app.simplemoney.Models.Repository
 import com.app.simplemoney8.Models.RepositoryExpense
 
-class ExpenseViewModelFactory(
+class PaymentViewModelFactory(
     private val application: Application,
-    private val repository: Repository,
-    private val repositoryExpense: RepositoryExpense,
-    private val repositoryMonthly: RepositoryMonthly,
-    private val repositoryPayment: RepositoryPayment
+    private val repositoryPayment: RepositoryPayment,
+    private val repositoryExpense: RepositoryExpense
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ExpenseViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(PaymentViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ExpenseViewModel(application, repositoryExpense, repository, repositoryPayment, repositoryMonthly) as T
+            return PaymentViewModel(application, repositoryPayment, repositoryExpense = repositoryExpense) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

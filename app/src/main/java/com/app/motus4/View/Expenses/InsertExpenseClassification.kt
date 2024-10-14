@@ -39,8 +39,12 @@ import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.motus4.R
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModel
 import com.app.simplemoney8.TranslatedExpenseName
 import com.app.simplemoney8.customFontFamily
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -52,7 +56,8 @@ fun ExpenseClassificationComposable(navController: NavController,
                                     expenseValue: Double,
                                     selectedOptionSpentOrReceived: String,
                                     selectedExpenseType : String?,
-                                    bank: Bank?){
+                                    bank: Bank?,
+                                    paymentViewModel: PaymentViewModel){
   val list = listOf(
       ExpenseClassificationBank("", stringResource(id = R.string.transporte), null) ,
       ExpenseClassificationBank("", stringResource(id = R.string.esporte), null),
@@ -111,7 +116,8 @@ fun ExpenseClassificationComposable(navController: NavController,
             selectedExpenseType = selectedExpenseType,
             bank = bank,
                 navController = navController,
-                expenseViewModel = expenseViewModel
+                expenseViewModel = expenseViewModel,
+                paymentViewModel = paymentViewModel
             )
         }
     }
@@ -129,7 +135,8 @@ fun ExpenseClassificationBox(navController: NavController,
                              expenseValue: Double,
                              selectedOptionSpentOrReceived: String,
                              selectedExpenseType : String?,
-                             bank: Bank?){
+                             bank: Bank?,
+                             paymentViewModel: PaymentViewModel){
     var showDialog by remember { mutableStateOf(false) }
     Box (
         modifier = Modifier
@@ -158,6 +165,9 @@ fun ExpenseClassificationBox(navController: NavController,
                         bank?.date.toString(),
                         expenseClassification = translatedExpenseClassification
                     )
+                    CoroutineScope(Dispatchers.IO).launch {
+                        paymentViewModel.updatePaymentIsNotExist(expenseValue.toDouble(), selectedOptionSpentOrReceived.toString())
+                    }
                     viewModel.updateBalanceForExpense(
                         bankId,
                         expenseValue,

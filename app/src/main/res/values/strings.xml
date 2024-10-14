@@ -85,5 +85,6 @@
     <string name="title_activity_register_compose">RegisterCompose</string>
     <string name="title_activity_register_email_and_password">RegisterEmailAndPassword</string>
     <string name="title_activity_login_compose">LoginCompose</string>
+    <string name="title_activity_select_payment">SelectPayment</string>
 
 </resources>

@@ -5,12 +5,16 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.motus4.Models.Room.DaoMonthlyExpense
+import com.app.motus4.Models.Room.DaoPayment
 import com.app.simplemoney8.Models.Room.DaoExpense
 import com.app.simplemoney8.Models.Room.DaoLanguage
 
-val MIGRATION_14_15 = object : Migration(14, 15) {
+val MIGRATION_15_16 = object : Migration(15, 16) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("DROP TABLE IF EXISTS table_expensesClassification")
+        database.execSQL("CREATE TABLE IF NOT EXISTS payment (\n" +
+                "    id INTEGER PRIMARY KEY NOT NULL,  -- id será a chave primária e terá um valor fixo\n" +
+                "    payment REAL                      -- payment é um valor do tipo REAL (Double)\n" +
+                ");\n")
 
     }
 }
@@ -23,7 +27,7 @@ object DatabaseProvider {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java, "app_database" )
-                .addMigrations(MIGRATION_14_15)
+                .addMigrations(MIGRATION_15_16)
                 .build()
 
             INSTANCE = instance
@@ -42,6 +46,9 @@ object DatabaseProvider {
     }
     fun getDaoMonthly(context: Context) : DaoMonthlyExpense{
         return getDatabase(context).userDaoMonthly()
+    }
+    fun getDaoPayment(context: Context) : DaoPayment{
+        return getDatabase(context).userDaoPayment()
     }
 
 }

@@ -11,7 +11,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.motus4.Models.RepositoryMonthly
+import com.app.motus4.Models.RepositoryPayment
+import com.app.motus4.Models.Room.DataClass.ModelPayment
 import com.app.motus4.Models.Room.DataClass.MonthlyExpense
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModel
 import com.app.motus4.scheduleAlertReminder
 import com.app.motus4.scheduleDueDateReminder
 import com.app.simplemoney.Models.Repository
@@ -30,7 +33,8 @@ class ExpenseViewModel(
     application: Application,
     private val repositoryExpense: RepositoryExpense,
     private val repository: Repository,
-    private val repositoryMonthly: RepositoryMonthly
+    private val repositoryPayment: RepositoryPayment,
+    private val repositoryMonthly: RepositoryMonthly,
     )  : AndroidViewModel(application) {
     private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
@@ -155,10 +159,18 @@ class ExpenseViewModel(
                         "Received" -> updatedBank?.balance?.plus(sum) ?: 0.0
                         else -> updatedBank?.balance ?: 0.0
                     }
+                    val newPayment = when(spentOrReceived){
+                        "Spent" -> repositoryPayment.getPayment(1L)?.payment?.plus(sum) ?: 0.0
+                        "Received" -> repositoryPayment.getPayment(1L)?.payment?.plus(sum) ?: 0.0
+                        else -> repositoryPayment.getPayment(1L)?.payment ?: 0.0
+                    }
                     repositoryExpense.markExpensesReadyForDeletion(bankId)
+                    val modelPayment = ModelPayment(payment = newPayment)
+                    repositoryPayment.updatePayment(modelPayment)
                     updatedBank?.let {
                         repository.updateBank(it.copy(balance = newBalance))
                     }
+
                 }
             }
             if (closures.isNotEmpty() && closures.maxOrNull() == currentDateFormatted) {
@@ -174,7 +186,6 @@ class ExpenseViewModel(
                 repositoryExpense.deleteExpensesReadyForDeletion()
                 repositoryExpense.deleteExpenseByBankId(bankId, "Variable")
                 val count = repositoryMonthly.getItemCount()
-
                 if(count > 6){
                     repositoryMonthly.deleteOldestItem()
                 }

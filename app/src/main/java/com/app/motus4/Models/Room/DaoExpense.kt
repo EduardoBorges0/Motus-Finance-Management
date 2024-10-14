@@ -23,8 +23,6 @@ interface DaoExpense {
     @Insert
     suspend fun insertExpense(expense: Expense)
 
-
-
     @Query("SELECT SUM(value) FROM table_expenses WHERE expenseClassification = :classification AND spentOrReceived = 'Spent'")
     suspend fun getTotalByClassification(classification: String): Double?
 

@@ -54,7 +54,11 @@ import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
 import com.app.motus4.R
 import com.app.motus4.ViewModels.ExpenseViewModel.ExpenseViewModel
+import com.app.motus4.ViewModels.PaymentViewModel.PaymentViewModel
 import com.app.simplemoney8.customFontFamily
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -64,6 +68,7 @@ fun ExpensesComposable(
     expenseViewModel: ExpenseViewModel,
     bank: Bank?,
     navController: NavController,
+    paymentViewModel: PaymentViewModel
 ) {
     var expense by remember { mutableStateOf("") }
     var expenseValue by remember { mutableStateOf("0.00") }
@@ -225,6 +230,9 @@ fun ExpensesComposable(
                                     bank?.date.toString(),
                                     ""
                                 )
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    paymentViewModel.updatePaymentIsNotExist(expenseValue.toDouble(), selectedOptionSpentOrReceived.toString())
+                                }
                                 viewModel.updateBalanceForExpense(bankId, cleanedBalance.toDouble(), selectedOptionSpentOrReceived.toString())
                                 navController.navigate("home")
                             }
@@ -244,6 +252,9 @@ fun ExpensesComposable(
                                     bank?.date.toString(),
                                     ""
                                 )
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    paymentViewModel.updatePaymentIsNotExist(expenseValue.toDouble(), selectedOptionSpentOrReceived.toString())
+                                }
                                 viewModel.updateBalanceForExpense(bankId, removedSecond.toDouble(), selectedOptionSpentOrReceived.toString())
                                 navController.navigate("home")
                             }
@@ -261,6 +272,9 @@ fun ExpensesComposable(
                                     bank?.date.toString(),
                                     ""
                                 )
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    paymentViewModel.updatePaymentIsNotExist(expenseValue.toDouble(), selectedOptionSpentOrReceived.toString())
+                                }
                                 viewModel.updateBalanceForExpense(bankId, cleanedBalance.toDouble(), selectedOptionSpentOrReceived.toString())
                                 navController.navigate("home")
                             }

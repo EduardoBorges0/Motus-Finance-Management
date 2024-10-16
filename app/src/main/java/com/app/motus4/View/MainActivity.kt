@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -110,7 +112,7 @@ class MainActivity : FragmentActivity() {
         val navController = rememberNavController()
         val context = LocalContext.current as Activity
         NavHost(navController = navController, startDestination = "splash") {
-            composable("main") { SimpleMoneyEnter(viewModel = expenseViewModel, navController = navController) }
+            composable("main") { SimpleMoneyEnter(paymentViewModel = paymentViewModel, navController = navController) }
             composable("expenseClassificationNavBottom?classification={classification}",
                 arguments = listOf(navArgument("classification") { type = NavType.StringType })
             ) {
@@ -214,12 +216,11 @@ class MainActivity : FragmentActivity() {
 
 
 @Composable
-fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) {
+fun SimpleMoneyEnter(navController: NavController, paymentViewModel: PaymentViewModel) {
     val context = LocalContext.current as MainActivity
     val executor = ContextCompat.getMainExecutor(context)
     val biometricManager = BiometricManager.from(context)
-
-
+    val payment by paymentViewModel.livedata.observeAsState()
     val biometricPrompt = BiometricPrompt(context, executor, object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
@@ -262,6 +263,14 @@ fun SimpleMoneyEnter(navController: NavController, viewModel: ExpenseViewModel) 
             .fillMaxSize()
             .background(Color.White)
     ) {
+        LaunchedEffect(Unit) {
+            payment.let {
+                if(it?.payment == null){
+                    paymentViewModel.deletePayment(1)
+                }
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()

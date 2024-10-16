@@ -17,6 +17,7 @@ class RepositoryExpense(private val daoExpense: DaoExpense) {
 
     suspend fun getReceived() : Double? = daoExpense.getReceived()
 
+
     fun markExpensesReadyForDeletion(bankId: Int) = daoExpense.markExpensesReadyForDeletion(bankId)
 
     suspend fun deleteExpense(currentDate: String) = daoExpense.deleteExpense(currentDate)

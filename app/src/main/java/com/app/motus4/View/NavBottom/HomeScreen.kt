@@ -221,8 +221,15 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
+
                 if (payment != null) {
-                    val paymentValue = payment?.payment // Assegure-se de que não seja nulo
+                    payment.let {
+                        if(it?.payment == null){
+                            LaunchedEffect(Unit) {
+                                paymentViewModel.deletePayment(1)
+                            }
+                        }
+                    }
                     Box(
                         modifier = Modifier
                             .padding(16.dp)

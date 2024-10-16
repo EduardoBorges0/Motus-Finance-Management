@@ -129,17 +129,15 @@ class ExpenseViewModel(
             val currentDate = LocalDate.now()
             val currentDateFormatted = currentDate.format(dateFormatter)
 
-            // Converte a data da despesa para LocalDate
             val parsedExpenseDate = LocalDate.parse(expenseDate, dateFormatter)
 
-            // Captura todas as datas de fechamento de bancos
             val allBankClosureDates = repository.getAllBankClosureDates()
             val closures = allBankClosureDates.filter {
                 val date = it.toLocalDateOrNull(dateFormatter)
                 date?.month == currentDate.month
             }
 
-            if (parsedExpenseDate.isBefore(currentDate) || parsedExpenseDate.isEqual(currentDate) ) {
+            if (parsedExpenseDate.isBefore(currentDate) || parsedExpenseDate.isEqual(currentDate)) {
                 val newDate = parsedExpenseDate.plusMonths(1).format(dateFormatter)
                 Log.d("DATA", "Atualizando data para: $newDate")
 
@@ -153,26 +151,32 @@ class ExpenseViewModel(
                     val totalReceived = repositoryExpense.getTotalReceivedForBank(bankId) ?: 0.0
                     val sum = totalSpent - totalReceived
 
+                    Log.d("FinanceLog", "Total Spent: $totalSpent, Total Received: $totalReceived, Sum: $sum")
+
                     // Atualiza o balance do banco de acordo com a despesa/recebido
                     val newBalance = when (spentOrReceived) {
                         "Spent" -> updatedBank?.balance?.plus(sum) ?: 0.0
                         "Received" -> updatedBank?.balance?.plus(sum) ?: 0.0
                         else -> updatedBank?.balance ?: 0.0
                     }
-                    val newPayment = when(spentOrReceived){
-                        "Spent" -> repositoryPayment.getPayment(1L)?.payment?.plus(sum) ?: 0.0
-                        "Received" -> repositoryPayment.getPayment(1L)?.payment?.plus(sum) ?: 0.0
-                        else -> repositoryPayment.getPayment(1L)?.payment ?: 0.0
-                    }
                     repositoryExpense.markExpensesReadyForDeletion(bankId)
-                    val modelPayment = ModelPayment(payment = newPayment)
-                    repositoryPayment.updatePayment(modelPayment)
                     updatedBank?.let {
                         repository.updateBank(it.copy(balance = newBalance))
                     }
 
+                    // Atualização do payment
+                    val currentPayment = repositoryPayment.getPayment(1L)?.payment ?: 0.0
+                    val newPayment = when (spentOrReceived) {
+                        "Spent" -> currentPayment.plus(sum)
+                        "Received" -> currentPayment.plus(sum)
+                        else -> currentPayment
+                    }
+                    Log.d("VALOR GASTO", "VALOR GASTO ${newPayment}, VALOR GASTO/RECEBIDO: ${totalSpent}/${totalReceived} e VALOR SUM: ${sum}")
+                    val modelPayment = ModelPayment(payment = newPayment)
+                    repositoryPayment.updatePayment(modelPayment)
                 }
             }
+
             if (closures.isNotEmpty() && closures.maxOrNull() == currentDateFormatted) {
                 val totalSpentBack = repositoryExpense.getSpent() ?: 0.0
                 val totalReceivedBack = repositoryExpense.getReceived() ?: 0.0
@@ -180,13 +184,18 @@ class ExpenseViewModel(
 
                 Log.d("ULTIMA DATA AMIGO", "PEGA ESSES VALORES $totalReceivedBack, $totalSpentBack e $sum")
 
-                val monthly = MonthlyExpense(monthlyExpense = sum, monthly = LocalDate.now().month.toString().take(3), yearExpense = LocalDate.now().year)
+                val monthly = MonthlyExpense(
+                    monthlyExpense = sum,
+                    monthly = LocalDate.now().month.toString().take(3),
+                    yearExpense = LocalDate.now().year
+                )
                 repositoryMonthly.insertMonthlyExpense(monthly)
                 repositoryMonthly.removeDuplicateMonthlyExpenses()
                 repositoryExpense.deleteExpensesReadyForDeletion()
                 repositoryExpense.deleteExpenseByBankId(bankId, "Variable")
+
                 val count = repositoryMonthly.getItemCount()
-                if(count > 6){
+                if (count > 6) {
                     repositoryMonthly.deleteOldestItem()
                 }
             }

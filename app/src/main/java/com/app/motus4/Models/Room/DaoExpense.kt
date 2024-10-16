@@ -51,6 +51,7 @@ interface DaoExpense {
     suspend fun getTotalReceived(): Double?
 
 
+
     @Query("SELECT SUM(value) FROM table_expenses WHERE bankId = :bankId AND expenseClassification = :classification AND spentOrReceived = 'Spent'")
     suspend fun getTotalByClassificationAndBankId(bankId: Int, classification: String): Double?
 

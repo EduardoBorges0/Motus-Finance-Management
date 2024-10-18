@@ -27,6 +27,22 @@ class PaymentViewModel(application: Application,
         }
     }
 
+     fun updatePaymentByBank(bankId: Int) {
+        viewModelScope.launch {
+            val spent = repositoryExpense.getTotalSpentByBank(bankId) ?: 0.0
+            Log.d("VALOR SPENT By BANK", "VALOR SPENT $spent")
+            val received = repositoryExpense.getTotalReceivedByBank(bankId) ?: 0.0
+            Log.d("VALOR SPENT By BANK", "VALOR RECEIVED $received")
+            val plus = spent - received
+            Log.d("VALOR SPENT By BANK", "VALOR TOTAL $plus")
+            val paymentValue = repositoryPayment.getPayment(1L)
+            val count = paymentValue?.payment?.plus(plus)
+            val pay = ModelPayment(payment = count)
+            repositoryPayment.updatePayment(pay)
+            Log.d("VALOR SPENT", "VALOR PAYMENT ${pay.payment}")
+
+        }
+    }
     suspend fun updatePayment(){
         CoroutineScope(Dispatchers.IO).launch {
             val spent = repositoryExpense.getSpent() ?: 0.0
@@ -43,6 +59,23 @@ class PaymentViewModel(application: Application,
                     Log.d("VALOR SPENT", "VALOR PAYMENT ${pay.payment}")
 
                 }
+        }
+    }
+    suspend fun updatePaymentForDeleteExpense(value: Double, type: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d("VALOR SPENT", "VALOR TOTAL $value")
+            val paymentValue = repositoryPayment.getPayment(1L)
+            val count = when(type){
+                "Spent" -> paymentValue?.payment?.plus(value)
+                "Received" -> paymentValue?.payment?.minus(value)
+                else -> throw IllegalArgumentException("Invalid payment type: $type")
+            }
+            val pay = ModelPayment(payment = count)
+            viewModelScope.launch {
+                repositoryPayment.updatePayment(pay)
+                Log.d("VALOR SPENT", "VALOR PAYMENT ${pay.payment}")
+
+            }
         }
     }
     suspend fun updatePaymentIsNotExist(value: Double, type: String){
@@ -67,8 +100,13 @@ class PaymentViewModel(application: Application,
         return repositoryPayment.deletePayment(id)
     }
      suspend fun getPayment(){
-         livedata.postValue( repositoryPayment.getPayment(1))
-         Log.d("ISSO AI VIEWMODEL", "${livedata.value}")
+         try {
+             livedata.postValue( repositoryPayment.getPayment(1))
+             Log.d("ISSO AI VIEWMODEL", "${livedata.value}")
+         }catch (e: Exception){
+             Log.d("EXCEÇÃO", "ESSE ERRO AE MEU NOBRE ${e.message}")
+
+         }
 
      }
 }

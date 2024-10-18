@@ -25,9 +25,6 @@ interface DaoPayment {
     @Query("SELECT * FROM payment WHERE id = :id LIMIT 1")
     suspend fun getPayment(id: Long) : ModelPayment?
 
-
-
-
     @Query("SELECT * FROM payment")
     suspend fun getPaymentAll() : ModelPayment?
 

@@ -263,13 +263,7 @@ fun SimpleMoneyEnter(navController: NavController, paymentViewModel: PaymentView
             .fillMaxSize()
             .background(Color.White)
     ) {
-        LaunchedEffect(Unit) {
-            payment.let {
-                if(it?.payment == null){
-                    paymentViewModel.deletePayment(1)
-                }
-            }
-        }
+
 
         Box(
             modifier = Modifier

@@ -86,7 +86,7 @@ fun SelectPayment(navController: NavController, viewModel: PaymentViewModel) {
 
                     // Formata como valor monetário (centavos)
                     payment = if (parsedValue == 0L) {
-                        "0,00"
+                        "0.00"
                     } else {
                         val formattedValue = parsedValue.toString().padStart(3, '0')
                         val integerPart = formattedValue.dropLast(2)
@@ -127,38 +127,45 @@ fun SelectPayment(navController: NavController, viewModel: PaymentViewModel) {
                 if(cleanedBalance.count{ it == '.' } == 2){
                     val removed = cleanedBalance.replaceFirst(".", "")
                     Log.d("REMOVEU", "VAI VAI ${removed}")
-                    CoroutineScope(Dispatchers.IO).launch {
+
                         val model = ModelPayment(
                             payment = removed.toDouble()
                         )
                         viewModel.insertPayment(model)
+                    CoroutineScope(Dispatchers.IO).launch {
                         viewModel.updatePayment()
                     }
+
                     navController.navigate("home")
                 }
                 else if ( cleanedBalance.count{ it == '.' } == 3 ){
                     val removed = cleanedBalance.replaceFirst(".", "")
                     val removedSecond = removed.replaceFirst(".", "")
                     Log.d("REMOVEU 3", "VAI VAI ${removedSecond}")
-                    CoroutineScope(Dispatchers.IO).launch {
                         val model = ModelPayment(
                             payment = removed.toDouble()
                         )
-                        viewModel.updatePayment()
+
 
                         viewModel.insertPayment(model)
+                    viewModel.insertPayment(model)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        viewModel.updatePayment()
                     }
+
                     navController.navigate("home")
                 }
                 else{
-                    CoroutineScope(Dispatchers.IO).launch {
                         val model = ModelPayment(
                             payment = payment.toDouble()
                         )
-                        viewModel.updatePayment()
 
                         viewModel.insertPayment(model)
+                    viewModel.insertPayment(model)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        viewModel.updatePayment()
                     }
+
                     navController.navigate("home")
                 }
             },

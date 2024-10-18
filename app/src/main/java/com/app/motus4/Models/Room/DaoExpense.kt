@@ -58,6 +58,12 @@ interface DaoExpense {
     @Query("SELECT SUM(value) FROM table_expenses WHERE bankId = :bankId AND type = 'Variable' AND spentOrReceived = 'Spent'")
     suspend fun getTotalSpentForBank(bankId: Int): Double?
 
+    @Query("SELECT SUM(value) FROM table_expenses WHERE bankId = :bankId AND spentOrReceived = 'Spent'")
+    suspend fun getTotalSpentByBank(bankId: Int): Double?
+
+    @Query("SELECT SUM(value) FROM table_expenses WHERE bankId = :bankId AND spentOrReceived = 'Received'")
+    suspend fun getTotalReceivedByBank(bankId: Int): Double?
+
     @Query("SELECT * FROM table_expenses WHERE bankId = :bankId")
     fun getExpensesForBank(bankId: Int): LiveData<List<Expense>>
 

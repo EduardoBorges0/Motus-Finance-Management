@@ -38,8 +38,9 @@ class RepositoryExpense(private val daoExpense: DaoExpense) {
 
     suspend fun getTotalSpent(): Double? = daoExpense.getTotalSpent()
 
-    suspend fun getTotalReceived(): Double? = daoExpense.getTotalReceived()
+    suspend fun getTotalSpentByBank(bankId: Int): Double? = daoExpense.getTotalSpentByBank(bankId)
 
+    suspend fun getTotalReceivedByBank(bankId: Int): Double? = daoExpense.getTotalReceivedByBank(bankId)
 
     suspend fun getTotalByClassification(classification: String): Double? = daoExpense.getTotalByClassification(classification)
 

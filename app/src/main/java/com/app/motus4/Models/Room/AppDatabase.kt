@@ -11,7 +11,7 @@ import com.app.simplemoney6.Models.Room.DataClass.Expense
 import com.app.simplemoney8.Models.Room.DaoExpense
 import com.app.simplemoney8.Models.Room.DaoLanguage
 
-@Database(entities = [Bank::class, Expense::class, ModelsLanguage::class, MonthlyExpense::class, ModelPayment::class], version = 16)
+@Database(entities = [Bank::class, Expense::class, ModelsLanguage::class, MonthlyExpense::class, ModelPayment::class], version = 18)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun userDao() : Dao
     abstract fun userDaoExpense() : DaoExpense

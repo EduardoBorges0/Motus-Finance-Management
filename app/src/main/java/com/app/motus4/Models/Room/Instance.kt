@@ -9,12 +9,26 @@ import com.app.motus4.Models.Room.DaoPayment
 import com.app.simplemoney8.Models.Room.DaoExpense
 import com.app.simplemoney8.Models.Room.DaoLanguage
 
-val MIGRATION_15_16 = object : Migration(15, 16) {
+val MIGRATION_17_18 = object : Migration(17, 18) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE TABLE IF NOT EXISTS payment (\n" +
-                "    id INTEGER PRIMARY KEY NOT NULL,  -- id será a chave primária e terá um valor fixo\n" +
-                "    payment REAL                      -- payment é um valor do tipo REAL (Double)\n" +
-                ");\n")
+        database.execSQL("""
+            CREATE TABLE payment_new (
+                id INTEGER PRIMARY KEY NOT NULL,
+                payment REAL
+            )
+        """.trimIndent())
+
+        // Copie os dados da tabela antiga para a nova
+        database.execSQL("""
+            INSERT INTO payment_new (id, payment)
+            SELECT id, payment FROM payment
+        """.trimIndent())
+
+        // Apague a tabela antiga
+        database.execSQL("DROP TABLE payment")
+
+        // Renomeie a nova tabela para o nome antigo
+        database.execSQL("ALTER TABLE payment_new RENAME TO payment")
 
     }
 }
@@ -27,7 +41,7 @@ object DatabaseProvider {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java, "app_database" )
-                .addMigrations(MIGRATION_15_16)
+                .addMigrations(MIGRATION_17_18)
                 .build()
 
             INSTANCE = instance

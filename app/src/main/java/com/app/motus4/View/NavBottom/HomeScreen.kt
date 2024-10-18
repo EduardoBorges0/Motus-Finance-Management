@@ -223,13 +223,7 @@ fun HomeScreenContent(
             ) {
 
                 if (payment != null) {
-                    payment.let {
-                        if(it?.payment == null){
-                            LaunchedEffect(Unit) {
-                                paymentViewModel.deletePayment(1)
-                            }
-                        }
-                    }
+
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -294,7 +288,8 @@ fun HomeScreenContent(
                                 refreshing = refreshing,
                                 onRefreshComplete = { refreshing = false },
                                 navHostController = navHostController,
-                                expenseViewModel = expenseViewModel
+                                expenseViewModel = expenseViewModel,
+                                paymentViewModel = paymentViewModel
                             )
                         }
                         item {
@@ -344,6 +339,7 @@ fun BankItem(
     expenseViewModel: ExpenseViewModel,
     refreshing: Boolean,
     navHostController: NavHostController,
+    paymentViewModel: PaymentViewModel,
     onRefreshComplete: () -> Unit
 ) {
     var lang by remember { mutableStateOf("pt") }
@@ -537,7 +533,12 @@ fun BankItem(
                                                 value,
                                                 expense.spentOrReceived.toString()
                                             )
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                paymentViewModel.updatePaymentForDeleteExpense(value = value, expense.spentOrReceived.toString())
+
+                                            }
                                         }
+
                                     }
                                 ) {
                                     Text(
@@ -580,8 +581,13 @@ fun BankItem(
                                             value,
                                             expense.spentOrReceived.toString()
                                         )
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            paymentViewModel.updatePaymentForDeleteExpense(value = value, expense.spentOrReceived.toString())
+                                        }
                                     }
+
                                 }
+
                             ) {
                                 Text(
                                     text = "OK",
@@ -609,6 +615,7 @@ fun BankItem(
                         confirmButton = {
                             TextButton(onClick = {
                                 showDialogBank = false
+                                paymentViewModel.updatePaymentByBank(bank.id)
                                 viewModel.deleteBank(bank)
                             }) {
                                 Text(text = "OK", color = Color.Black)

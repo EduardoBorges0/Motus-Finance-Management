@@ -221,9 +221,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-
                 if (payment != null) {
-
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -273,7 +271,7 @@ fun HomeScreenContent(
                 }
                 Box(
                     modifier = Modifier
-                        .padding(top = 80.dp)
+                        .padding(top = 30.dp)
                         .weight(1f)
                 ) {
                     LazyColumn(
@@ -459,7 +457,7 @@ fun BankItem(
                             .padding(top = 20.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(if (expense.readyForDeletion) Color.Red else bank.colorSpentsOrReceived.toColor())
-                            .height(if (isVisible) 55.dp else 0.dp) // Controla a altura para ocultar o item
+                            .height(if (isVisible) 65.dp else 0.dp) // Controla a altura para ocultar o item
                             .fillMaxWidth()
                             .alpha(if (isVisible) 1f else 0f) // Controla a visibilidade com alpha
                             .clickable {
@@ -479,29 +477,42 @@ fun BankItem(
                                     .padding(start = 10.dp),
                                 fontFamily = customFontFamily
                             )
-                            if(bank.name == "Bradesco"){
+                            Column {
                                 Text(
-                                    text = if (expense.spentOrReceived == "Spent") {
-                                        "- ${currencyFormat.format(expense.value)}"
-                                    } else {
-                                        currencyFormat.format(expense.value).toString()
-                                    },
-                                    color = if (expense.spentOrReceived == "Spent") negative else Color.Green,
-                                    modifier = Modifier.padding(end = 10.dp),
+                                    text = expense.date.toString(),
+                                    color = Color.White,
+                                    modifier = Modifier.align(Alignment.End).padding(end = 10.dp),
+                                    fontSize = 15.sp,
                                     fontFamily = customFontFamily
                                 )
-                            }else{
-                                Text(
-                                    text = if (expense.spentOrReceived == "Spent") {
-                                        "- ${currencyFormat.format(expense.value)}"
-                                    } else {
-                                        currencyFormat.format(expense.value).toString()
-                                    },
-                                    color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
-                                    modifier = Modifier.padding(end = 10.dp),
-                                    fontFamily = customFontFamily
-                                )
+                                Spacer(modifier = Modifier.height(5.dp))
+
+                                if(bank.name == "Bradesco"){
+                                    Text(
+                                        text = if (expense.spentOrReceived == "Spent") {
+                                            "- ${currencyFormat.format(expense.value)}"
+                                        } else {
+                                            currencyFormat.format(expense.value).toString()
+                                        },
+                                        color = if (expense.spentOrReceived == "Spent") negative else Color.Green,
+                                        modifier = Modifier.padding(end = 10.dp),
+                                        fontFamily = customFontFamily
+                                    )
+                                }else{
+                                    Text(
+                                        text = if (expense.spentOrReceived == "Spent") {
+                                            "- ${currencyFormat.format(expense.value)}"
+                                        } else {
+                                            currencyFormat.format(expense.value).toString()
+                                        },
+                                        color = if (expense.spentOrReceived == "Spent") Color.Red else Color.Green,
+                                        modifier = Modifier.padding(end = 10.dp),
+                                        fontFamily = customFontFamily
+                                    )
+                                }
+
                             }
+
 
                         }
                     }

@@ -100,7 +100,7 @@ class ExpenseViewModel(
 
     fun insertExpense(id: Int, description: String, value: Double, spentOrReceived: String, type: String?, date: String?, expenseClassification : String) {
         Log.d("BankViewModel", "Inserting expense: bankId=$id, description=$description, value=$value, spentOrReceived=$spentOrReceived, date= $date, expenseClassification = $expenseClassification")
-        val expense = Expense(bankId = id, description = description, value = value, spentOrReceived = spentOrReceived, type = type, expenseClassification = expenseClassification)
+        val expense = Expense(bankId = id, description = description, value = value, spentOrReceived = spentOrReceived, type = type, expenseClassification = expenseClassification, date = date)
         viewModelScope.launch(Dispatchers.IO) {
             repositoryExpense.insertExpense(expense)
         }

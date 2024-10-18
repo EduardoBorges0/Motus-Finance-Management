@@ -15,13 +15,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -49,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.app.motus2.View.showDatePicker
 import com.app.simplemoney.Models.Room.Bank
 import com.app.motus4.ViewModels.BankViewModel.BankViewModel
 import com.app.simplemoney.ui.theme.DarkBlue
@@ -75,12 +80,13 @@ fun ExpensesComposable(
     var selectedOptionSpentOrReceived by remember { mutableStateOf<String?>(null) }
     var selectedExpenseType by remember { mutableStateOf<String?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    var date by remember { mutableStateOf("") }
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F1F5))
-            .clip(RoundedCornerShape(24.dp))
     ) {
         Button(
             onClick = { navController.popBackStack() },
@@ -95,7 +101,7 @@ fun ExpensesComposable(
                 contentDescription = "return"
             )
         }
-        Column(modifier = Modifier.align(Alignment.Center).padding(top = 30.dp)) {
+        Column(modifier = Modifier.align(Alignment.Center).padding(top = 100.dp)) {
             Image(painter = painterResource(bank?.img!!.toInt()),
                 contentDescription = "IMG",
                 modifier = Modifier
@@ -122,6 +128,12 @@ fun ExpensesComposable(
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
             )
+            DateTextFieldExpense(
+                label = stringResource(id = R.string.selecione_a_data_de_vencimento),
+                initialDate = date
+            ) { selectedDate ->
+                date = selectedDate
+            }
             Spacer(modifier = Modifier.height(36.dp))
 
             Row(
@@ -209,7 +221,7 @@ fun ExpensesComposable(
                     unfocusedIndicatorColor = Color.Transparent,
                 )
             )
-            // Botão de confirmação
+Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = {
                     if (expense.isEmpty() || expenseValue.isEmpty() || selectedOptionSpentOrReceived == null || selectedExpenseType == null) {
@@ -261,7 +273,7 @@ fun ExpensesComposable(
                         }
                         else{
                             if (selectedOptionSpentOrReceived == "Spent") {
-                                navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$cleanedBalance&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${bank?.date}")
+                                navController.navigate("expenseClassification?bankId=$bankId&expense=$expense&expenseValue=$cleanedBalance&selectedOptionSpentOrReceived=$selectedOptionSpentOrReceived&selectedExpenseType=$selectedExpenseType&date=${date}")
                             } else {
                                 expenseViewModel.insertExpense(
                                     bankId,
@@ -269,7 +281,7 @@ fun ExpensesComposable(
                                     cleanedBalance.toDouble(),
                                     selectedOptionSpentOrReceived.toString(),
                                     selectedExpenseType,
-                                    bank?.date.toString(),
+                                    date = date,
                                     ""
                                 )
                                 CoroutineScope(Dispatchers.IO).launch {
@@ -281,13 +293,11 @@ fun ExpensesComposable(
                         }
                     }
                 },
-                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .padding(bottom = 190.dp)
                     .fillMaxWidth()
                     .padding(top = 50.dp)
-                    .height(56.dp)
-                    .padding(horizontal = 29.dp),
+                    .height(66.dp),
+                shape = RoundedCornerShape(0.dp),
                 colors = ButtonDefaults.buttonColors(DarkBlue)
             ) {
                 Text(text = stringResource(id = R.string.confirmar), style = TextStyle(color = Color.White), fontFamily = customFontFamily)
@@ -334,4 +344,62 @@ fun OptionReceivedOrSpent(text: String, isSelected: Boolean, onClick: () -> Unit
             )
         )
     }
+}
+@Composable
+fun DateTextFieldExpense(
+    label: String,
+    initialDate: String,
+    onDateSelected: (String) -> Unit
+) {
+    var date by remember { mutableStateOf(initialDate) }
+    val context = LocalContext.current
+
+    TextField(
+        value = date,
+        onValueChange = { },
+        label = { Text(label) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .padding(horizontal = 40.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White),
+        textStyle = TextStyle(color = Color.Black),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            disabledContainerColor = Color.White,
+            cursorColor = DarkBlue,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+        readOnly = true,
+        trailingIcon = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(end = 15.dp)
+            ) {
+                Divider(
+                    color = Color(0xFFF0F1F5),
+                    modifier = Modifier
+                        .height(24.dp)  // Altura da linha
+                        .width(1.dp)    // Largura da linha
+                )
+
+                Spacer(modifier = Modifier.width(8.dp)) // Espaço entre a linha e o ícone
+
+                // Ícone de calendário
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Select Date",
+                    modifier = Modifier.clickable {
+                        showDatePicker(context) { selectedDate ->
+                            date = selectedDate
+                            onDateSelected(selectedDate)
+                        }
+                    }
+                )
+            }
+        }
+    )
 }

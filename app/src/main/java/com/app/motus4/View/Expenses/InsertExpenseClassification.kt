@@ -54,9 +54,9 @@ fun ExpenseClassificationComposable(navController: NavController,
                                     bankId: Int,
                                     expense: String,
                                     expenseValue: Double,
+                                    date: String?,
                                     selectedOptionSpentOrReceived: String,
                                     selectedExpenseType : String?,
-                                    bank: Bank?,
                                     paymentViewModel: PaymentViewModel){
   val list = listOf(
       ExpenseClassificationBank("", stringResource(id = R.string.transporte), null) ,
@@ -114,7 +114,7 @@ fun ExpenseClassificationComposable(navController: NavController,
                 expenseValue = expenseValue,
                 selectedOptionSpentOrReceived = selectedOptionSpentOrReceived,
             selectedExpenseType = selectedExpenseType,
-            bank = bank,
+                date = date,
                 navController = navController,
                 expenseViewModel = expenseViewModel,
                 paymentViewModel = paymentViewModel
@@ -135,7 +135,7 @@ fun ExpenseClassificationBox(navController: NavController,
                              expenseValue: Double,
                              selectedOptionSpentOrReceived: String,
                              selectedExpenseType : String?,
-                             bank: Bank?,
+                             date: String?,
                              paymentViewModel: PaymentViewModel){
     var showDialog by remember { mutableStateOf(false) }
     Box (
@@ -162,7 +162,7 @@ fun ExpenseClassificationBox(navController: NavController,
                         expenseValue,
                         selectedOptionSpentOrReceived,
                         selectedExpenseType,
-                        bank?.date.toString(),
+                        date = date,
                         expenseClassification = translatedExpenseClassification
                     )
                     CoroutineScope(Dispatchers.IO).launch {

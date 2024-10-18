@@ -71,10 +71,8 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
 
     Box(
         modifier = Modifier
-
             .fillMaxSize()
             .background(Color(0xFFF0F1F5))
-            .clip(RoundedCornerShape(24.dp))
     ) {
         Button(
             onClick = { navHostController.popBackStack() },
@@ -91,7 +89,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(top = 276.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -102,7 +100,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 32.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color.White),
                 textStyle = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
@@ -173,7 +171,7 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
             )
 
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 onClick = {
@@ -198,11 +196,10 @@ fun CreditOrDebitComposable(navHostController: NavHostController) {
                         }
                     }
                 },
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(0.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .padding(horizontal = 16.dp)
+                    .height(66.dp)
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(DarkBlue)
             ) {
@@ -245,7 +242,7 @@ fun DateTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 32.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White),
         textStyle = TextStyle(color = Color.Black),

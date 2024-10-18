@@ -19,7 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -57,6 +59,7 @@ import com.app.simplemoney8.View.Expenses.ExpensesComposable
 import com.app.simplemoney8.View.NavBottom.HomeScreenComposable
 import com.app.simplemoney8.customFontFamily
 import com.app.motus4.setAppLocale
+import com.app.simplemoney.ui.theme.DarkBlueDivisor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -132,13 +135,14 @@ class MainActivity : FragmentActivity() {
                 viewModel = viewModel
             ) }
             composable(
-                "expenseClassification?bankId={bankId}&expense={expense}&expenseValue={expenseValue}&selectedOptionSpentOrReceived={selectedOptionSpentOrReceived}&selectedExpenseType={selectedExpenseType}",
+                "expenseClassification?bankId={bankId}&expense={expense}&expenseValue={expenseValue}&selectedOptionSpentOrReceived={selectedOptionSpentOrReceived}&selectedExpenseType={selectedExpenseType}&date={date}",
                 arguments = listOf(
                     navArgument("bankId") { type = NavType.IntType },
                     navArgument("expense") { type = NavType.StringType },
                     navArgument("expenseValue") { type = NavType.StringType },
                     navArgument("selectedOptionSpentOrReceived") { type = NavType.StringType },
-                    navArgument("selectedExpenseType") { type = NavType.StringType }
+                    navArgument("selectedExpenseType") { type = NavType.StringType },
+                    navArgument("date") { type = NavType.StringType }
                 )
             ) {
                 val bankId = it.arguments?.getInt("bankId") ?: 0
@@ -147,11 +151,11 @@ class MainActivity : FragmentActivity() {
                 val selectedOptionSpentOrReceived = it.arguments?.getString("selectedOptionSpentOrReceived") ?: ""
                 val selectedExpenseType = it.arguments?.getString("selectedExpenseType") ?: ""
                 val bank = remember { mutableStateOf<Bank?>(null) }
+                val date = it.arguments?.getString("date") ?: ""
 
                 LaunchedEffect(bankId) {
                     bank.value = viewModel.getBankById(bankId)
                 }
-                bank.value?.let { bank ->
                     ExpenseClassificationComposable(
                         navController = navController,
                         bankId = bankId,
@@ -160,11 +164,11 @@ class MainActivity : FragmentActivity() {
                         selectedOptionSpentOrReceived = selectedOptionSpentOrReceived,
                         selectedExpenseType = selectedExpenseType,
                         viewModel = viewModel,
-                        bank = bank,
+                        date = date,
                         expenseViewModel = expenseViewModel,
                         paymentViewModel = paymentViewModel
                     )
-                }
+
             }
             composable("home") {
                 HomeScreenComposable(viewModel, navController, expenseViewModel = expenseViewModel, paymentViewModel)
@@ -225,8 +229,6 @@ fun SimpleMoneyEnter(navController: NavController, paymentViewModel: PaymentView
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
-            navController.navigate("home")
-
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -258,52 +260,48 @@ fun SimpleMoneyEnter(navController: NavController, paymentViewModel: PaymentView
     val credentialsAvailable = biometricAvailability != BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE &&
             biometricAvailability != BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(DarkBlue)
     ) {
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .background(DarkBlue)
-        ) {
             Image(
                 painter = painterResource(id = R.drawable.mainlogo),
                 contentDescription = "Ícone de carteira",
                 modifier = Modifier
+                    .background(DarkBlue)
                     .size(160.dp)
+                    .clip(RoundedCornerShape(60.dp))
                     .align(Alignment.Center)
             )
-        }
+Column {
+    Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = {
-                if (biometricAvailable) {
-                    biometricPrompt.authenticate(promptInfo)
-                } else if (credentialsAvailable) {
-                    // Inicia com credenciais do dispositivo (PIN, padrão)
-                    biometricPrompt.authenticate(promptInfo)
-                } else {
-                    Log.d("BiometricAuth", "Nenhuma opção de autenticação disponível.")
-                    navController.navigate("home")
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            shape = RoundedCornerShape(0.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = DarkBlue,
-                contentColor = Color.White
-            )
-        ) {
-            Text(text = "Entrar", fontFamily = customFontFamily)
-        }
+    Button(
+        onClick = {
+            if (biometricAvailable) {
+                biometricPrompt.authenticate(promptInfo)
+            } else if (credentialsAvailable) {
+                biometricPrompt.authenticate(promptInfo)
+            } else {
+                Log.d("BiometricAuth", "Nenhuma opção de autenticação disponível.")
+                navController.navigate("home")
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp),
+        shape = RoundedCornerShape(0.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = DarkBlueDivisor,
+            contentColor = Color.White
+        )
+    ) {
+        Text(text = "Entrar", fontFamily = customFontFamily)
     }
+}
+ }
+
 }

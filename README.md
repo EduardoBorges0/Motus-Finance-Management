@@ -6,6 +6,7 @@ This application is avaliable in releases!!
 Motus is a way for you to organize your finances without much effort and with a lot of practicality. Here you will have:
 
 - Possibility of adding as many colors as you want to represent the bank.
+- Add your salary and the app will calculate your expenses and income in real time.
 - Choose the bank's due date, limit and name.
 - You choose the icon that will appear in your bank.
 - Add expenses and income in the way you want, being able to choose whether they are fixed or variable and their classification.

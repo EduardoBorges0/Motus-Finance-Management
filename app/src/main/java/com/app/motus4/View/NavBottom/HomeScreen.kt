@@ -394,8 +394,8 @@ fun BankItem(
                         .align(Alignment.TopCenter)
                         .padding(horizontal = 10.dp)
                 ) {
-                    Image(
-                        painter = painterResource(bank.img.toInt()),
+                    AsyncImage(
+                        model = bank.img.toInt(),
                         contentDescription = "bankImage",
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)

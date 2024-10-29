@@ -102,7 +102,8 @@ fun ExpensesComposable(
             )
         }
         Column(modifier = Modifier.align(Alignment.Center).padding(top = 100.dp)) {
-            Image(painter = painterResource(bank?.img!!.toInt()),
+            AsyncImage(
+                model = bank?.img!!.toInt(),
                 contentDescription = "IMG",
                 modifier = Modifier
                     .size(76.dp)

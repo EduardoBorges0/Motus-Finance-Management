@@ -229,6 +229,8 @@ fun SimpleMoneyEnter(navController: NavController, paymentViewModel: PaymentView
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d("BiometricAuth", "Erro de autenticação: $errString")
+            navController.navigate("home")
+
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

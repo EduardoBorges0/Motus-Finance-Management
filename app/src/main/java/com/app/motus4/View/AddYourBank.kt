@@ -57,8 +57,6 @@ fun AddYourBankComposable(
     date: String?,
     navController: NavController
 ) {
-    auth = Firebase.auth
-
     val bankList = listOf(
         BankInfo("PE", "#9D62D9", R.drawable.nubank, PurpleExpense, "#820BD0"),
         BankInfo("LD", "#232323", R.drawable.picpay, LightDarkExpense, "#21C25E"),
@@ -133,8 +131,8 @@ fun BankBox(
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
-        Image(
-            painter = painterResource(id = bankInfo.imageRes),
+        AsyncImage(
+            model = bankInfo.imageRes,
             contentDescription = bankInfo.name,
             modifier = Modifier
                 .align(Alignment.TopEnd)

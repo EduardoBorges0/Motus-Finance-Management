@@ -1,11 +1,12 @@
 ﻿# Motus-Finance-Management
 
-This application is still under development!!
+This application is avaliable in releases!!
 
  What is Motus-Finance Management?
 Motus is a way for you to organize your finances without much effort and with a lot of practicality. Here you will have:
 
 - Possibility of adding as many colors as you want to represent the bank.
+- Add your salary and the app will calculate your expenses and income in real time.
 - Choose the bank's due date, limit and name.
 - You choose the icon that will appear in your bank.
 - Add expenses and income in the way you want, being able to choose whether they are fixed or variable and their classification.
@@ -18,23 +19,27 @@ Motus is a way for you to organize your finances without much effort and with a 
 Motus is the financial management application you always wanted, fully customized and complete to improve your experience.
 
 # Main
-<img src = "https://github.com/user-attachments/assets/85fddeaa-3f40-4a11-8562-881213a4055e" width = 230px/>
-<img src = "https://github.com/user-attachments/assets/21e88ab3-314a-4565-a6bd-09217d93cd28" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/925173ac-ee08-41ce-8fb0-b16557924f53" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/144abc7e-3934-48bb-bd61-8db61dc6d8cb" width = 230px/>
+
+# Add Payment
+
+<img src = "https://github.com/user-attachments/assets/1c931eef-728b-4038-989a-fe08990eb499" width = 230px/>
 
 # Add Bank
-<img src = "https://github.com/user-attachments/assets/d2c6442e-1359-40e9-a651-4ffb4731c06b" width = 230px/>
-<img src = "https://github.com/user-attachments/assets/1ab18160-626a-4ec5-b311-b25ed7d8cc6e" width = 230px/>
-<img src = "https://github.com/user-attachments/assets/d31fee6c-33e9-4454-817f-dfb94f2708cb" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/aec25bba-91c0-4186-9d2b-caed38468ecd" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/898b1dfc-898a-4dd7-94b3-258abd0d6b03" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/f52e7643-ee18-4a25-a4da-a7ffcd3a9d26" width = 230px/>
 
 # Add Expense/Received
-<img src = "https://github.com/user-attachments/assets/73f00fcd-0052-43d2-9eb1-751c257e7a25" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/1f31cf8b-db97-4ff6-9486-6c8e2d290c99" width = 230px/>
 <img src = "https://github.com/user-attachments/assets/bf57f072-ab18-4ff6-bcf9-994a16787706" width = 230px/>
-<img src = "https://github.com/user-attachments/assets/234bb89e-911a-4120-ba6c-0aa15a7f205d" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/4b1ba894-a40f-4c4c-95b0-47f0c662b4d2" width = 230px/>
 
 # Graphs
 <img src = "https://github.com/user-attachments/assets/8391e766-ed1f-4a80-804e-fd8d04755d3e" width = 230px/>
 <img src = "https://github.com/user-attachments/assets/e476a3ea-2c9a-4c41-9e47-50614322f7d0" width = 230px/>
-<img src = "https://github.com/user-attachments/assets/45372e20-39b0-49c8-911f-ab07e74846b2" width = 230px/>
+<img src = "https://github.com/user-attachments/assets/557cede8-8f11-4e49-931b-c26d18ee3018" width = 230px/>
 
 <img src = "https://github.com/user-attachments/assets/ee5c9fec-b124-4731-8984-8601f8e194ca" width = 230px/>
 

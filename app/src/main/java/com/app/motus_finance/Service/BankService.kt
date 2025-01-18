@@ -3,8 +3,8 @@ package com.app.motus_finance.Service
 import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.Repositories.RepositoriesBank
-import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
-import kotlin.math.exp
+import com.app.motus_finance.UtilityClass.DateUtils.stringToLocalDate
+import java.time.LocalDate
 
 class BankService(private val repositoriesBank: RepositoriesBank) {
     suspend fun insertBank(bankDTO: BankDTO): Boolean {
@@ -38,5 +38,17 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         // Atualiza o objeto bankDTO com o novo saldo
         return bankDTO.copy(balance = newBalance)
     }
+
+    suspend fun updateBankDate(bankId: Int, bankDTO: BankDTO): String {
+        val date = stringToLocalDate(bankDTO.date.toString())
+        return if (date == LocalDate.now()) {
+            val newDate = date.plusMonths(1)
+            repositoriesBank.updateBankDate(bankId, newDate.toString())
+            newDate.toString() // Retorna a nova data
+        } else {
+            bankDTO.date.toString()
+        }
+    }
+
 
 }

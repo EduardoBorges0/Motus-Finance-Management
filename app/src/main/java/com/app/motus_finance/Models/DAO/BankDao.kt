@@ -19,4 +19,7 @@ interface BankDao {
     @Query("UPDATE bank_entity SET balance = :newBalance WHERE id = :bankId")
     suspend fun updateBalance(bankId: Int, newBalance: Double)
 
+    @Query("UPDATE bank_entity SET date = :newDate WHERE id = :bankId")
+    suspend fun updateBankDate(bankId: Int, newDate: String) : String
+
 }

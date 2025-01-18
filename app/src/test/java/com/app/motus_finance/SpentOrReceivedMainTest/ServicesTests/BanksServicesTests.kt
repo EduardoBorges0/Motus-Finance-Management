@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 class BanksServicesTests {
     private val testDispatcher = Dispatchers.Unconfined
@@ -103,6 +104,31 @@ class BanksServicesTests {
 
         // Verifique se o repositório foi chamado para atualizar o saldo
         coVerify { mockRepositoriesBank.updateBalance(1, 1600.00) }
+    }
+
+    @Test
+    fun `should update date correctly when date is equal now date`() = runTest {
+        //Assert
+        val bank = BankDTO(
+            name = "Nubank",
+            color = "Purple",
+            img = "url xxx",
+            balance = 200.00,
+            colorSpentsOrReceived = "Light Purple",
+            date = LocalDate.now().toString(),
+            sum = null
+        )
+
+        coEvery { mockRepositoriesBank.updateBankDate(any(), any()) } returns LocalDate.now().plusMonths(1).toString()
+
+        //Act
+        val result = service.updateBankDate(1, bank)
+        //Assert
+        assertEquals( LocalDate.now().plusMonths(1).toString(), result)
+
+        coVerify { mockRepositoriesBank.updateBankDate(1,  LocalDate.now().plusMonths(1).toString()) }
+
+
     }
 
 }

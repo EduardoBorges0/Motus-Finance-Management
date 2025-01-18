@@ -12,5 +12,9 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun updateBalance(bankId: Int, newBalance: Double){
         return dao.updateBalance(bankId, newBalance)
     }
+    suspend fun updateBankDate(bankId: Int, newDate: String) : String{
+        return dao.updateBankDate(bankId, newDate)
+    }
+
 
 }

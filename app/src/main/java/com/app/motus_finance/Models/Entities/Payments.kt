@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity("payment_table")
 data class Payments (
-    @PrimaryKey(autoGenerate = true) val id : Long = 0,
+    @PrimaryKey(autoGenerate = false) val id : Long = 1,
     @ColumnInfo val payment : Double? = null
 )

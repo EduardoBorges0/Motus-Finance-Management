@@ -127,8 +127,5 @@ class BanksServicesTests {
         assertEquals( LocalDate.now().plusMonths(1).toString(), result)
 
         coVerify { mockRepositoriesBank.updateBankDate(1,  LocalDate.now().plusMonths(1).toString()) }
-
-
     }
-
 }

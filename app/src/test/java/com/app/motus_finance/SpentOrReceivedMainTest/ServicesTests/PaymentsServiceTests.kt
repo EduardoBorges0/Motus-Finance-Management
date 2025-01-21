@@ -2,9 +2,7 @@ package com.app.motus_finance.SpentOrReceivedMainTest.ServicesTests
 
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.DTO.PaymentDTO
-import com.app.motus_finance.Models.Repositories.RepositoriesBank
 import com.app.motus_finance.Models.Repositories.RepositoriesPayments
-import com.app.motus_finance.Service.BankService
 import com.app.motus_finance.Service.PaymentsService
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDate
 
 class PaymentsServiceTests {
     private val testDispatcher = Dispatchers.Unconfined

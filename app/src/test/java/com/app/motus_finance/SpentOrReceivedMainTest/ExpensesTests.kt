@@ -42,6 +42,7 @@ class ExpensesTests {
             spentOrReceived = "Spent",
             fixedOrVariable = "Fixed",
             date = "10/01/2025",
+            dueDate = "2025-02-22",
             classification = "Streams",
             readyForDeletion = false
         )
@@ -67,6 +68,7 @@ class ExpensesTests {
             spentOrReceived = "Spent",
             fixedOrVariable = "Fixed",
             date = "10/01/2025",
+            dueDate = "2025-02-22",
             classification = "Streams",
             readyForDeletion = false
         )

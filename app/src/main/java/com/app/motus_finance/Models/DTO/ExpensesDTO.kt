@@ -10,6 +10,7 @@ data class ExpensesDTO (
     val spentOrReceived: String? = null,
     val fixedOrVariable: String? = null,
     val date : String? = null,
+    val dueDate : String?,
     val classification : String? = null,
     val readyForDeletion: Boolean = false
 )
@@ -22,6 +23,7 @@ fun Expenses.toDTO() : ExpensesDTO{
         spentOrReceived = this.spentOrReceived,
         fixedOrVariable = this.fixedOrVariable,
         date = this.date,
+        dueDate = this.dueDate,
         classification = this.classification,
         readyForDeletion = this.readyForDeletion
     )
@@ -34,6 +36,7 @@ fun ExpensesDTO.toEntity() : Expenses{
         spentOrReceived = this.spentOrReceived,
         fixedOrVariable = this.fixedOrVariable,
         date = this.date,
+        dueDate = this.dueDate,
         classification = this.classification,
         readyForDeletion = this.readyForDeletion
     )

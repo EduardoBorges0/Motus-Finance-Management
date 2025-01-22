@@ -1,5 +1,6 @@
 package com.app.motus_finance.Models.Repositories
 
+import androidx.lifecycle.LiveData
 import com.app.motus_finance.Models.DAO.BankDao
 import com.app.motus_finance.Models.DTO.BankDTO
 
@@ -15,6 +16,8 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun updateBankDate(bankId: Int, newDate: String) : String{
         return dao.updateBankDate(bankId, newDate)
     }
-
+    suspend fun getAllDates() : LiveData<List<String>>{
+        return dao.getAllDates()
+    }
 
 }

@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.motus_finance.Models.DAO.BankDao
+import com.app.motus_finance.Models.DAO.DueDatesDAO
 import com.app.motus_finance.Models.DAO.ExpensesDAO
 import com.app.motus_finance.Models.DAO.PaymentDAO
 
@@ -38,4 +39,8 @@ object DatabaseProvider {
     fun getPaymentDAO(context: Context): PaymentDAO {
         return getDatabase(context).paymentsDao()
     }
+    fun getDueDatesDAO(context: Context): DueDatesDAO {
+        return getDatabase(context).dueDateDao()
+    }
+
 }

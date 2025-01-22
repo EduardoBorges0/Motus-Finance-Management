@@ -23,6 +23,7 @@ data class Expenses (
     @ColumnInfo val spentOrReceived: String? = null,
     @ColumnInfo val fixedOrVariable: String? = null,
     @ColumnInfo val date : String? = null,
+    @ColumnInfo val dueDate: String?,
     @ColumnInfo val classification : String? = null,
     val readyForDeletion: Boolean = false
 )

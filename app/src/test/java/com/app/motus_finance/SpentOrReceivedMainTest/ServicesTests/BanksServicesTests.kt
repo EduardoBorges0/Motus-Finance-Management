@@ -52,6 +52,7 @@ class BanksServicesTests {
             spentOrReceived = "Spent", // Esta é uma despesa
             fixedOrVariable = "Fixed",
             date = "10/01/2025",
+            dueDate = "2025-02-22",
             classification = "Streams",
             readyForDeletion = false
         )
@@ -89,6 +90,7 @@ class BanksServicesTests {
             spentOrReceived = "Received", // Esta é uma despesa
             fixedOrVariable = "Fixed",
             date = "05/02/2025",
+            dueDate = "2025-02-22",
             classification = "",
             readyForDeletion = false
         )

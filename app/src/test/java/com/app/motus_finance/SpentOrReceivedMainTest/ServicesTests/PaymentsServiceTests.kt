@@ -43,6 +43,8 @@ class PaymentsServiceTests {
             spentOrReceived = "Spent",
             fixedOrVariable = "Fixed",
             date = "10/01/2025",
+            dueDate = "2025-02-22",
+
             classification = "Streams",
             readyForDeletion = false
         )
@@ -68,6 +70,8 @@ class PaymentsServiceTests {
             spentOrReceived = "Received",
             fixedOrVariable = "Fixed",
             date = "10/01/2025",
+            dueDate = "2025-02-22",
+
             classification = "Streams",
             readyForDeletion = false
         )

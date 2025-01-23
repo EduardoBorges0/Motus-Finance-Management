@@ -8,12 +8,9 @@ import com.app.motus_finance.Service.PaymentsService
 import kotlinx.coroutines.launch
 
 class PaymentsViewModel(private val paymentsService: PaymentsService) : ViewModel() {
-    fun updatePayment(expensesDTO: ExpensesDTO, payments: Double?){
+    fun updatePayment(expensesDTO: ExpensesDTO){
         viewModelScope.launch {
-            val paymentDTO = PaymentDTO(
-                payment = payments
-            )
-            paymentsService.updatePayment(expensesDTO, paymentDTO)
+            paymentsService.updatePayment(expensesDTO)
         }
     }
     fun insertPayments(payment: Double){

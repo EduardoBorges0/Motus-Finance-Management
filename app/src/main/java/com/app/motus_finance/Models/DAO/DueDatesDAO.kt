@@ -9,5 +9,5 @@ import com.app.motus_finance.Models.Entities.DueDates
 interface DueDatesDAO {
 
    @Insert
-   suspend fun insertDueDate(dueDates: DueDatesDTO)
+   suspend fun insertDueDate(dueDates: DueDates)
 }

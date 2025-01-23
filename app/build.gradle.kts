@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -51,6 +52,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation("androidx.room:room-ktx:2.6.1") // Adicionando dependência para corrotinas
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     testImplementation(libs.mockk)

@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.motus_finance.Models.DAO.BankDao
 import com.app.motus_finance.Models.DAO.DueDatesDAO
 import com.app.motus_finance.Models.DAO.ExpensesDAO
+import com.app.motus_finance.Models.DAO.GraphicsDAO
 import com.app.motus_finance.Models.DAO.PaymentDAO
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -41,6 +42,9 @@ object DatabaseProvider {
     }
     fun getDueDatesDAO(context: Context): DueDatesDAO {
         return getDatabase(context).dueDateDao()
+    }
+    fun getGraphicsDAO(context: Context): GraphicsDAO {
+        return getDatabase(context).graphicsDao()
     }
 
 }

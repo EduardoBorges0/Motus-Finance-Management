@@ -11,4 +11,9 @@ class RepositoriesExpenses(private val expensesDAO: ExpensesDAO) {
     suspend fun getTotalExpenses(fixedOrVariable: String, bankId: Int) : Double?{
         return expensesDAO.getTotalExpenses(fixedOrVariable, bankId)
     }
+
+    suspend fun deleteVariables(bankId: Int){
+        return expensesDAO.deleteVariables(bankId)
+    }
+
 }

@@ -8,4 +8,8 @@ class RepositoriesDueDates(private val dao: DueDatesDAO) {
     suspend fun insertDueDate(dueDates: DueDates){
         return dao.insertDueDate(dueDates)
     }
+    suspend fun getDueDate() : String{
+        return dao.getDueDate()
+    }
+
 }

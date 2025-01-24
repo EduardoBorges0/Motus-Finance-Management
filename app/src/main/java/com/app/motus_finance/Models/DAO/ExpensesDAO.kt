@@ -15,5 +15,6 @@ interface ExpensesDAO {
     @Query("SELECT SUM(value) FROM table_expenses WHERE fixedOrVariable = :fixedOrVariable AND bankId = :bankId")
     fun getTotalExpenses(fixedOrVariable: String, bankId: Int): Double?
 
-
+    @Query("DELETE FROM table_expenses WHERE fixedOrVariable = 'Variable' AND bankId= :bankId")
+    suspend fun deleteVariables(bankId: Int)
 }

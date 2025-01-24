@@ -13,10 +13,13 @@ import com.app.motus_finance.Models.Entities.Banks
 interface BankDao {
 
     @Query("SELECT * FROM bank_entity")
-    fun getAllBanks() : LiveData<List<Banks>>
+    fun getAllBanks() : List<Banks>
 
     @Query("SELECT date FROM bank_entity")
-    fun getAllDates() : LiveData<List<String>>
+    fun getAllDates() : List<String>
+
+    @Query("SELECT date FROM bank_entity WHERE id = :id")
+    fun getDatesById(id: Int) : String
 
     @Query("DELETE FROM bank_entity WHERE id= :id")
     suspend fun deleteBank(id: Int)
@@ -33,5 +36,8 @@ interface BankDao {
 
     @Query("UPDATE bank_entity SET sum = :sum WHERE id = :bankId")
     suspend fun updateSum(bankId: Int, sum: Double)
+
+    @Query("SELECT SUM(sum) FROM bank_entity")
+    suspend fun sumAllBank() : Double
 
 }

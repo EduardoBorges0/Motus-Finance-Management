@@ -46,6 +46,7 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         return bankDTO.toEntity().copy(balance = newBalance)
     }
 
+
     suspend fun updateBankDate(bankId: Int, bankDTO: BankDTO): String {
         val date = stringToLocalDate(bankDTO.date.toString())
         return if (date == LocalDate.now()) {

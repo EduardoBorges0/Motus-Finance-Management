@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 
 class GraphicsViewModel(private val service: GraphicsService) : ViewModel() {
 
-    fun insertGraphics(bankDTO: BankDTO, dueDatesDTO: DueDatesDTO){
+    fun insertGraphics(){
         viewModelScope.launch {
-            service.insertGraphics(dueDatesDTO, bankDTO)
+            service.insertGraphics()
         }
     }
 }

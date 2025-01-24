@@ -10,6 +10,16 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun insertBank(banks: Banks){
         return dao.insertBank(banks)
     }
+    suspend fun getAllBanks() : List<Banks>{
+        return dao.getAllBanks()
+    }
+
+    fun getDatesById(id: Int) : String{
+        return dao.getDatesById(id)
+    }
+    suspend fun updateSum(bankId: Int, sum: Double){
+        return dao.updateSum(bankId, sum)
+    }
 
     suspend fun deleteBanks(id: Int){
         return dao.deleteBank(id)
@@ -21,8 +31,12 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun updateBankDate(bankId: Int, newDate: String){
         return dao.updateBankDate(bankId, newDate)
     }
-    suspend fun getAllDates() : LiveData<List<String>>{
+    suspend fun getAllDates() : List<String>{
         return dao.getAllDates()
     }
+    suspend fun sumAllBank() : Double{
+        return dao.sumAllBank()
+    }
+
 
 }

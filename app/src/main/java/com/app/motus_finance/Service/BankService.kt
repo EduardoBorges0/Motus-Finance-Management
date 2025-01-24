@@ -19,6 +19,14 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
             false
         }
     }
+    suspend fun updateSum(bankId: Int, sum: Double){
+        return repositoriesBank.updateSum(bankId, sum)
+    }
+
+    suspend fun updateDatePlusMonth(date: String, id: Int){
+        return repositoriesBank.updateDatePlusMonth(date, id)
+    }
+
 
     suspend fun deleteBanks(id: Int){
         return repositoriesBank.deleteBanks(id)
@@ -27,22 +35,20 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         bankDTO: BankDTO,
         expensesDTO: ExpensesDTO
     ): Banks {
-        val currentBalance = bankDTO.toEntity().balance ?: 0.0 // Saldo atual padrão 0
-        val transactionValue = expensesDTO.toEntity().value ?: 0.0 // Valor da transação padrão 0
+        val currentBalance = bankDTO.toEntity().balance ?: 0.0
+        val transactionValue = expensesDTO.toEntity().value ?: 0.0
 
         val newBalance = when (expensesDTO.toEntity().spentOrReceived) {
-            "Spent" -> currentBalance - transactionValue // Subtrair o gasto
-            "Received" -> currentBalance + transactionValue // Adicionar o recebido
-            else -> currentBalance // Sem alteração se for inválido
+            "Spent" -> currentBalance - transactionValue
+            "Received" -> currentBalance + transactionValue
+            else -> currentBalance
         }
 
-        // Atualiza o saldo no banco de dados
         repositoriesBank.updateBalance(
             bankId = expensesDTO.toEntity().bankId ?: 0,
             newBalance = newBalance
         )
 
-        // Atualiza o objeto bankDTO com o novo saldo
         return bankDTO.toEntity().copy(balance = newBalance)
     }
 
@@ -52,11 +58,9 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         return if (date == LocalDate.now()) {
             val newDate = date.plusMonths(1)
             repositoriesBank.updateBankDate(bankId, newDate.toString())
-            newDate.toString() // Retorna a nova data
+            newDate.toString()
         } else {
             bankDTO.toEntity().date.toString()
         }
     }
-
-
 }

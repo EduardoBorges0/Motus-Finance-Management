@@ -12,4 +12,9 @@ class RepositoriesDueDates(private val dao: DueDatesDAO) {
         return dao.getDueDate()
     }
 
+    suspend fun deleteDueDate(){
+        return dao.deleteDueDate()
+    }
+
+
 }

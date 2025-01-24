@@ -25,6 +25,7 @@ class GraphicsService(
                 monthly = lastDay.month.toString(),
                 value = sum
             )
+            repositoriesBank.updateAllSumToZero(0.0)
             repositoriesGraphics.insertGraphics(graphicsDTO.ToEntity())
         }
     }

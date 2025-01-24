@@ -11,11 +11,13 @@ class DueDateService(private val repositoriesBank: RepositoriesBank,
                      private val repositoriesDueDates: RepositoriesDueDates) {
     suspend fun insertDueDate(){
         val dueDates = repositoriesBank.getAllDates()
-        Log.d("DATAS LISTA", "ESSA É AA LISTA: ${dueDates}")
         val plusDay = DateUtils.stringToLocalDate(dueDates.max().toString()).plusDays(1)
         val dueDatesDTO = DueDatesDTO(
             dueDate = plusDay.toString()
         )
         repositoriesDueDates.insertDueDate(dueDatesDTO.toEntity())
+    }
+    suspend fun deleteDueDate(){
+        return repositoriesDueDates.deleteDueDate()
     }
 }

@@ -8,6 +8,7 @@ import com.app.motus_finance.Models.DTO.toEntity
 import com.app.motus_finance.Models.Repositories.RepositoriesBank
 import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
 import com.app.motus_finance.UtilityClass.DateUtils
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 class ExpensesService(private val repositoriesExpenses: RepositoriesExpenses, private val repositoriesBank: RepositoriesBank) {
@@ -25,11 +26,13 @@ class ExpensesService(private val repositoriesExpenses: RepositoriesExpenses, pr
         ) : Double{
         val date = repositoriesBank.getDatesById(id)
         val bankDate = DateUtils.stringToLocalDate(date)
+        val bankDatePlusMonth = DateUtils.stringToLocalDate(date).plusMonths(1)
+
         var sum = 0.0
         if(bankDate == LocalDate.now()){
-              val getAllExpenses = repositoriesExpenses.getTotalExpenses(fixedOrVariable, id)
-              Log.d("SOMA TOTAL", "ESSA É A SOMA: $getAllExpenses")
-              repositoriesBank.updateSum(id, getAllExpenses ?: 0.0)
+            val getAllExpenses = repositoriesExpenses.getTotalExpenses(fixedOrVariable, id)
+            repositoriesBank.updateSum(id, getAllExpenses ?: 0.0)
+            repositoriesBank.updateDatePlusMonth(bankDatePlusMonth.toString(), id)
             sum = getAllExpenses ?: 0.0
             repositoriesExpenses.deleteVariables(id)
          }

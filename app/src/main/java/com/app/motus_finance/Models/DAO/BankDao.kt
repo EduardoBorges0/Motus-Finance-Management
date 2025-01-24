@@ -24,6 +24,11 @@ interface BankDao {
     @Query("DELETE FROM bank_entity WHERE id= :id")
     suspend fun deleteBank(id: Int)
 
+    @Query("UPDATE bank_entity SET sum = :sum")
+    suspend fun updateAllSumToZero(sum: Double)
+
+    @Query("UPDATE bank_entity SET date = :date WHERE id= :id")
+    suspend fun updateDatePlusMonth(date: String, id: Int)
 
     @Insert
     suspend fun insertBank(banks: Banks)

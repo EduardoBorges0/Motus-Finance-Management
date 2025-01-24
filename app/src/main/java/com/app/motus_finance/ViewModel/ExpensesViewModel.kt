@@ -1,11 +1,8 @@
 package com.app.motus_finance.ViewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Service.ExpensesService
-import kotlinx.coroutines.launch
-import kotlin.math.exp
 
 class ExpensesViewModel(private val expensesService: ExpensesService) : ViewModel() {
     suspend fun insertExpenses(expensesDTO: ExpensesDTO) : Boolean{
@@ -23,6 +20,6 @@ class ExpensesViewModel(private val expensesService: ExpensesService) : ViewMode
     }
 
     suspend fun updateBanksForDueDate(id: Int) : Double{
-             return expensesService.updateBanksForDueDate("Variable", id)
+        return expensesService.updateBanksForDueDate("Variable", id)
     }
 }

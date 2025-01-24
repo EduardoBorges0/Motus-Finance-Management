@@ -34,8 +34,16 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun getAllDates() : List<String>{
         return dao.getAllDates()
     }
+
+    suspend fun updateDatePlusMonth(date: String, id: Int){
+        return dao.updateDatePlusMonth(date, id)
+    }
+
     suspend fun sumAllBank() : Double{
         return dao.sumAllBank()
+    }
+    suspend fun updateAllSumToZero(sum: Double){
+        return dao.updateAllSumToZero(sum)
     }
 
 

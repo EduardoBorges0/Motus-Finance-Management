@@ -14,4 +14,7 @@ interface DueDatesDAO {
 
    @Query("SELECT dueDate FROM dueDate_entity")
    suspend fun getDueDate() : String
+
+   @Query("DELETE FROM dueDate_entity")
+   suspend fun deleteDueDate()
 }

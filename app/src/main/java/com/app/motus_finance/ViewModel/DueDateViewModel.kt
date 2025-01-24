@@ -9,4 +9,7 @@ class DueDateViewModel(private val service: DueDateService): ViewModel() {
     suspend fun insertDueDate(){
         return service.insertDueDate()
     }
+    suspend fun deleteDueDate(){
+        return service.deleteDueDate()
+    }
 }

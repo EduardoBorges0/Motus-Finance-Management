@@ -11,7 +11,6 @@ import kotlin.math.exp
 class BanksViewModel(private val bankService: BankService) : ViewModel() {
 
     suspend fun insertBank(bankDTO: BankDTO): Boolean {
-
         if (bankDTO.name == null||
             bankDTO.colorSpentsOrReceived == null||
             bankDTO.img == null||
@@ -22,7 +21,7 @@ class BanksViewModel(private val bankService: BankService) : ViewModel() {
 
         return bankService.insertBank(bankDTO)
     }
-    suspend fun updateBalance(bankDTO: BankDTO, expensesDTO: ExpensesDTO) : Banks{
+    suspend fun updateBalanceWhenAddExpense(bankDTO: BankDTO, expensesDTO: ExpensesDTO) : Banks{
         return bankService.updateBalance(bankDTO, expensesDTO)
     }
     suspend fun deleteBanks(id: Int){

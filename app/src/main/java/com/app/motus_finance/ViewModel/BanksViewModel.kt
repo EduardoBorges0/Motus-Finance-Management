@@ -1,5 +1,9 @@
 package com.app.motus_finance.ViewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.exp
 
 class BanksViewModel(private val bankService: BankService) : ViewModel() {
-
+    val selectedTab = mutableIntStateOf(0)
     suspend fun insertBank(bankDTO: BankDTO): Boolean {
         if (bankDTO.name == null||
             bankDTO.colorSpentsOrReceived == null||
@@ -27,8 +31,8 @@ class BanksViewModel(private val bankService: BankService) : ViewModel() {
 
     fun getAllBanks(): LiveData<List<Banks>> = bankService.getAllBanks()
 
-    suspend fun updateBalanceWhenAddExpense(bankDTO: BankDTO, expensesDTO: ExpensesDTO) : Banks{
-        return bankService.updateBalance(bankDTO, expensesDTO)
+    suspend fun updateBalanceWhenAddExpense(bankId: Int, expensesDTO: ExpensesDTO){
+        return bankService.updateBalance(bankId, expensesDTO)
     }
      fun deleteBanks(id: Int){
          viewModelScope.launch {

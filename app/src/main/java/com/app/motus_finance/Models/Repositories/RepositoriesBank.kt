@@ -24,7 +24,9 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun deleteBanks(id: Int){
         return dao.deleteBank(id)
     }
-
+    suspend fun getBalanceById(id: Int) : Double{
+        return dao.getBalanceById(id)
+    }
     suspend fun updateBalance(bankId: Int, newBalance: Double){
         return dao.updateBalance(bankId, newBalance)
     }

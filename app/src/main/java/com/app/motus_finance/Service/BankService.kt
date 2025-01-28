@@ -36,10 +36,10 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         return repositoriesBank.deleteBanks(id)
     }
     suspend fun updateBalance(
-        bankDTO: BankDTO,
+        bankId: Int,
         expensesDTO: ExpensesDTO
-    ): Banks {
-        val currentBalance = bankDTO.toEntity().balance ?: 0.0
+    ) {
+        val currentBalance = repositoriesBank.getBalanceById(bankId)
         val transactionValue = expensesDTO.toEntity().value ?: 0.0
 
         val newBalance = when (expensesDTO.toEntity().spentOrReceived) {
@@ -49,11 +49,9 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         }
 
         repositoriesBank.updateBalance(
-            bankId = expensesDTO.toEntity().bankId ?: 0,
+            bankId = bankId,
             newBalance = newBalance
         )
-
-        return bankDTO.toEntity().copy(balance = newBalance)
     }
 
 

@@ -9,24 +9,30 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.Repositories.RepositoriesBank
+import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
 import com.app.motus_finance.Models.RoomConfig.DatabaseProvider
 import com.app.motus_finance.Service.BankService
-import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen
+import com.app.motus_finance.Service.ExpensesService
 import com.app.motus_finance.View.Navigations.ui.theme.Motus_FINANCETheme
 import com.app.motus_finance.ViewModel.BanksViewModel
+import com.app.motus_finance.ViewModel.ExpensesViewModel
 
 class Nav : ComponentActivity() {
     private lateinit var banksViewModel: BanksViewModel
+    private lateinit var expensesViewModel: ExpensesViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val bankDAO = DatabaseProvider.getBankDAO(this)
+        val expenseDAO = DatabaseProvider.getExpenseDAO(this)
         banksViewModel = BanksViewModel(BankService(RepositoriesBank(bankDAO)))
+        expensesViewModel = ExpensesViewModel(ExpensesService(RepositoriesExpenses(expenseDAO), RepositoriesBank(bankDAO)))
+
         setContent {
             LaunchedEffect(Unit) {
-
-            }
+ }
             Motus_FINANCETheme {
               SetupNavController(banksViewModel)
             }
@@ -38,6 +44,6 @@ class Nav : ComponentActivity() {
 fun SetupNavController(banksViewModel: BanksViewModel){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "main"){
-        composable("main") { MainScreen(banksViewModel) }
+        composable("main") { NavigationBarComposable(banksViewModel) }
     }
 }

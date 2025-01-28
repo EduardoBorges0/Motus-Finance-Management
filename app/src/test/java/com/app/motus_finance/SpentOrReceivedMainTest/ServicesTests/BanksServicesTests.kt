@@ -39,7 +39,7 @@ class BanksServicesTests {
         val bank = BankDTO(
             name = "Nubank",
             color = "Purple",
-            img = "url xxx",
+            img = 50,
             balance = 200.00,
             colorSpentsOrReceived = "Light Purple",
             date = "03/02/2025",
@@ -57,17 +57,14 @@ class BanksServicesTests {
             readyForDeletion = false
         )
 
-        // Mock da interação com o repositório (não precisa realmente alterar o banco de dados no teste)
         coEvery { mockRepositoriesBank.updateBalance(any(), any()) } returns Unit
 
         // Act
         val result = service.updateBalance(bank, expenses)
 
         // Assert
-        // O saldo após o gasto de 30 será 170 (200 - 30)
         assertEquals(bank.copy(balance = 170.00), result)
 
-        // Verifique se o repositório foi chamado para atualizar o saldo
         coVerify { mockRepositoriesBank.updateBalance(1, 170.00) }
     }
 
@@ -77,7 +74,7 @@ class BanksServicesTests {
         val bank = BankDTO(
             name = "Nubank",
             color = "Purple",
-            img = "url xxx",
+            img = 50,
             balance = 200.00,
             colorSpentsOrReceived = "Light Purple",
             date = "03/02/2025",
@@ -101,10 +98,8 @@ class BanksServicesTests {
         val result = service.updateBalance(bank, expenses)
 
         // Assert
-        // O saldo após o gasto de 30 será 170 (200 - 30)
         assertEquals(bank.copy(balance = 1600.00), result)
 
-        // Verifique se o repositório foi chamado para atualizar o saldo
         coVerify { mockRepositoriesBank.updateBalance(1, 1600.00) }
     }
 
@@ -114,7 +109,7 @@ class BanksServicesTests {
         val bank = BankDTO(
             name = "Nubank",
             color = "Purple",
-            img = "url xxx",
+            img = 50,
             balance = 200.00,
             colorSpentsOrReceived = "Light Purple",
             date = LocalDate.now().toString(),

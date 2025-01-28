@@ -11,8 +11,40 @@ import com.app.motus_finance.Models.DAO.GraphicsDAO
 import com.app.motus_finance.Models.DAO.PaymentDAO
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(db: SupportSQLiteDatabase) {}
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // 1. Crie uma nova tabela com o tipo correto para a coluna `img`
+        database.execSQL(
+            """
+            CREATE TABLE banks_new (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name TEXT,
+                color TEXT,
+                img INTEGER, -- Alterado para INTEGER
+                balance REAL,
+                colorSpentsOrReceived TEXT,
+                date TEXT,
+                sum REAL
+            )
+            """.trimIndent()
+        )
+
+        // 2. Copie os dados da tabela antiga para a nova
+        database.execSQL(
+            """
+            INSERT INTO banks_new (id, name, color, img, balance, colorSpentsOrReceived, date, sum)
+            SELECT id, name, color, NULL, balance, colorSpentsOrReceived, date, sum
+            FROM bank_entity
+            """.trimIndent()
+        )
+
+        // 3. Exclua a tabela antiga
+        database.execSQL("DROP TABLE bank_entity")
+
+        // 4. Renomeie a nova tabela para o nome original
+        database.execSQL("ALTER TABLE banks_new RENAME TO bank_entity")
+    }
 }
+
 
 object DatabaseProvider {
     private var INSTANCE: AppDatabase? = null
@@ -22,6 +54,7 @@ object DatabaseProvider {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java, "app_database" )
+                .addMigrations(MIGRATION_1_2)
                 .build()
 
             INSTANCE = instance

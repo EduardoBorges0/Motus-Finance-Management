@@ -9,7 +9,7 @@ data class Banks (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo val name : String?,
     @ColumnInfo val color: String?,
-    @ColumnInfo val img: String?,
+    @ColumnInfo val img: Int?,
     @ColumnInfo val balance: Double?,
     @ColumnInfo val colorSpentsOrReceived: String?,
     @ColumnInfo val date: String?,

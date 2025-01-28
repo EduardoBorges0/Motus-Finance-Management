@@ -13,7 +13,7 @@ import com.app.motus_finance.Models.Entities.Expenses
 import com.app.motus_finance.Models.Entities.Graphics
 import com.app.motus_finance.Models.Entities.Payments
 
-@Database(entities = [Banks::class, Expenses::class, Payments::class, DueDates::class, Graphics::class], version = 1)
+@Database(entities = [Banks::class, Expenses::class, Payments::class, DueDates::class, Graphics::class], version = 2)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun bankDao() : BankDao
     abstract fun expenseDao() : ExpensesDAO

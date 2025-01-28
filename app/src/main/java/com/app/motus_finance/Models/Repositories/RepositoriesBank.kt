@@ -10,7 +10,7 @@ class RepositoriesBank(private val dao: BankDao) {
     suspend fun insertBank(banks: Banks){
         return dao.insertBank(banks)
     }
-    suspend fun getAllBanks() : List<Banks>{
+    fun getAllBanks() : LiveData<List<Banks>>{
         return dao.getAllBanks()
     }
 

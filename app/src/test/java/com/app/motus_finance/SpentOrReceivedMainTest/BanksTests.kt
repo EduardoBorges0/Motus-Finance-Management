@@ -19,20 +19,20 @@ import org.junit.Before
 import org.junit.Test
 
 class BanksTests {
-    private val testDispatcher = Dispatchers.Unconfined // Use o dispatcher apropriado para testes
+    private val testDispatcher = Dispatchers.Unconfined
     private lateinit var mockService: BankService
     private lateinit var viewModel: BanksViewModel
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher) // Configura o dispatcher principal para testes
+        Dispatchers.setMain(testDispatcher)
         mockService = mockk()
         viewModel = BanksViewModel(mockService)
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain() // Reseta o dispatcher principal após os testes
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -41,7 +41,7 @@ class BanksTests {
         val bank = BankDTO(
             name = "Nubank",
             color = "Purple",
-            img = "url xxx",
+            img = 50,
             balance = 200.12,
             colorSpentsOrReceived = "Light Purple",
             date = "03/02/2025",
@@ -64,14 +64,13 @@ class BanksTests {
         val bank = BankDTO(
             name = null,
             color = "Purple",
-            img = "url xxx",
+            img = 50,
             balance = 200.12,
             colorSpentsOrReceived = "Light Purple",
             date = "03/02/2025",
             sum = null
         )
 
-        // Mock do serviço (não será chamado)
         coEvery { mockService.insertBank(bank) } returns false
 
         // Act

@@ -5,7 +5,7 @@ import com.app.motus_finance.Models.Entities.Banks
 data class BankDTO (
     val name: String?,
     val color: String?,
-    val img: String?,
+    val img: Int?,
     val balance: Double?,
     val colorSpentsOrReceived: String?,
     val date: String?,

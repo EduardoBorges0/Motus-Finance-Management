@@ -13,7 +13,7 @@ import com.app.motus_finance.Models.Entities.Banks
 interface BankDao {
 
     @Query("SELECT * FROM bank_entity")
-    fun getAllBanks() : List<Banks>
+    fun getAllBanks() : LiveData<List<Banks>>
 
     @Query("SELECT date FROM bank_entity")
     fun getAllDates() : List<String>

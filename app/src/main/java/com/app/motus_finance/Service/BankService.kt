@@ -1,5 +1,6 @@
 package com.app.motus_finance.Service
 
+import androidx.lifecycle.LiveData
 import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.DTO.toEntity
@@ -18,6 +19,9 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
             e.printStackTrace()
             false
         }
+    }
+    fun getAllBanks(): LiveData<List<Banks>> {
+        return repositoriesBank.getAllBanks()
     }
     suspend fun updateSum(bankId: Int, sum: Double){
         return repositoriesBank.updateSum(bankId, sum)

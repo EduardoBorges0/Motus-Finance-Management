@@ -51,9 +51,12 @@ android {
 }
 
 dependencies {
+    implementation (libs.coil.compose)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
     kapt(libs.androidx.room.compiler)
-    implementation("androidx.room:room-ktx:2.6.1") // Adicionando dependência para corrotinas
+    implementation(libs.androidx.room.ktx) // Adicionando dependência para corrotinas
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     testImplementation(libs.mockk)

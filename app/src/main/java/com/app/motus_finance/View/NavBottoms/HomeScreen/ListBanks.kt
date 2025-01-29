@@ -7,11 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,17 +28,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.app.motus_finance.Models.Entities.Banks
+import com.app.motus_finance.UtilityClass.DateUtils
+import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
 import com.app.motus_finance.ViewModel.BanksViewModel
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
 fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
-    val currency = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
     Box(
         modifier = Modifier
             .padding(top = 20.dp)
-            .height(150.dp)
+            .height(200.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(
                 Color(parseColor(banks.color))
@@ -44,7 +50,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
         },
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(bottom = 85.dp, end = 30.dp)) {
+                .padding(bottom = 130.dp, end = 30.dp)) {
             Icon(
                 imageVector = Icons.Filled.Clear,
                 contentDescription = "icons",
@@ -52,7 +58,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             )
         }
         Text(
-            text = currency.format(banks.balance).toString(),
+            text = DateUtils.currencyFormat(banks.balance!!.toDouble()) ,
             modifier = Modifier.padding(20.dp),
             color = Color.White,
             fontSize = 18.sp
@@ -60,8 +66,8 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
         Text(
             text = banks.date.toString(),
             modifier = Modifier
-                .padding(bottom = 32.dp)
-                .align(Alignment.BottomCenter),
+                .padding(bottom = 2.dp)
+                .align(Alignment.Center),
             color = Color.White,
             fontSize = 18.sp
         )
@@ -70,6 +76,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             contentDescription = "icon bank",
             modifier = Modifier
                 .size(60.dp)
+                .padding(top = 10.dp)
                 .align(Alignment.TopCenter)
         )
         Text(
@@ -81,6 +88,19 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             color = Color.White,
             textAlign = TextAlign.Center
         )
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .width(200.dp)
+                .padding(bottom = 20.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MainColor
+            )
+        ) {
+            Text("Adicionar Gastos")
+        }
     }
 
 }

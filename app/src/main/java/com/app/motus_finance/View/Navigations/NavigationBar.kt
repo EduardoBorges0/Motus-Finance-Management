@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.outlined.List
@@ -19,16 +20,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.app.motus_finance.Models.Entities.NavigationBarBottom
 import com.app.motus_finance.R
 import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen
+import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
 import com.app.motus_finance.ViewModel.BanksViewModel
+import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 @Composable
-fun NavigationBarComposable(banksViewModel: BanksViewModel){
+fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: PaymentsViewModel){
     val itemsNavigationBottom = listOf(
         NavigationBarBottom(
             title = "Home",
@@ -53,14 +57,19 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel){
     )
     Scaffold(bottomBar = {
         Box{
-            NavigationBar{
+            NavigationBar(
+                containerColor = MainColor
+            ){
                 itemsNavigationBottom.forEachIndexed{ index, item ->
                     NavigationBarItem(
                         selected = banksViewModel.selectedTab.value == index,
                         onClick = {
                             banksViewModel.selectedTab.value = index
-
                         },
+                        colors = NavigationBarItemDefaults.colors(
+                            unselectedIconColor = Color.White,
+                            indicatorColor = Color.Transparent
+                        ),
                         icon = {
                             Icon(
                                 imageVector = if(index == banksViewModel.selectedTab.value){
@@ -75,11 +84,15 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel){
             }
             FloatingActionButton(
                 onClick = {
+
                 },
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(60.dp)
-                    .offset(y = (-70).dp)
+                    .offset(y = (-70).dp),
+                shape = RoundedCornerShape(20.dp),
+                containerColor = MainColor,
+                contentColor = Color.White
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
@@ -93,7 +106,7 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel){
                     .padding(innerPadding)
             ) {
                 when (banksViewModel.selectedTab.value) {
-                    0 -> MainScreen(banksViewModel)
+                    0 -> MainScreen(banksViewModel, paymentsViewModel)
                 }
             }
         })

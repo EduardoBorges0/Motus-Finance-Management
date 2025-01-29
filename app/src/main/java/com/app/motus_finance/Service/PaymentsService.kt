@@ -26,4 +26,7 @@ class PaymentsService(private val repositoriesPayments: RepositoriesPayments) {
     suspend fun insertPayments(paymentDTO: PaymentDTO){
         repositoriesPayments.insertPayments(paymentDTO.toEntity())
     }
+    suspend fun getPayments() : Double{
+        return repositoriesPayments.getPayments()
+    }
 }

@@ -17,6 +17,7 @@ import com.app.motus_finance.Models.RoomConfig.DatabaseProvider
 import com.app.motus_finance.Service.BankService
 import com.app.motus_finance.Service.ExpensesService
 import com.app.motus_finance.Service.PaymentsService
+import com.app.motus_finance.View.NavBottoms.HomeScreen.AddPayments.AddPayments
 import com.app.motus_finance.View.Navigations.ui.theme.Motus_FINANCETheme
 import com.app.motus_finance.ViewModel.BanksViewModel
 import com.app.motus_finance.ViewModel.ExpensesViewModel
@@ -55,8 +56,11 @@ fun SetupNavController(
         composable("main") {
             NavigationBarComposable(
             banksViewModel,
-            paymentsViewModel
+            paymentsViewModel, navController
             )
+        }
+        composable("addPayments") {
+            AddPayments(navController)
         }
     }
 }

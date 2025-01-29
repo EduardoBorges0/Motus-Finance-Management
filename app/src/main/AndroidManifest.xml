@@ -15,6 +15,11 @@
         android:theme="@style/Theme.Motus_FINANCE"
         tools:targetApi="31">
         <activity
+            android:name=".View.UtilsComposable.ArrowBack"
+            android:exported="false"
+            android:label="@string/title_activity_arrow_back"
+            android:theme="@style/Theme.Motus_FINANCE" />
+        <activity
             android:name=".View.NavBottoms.HomeScreen.NavigationBar"
             android:exported="false"
             android:label="@string/title_activity_navigation_bar"

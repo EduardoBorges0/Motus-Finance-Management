@@ -10,13 +10,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.motus_finance.ViewModel.PaymentsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun PaymentBox(modifier: Modifier, paymentsViewModel: PaymentsViewModel) {
+fun PaymentBox(
+    modifier: Modifier,
+    paymentsViewModel: PaymentsViewModel,
+    navController: NavController
+               ) {
     val payment = paymentsViewModel.payments.observeAsState()
 
     LaunchedEffect(Unit) {
@@ -25,7 +30,9 @@ fun PaymentBox(modifier: Modifier, paymentsViewModel: PaymentsViewModel) {
     Box(modifier = modifier.padding(bottom = 30.dp)) {
         OutlinedButton(
             onClick = {
-                paymentsViewModel.getPayment()
+                if(payment.value == null){
+                    navController.navigate("addPayments")
+                }
             },
             shape = RoundedCornerShape(8.dp)
         ) {

@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.motus_finance.Models.Entities.NavigationBarBottom
 import com.app.motus_finance.R
 import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen
@@ -32,7 +33,7 @@ import com.app.motus_finance.ViewModel.BanksViewModel
 import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 @Composable
-fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: PaymentsViewModel){
+fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: PaymentsViewModel, navController: NavController){
     val itemsNavigationBottom = listOf(
         NavigationBarBottom(
             title = "Home",
@@ -106,7 +107,7 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: P
                     .padding(innerPadding)
             ) {
                 when (banksViewModel.selectedTab.value) {
-                    0 -> MainScreen(banksViewModel, paymentsViewModel)
+                    0 -> MainScreen(banksViewModel, paymentsViewModel, navController)
                 }
             }
         })

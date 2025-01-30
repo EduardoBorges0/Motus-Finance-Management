@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.motus_finance.Models.DTO.ExpensesDTO
+import com.app.motus_finance.Models.Entities.Payments
 import com.app.motus_finance.Models.Repositories.RepositoriesBank
 import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
 import com.app.motus_finance.Models.Repositories.RepositoriesPayments
@@ -39,6 +40,7 @@ class Nav : ComponentActivity() {
         paymentsViewModel = PaymentsViewModel(PaymentsService(RepositoriesPayments(paymentsDAO)))
         setContent {
             LaunchedEffect(Unit) {
+//                paymentsViewModel.insertPayments(1290.0)
  }
             Motus_FINANCETheme {
               SetupNavController(banksViewModel, paymentsViewModel)

@@ -1,5 +1,6 @@
 package com.app.motus_finance.ViewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,17 +10,24 @@ import com.app.motus_finance.Service.PaymentsService
 import kotlinx.coroutines.launch
 
 class PaymentsViewModel(private val paymentsService: PaymentsService) : ViewModel() {
-    val payments = MutableLiveData<String>()
+    private val _alertDialog = MutableLiveData(false)
+    val alertDialog: LiveData<Boolean> = _alertDialog
 
+    fun setAlertDialog(value: Boolean) {
+        _alertDialog.value = value
+    }
+    fun deletePayment(){
+        viewModelScope.launch {
+            paymentsService.deletePayment()
+        }
+    }
     fun updatePayment(expensesDTO: ExpensesDTO){
         viewModelScope.launch {
             paymentsService.updatePayment(expensesDTO)
         }
     }
-    fun getPayment() {
-        viewModelScope.launch {
-            payments.value = paymentsService.getPayments().toString()
-        }
+    fun getPayment() : LiveData<Double>{
+        return paymentsService.getPayments()
     }
 
     fun insertPayments(payment: Double){

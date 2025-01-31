@@ -62,7 +62,8 @@ public final class DueDatesDAO_Impl implements DueDatesDAO {
   }
 
   @Override
-  public Object insertDueDate(final DueDates dueDates, final Continuation<? super Unit> arg1) {
+  public Object insertDueDate(final DueDates dueDates,
+      final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -76,11 +77,11 @@ public final class DueDatesDAO_Impl implements DueDatesDAO {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
-  public Object deleteDueDate(final Continuation<? super Unit> arg0) {
+  public Object deleteDueDate(final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -99,11 +100,11 @@ public final class DueDatesDAO_Impl implements DueDatesDAO {
           __preparedStmtOfDeleteDueDate.release(_stmt);
         }
       }
-    }, arg0);
+    }, $completion);
   }
 
   @Override
-  public Object getDueDate(final Continuation<? super String> arg0) {
+  public Object getDueDate(final Continuation<? super String> $completion) {
     final String _sql = "SELECT dueDate FROM dueDate_entity";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -129,7 +130,7 @@ public final class DueDatesDAO_Impl implements DueDatesDAO {
           _statement.release();
         }
       }
-    }, arg0);
+    }, $completion);
   }
 
   @NonNull

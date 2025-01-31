@@ -52,7 +52,8 @@ public final class GraphicsDAO_Impl implements GraphicsDAO {
   }
 
   @Override
-  public Object insertGraphics(final Graphics graphics, final Continuation<? super Unit> arg1) {
+  public Object insertGraphics(final Graphics graphics,
+      final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -66,7 +67,7 @@ public final class GraphicsDAO_Impl implements GraphicsDAO {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @NonNull

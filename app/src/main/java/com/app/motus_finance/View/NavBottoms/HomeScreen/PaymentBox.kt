@@ -1,6 +1,5 @@
 package com.app.motus_finance.View.NavBottoms.HomeScreen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,11 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.app.motus_finance.R
 import com.app.motus_finance.UtilityClass.DateUtils
 import com.app.motus_finance.View.UtilsComposable.AlertDialogComposable
 import com.app.motus_finance.ViewModel.PaymentsViewModel
-
 
 @Composable
 fun PaymentBox(
@@ -46,13 +43,13 @@ fun PaymentBox(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.width(150.dp).height(50.dp)
         ) {
-            Text(payment.value?.toDouble()?.let { DateUtils.currencyFormat(it) } ?: "Adicionar pagamento",
+            Text(payment.value?.let { DateUtils.currencyFormat(it) } ?: "Adicionar pagamento",
                 fontSize = 17.sp)
         }
     }
     AlertDialogComposable(
         showDialog = showDialog.value,
-        onDismiss = {paymentsViewModel.setAlertDialog(false)},
+        onDismiss = { paymentsViewModel.setAlertDialog(false) },
         onConfirm = {
             paymentsViewModel.deletePayment()
             paymentsViewModel.setAlertDialog(false)

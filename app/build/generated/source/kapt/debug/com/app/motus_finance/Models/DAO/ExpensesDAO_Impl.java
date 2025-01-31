@@ -99,7 +99,8 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
   }
 
   @Override
-  public Object insertExpenses(final Expenses expenses, final Continuation<? super Unit> arg1) {
+  public Object insertExpenses(final Expenses expenses,
+      final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -113,11 +114,11 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
-  public Object deleteVariables(final int bankId, final Continuation<? super Unit> arg1) {
+  public Object deleteVariables(final int bankId, final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -138,7 +139,7 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           __preparedStmtOfDeleteVariables.release(_stmt);
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override

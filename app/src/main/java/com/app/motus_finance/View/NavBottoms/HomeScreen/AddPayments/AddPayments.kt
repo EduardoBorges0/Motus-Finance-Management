@@ -71,7 +71,10 @@ fun AddPayments(navController: NavController, paymentsViewModel: PaymentsViewMod
             )
         }
         Button(onClick = {
-           paymentsViewModel.insertPayments(inputText.toDouble())
+            val sanitizedValue = inputText.replace(".", "").replace(",", ".") // Remove pontos e ajusta para um formato válido
+            val numericValue = sanitizedValue.toDoubleOrNull() ?: 0.0
+            paymentsViewModel.insertPayments(numericValue)
+
             navController.popBackStack()
         },
             modifier = Modifier

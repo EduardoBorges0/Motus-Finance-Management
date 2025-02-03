@@ -17,4 +17,20 @@ object DateUtils {
         val currency = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
         return currency.format(value)
     }
+    fun formatToCurrency(input: String): String {
+        val cleanedInput = input.replace(",", "").replace(".", "")
+        val parsedValue = cleanedInput.toLongOrNull() ?: 0L
+
+        return if (parsedValue == 0L) {
+            "0.00"
+        } else {
+            val formattedValue = parsedValue.toString().padStart(3, '0')
+            val integerPart = formattedValue.dropLast(2)
+            val decimalPart = formattedValue.takeLast(2)
+            val integerWithThousandsSeparator =
+                integerPart.reversed().chunked(3).joinToString(".").reversed()
+
+            "$integerWithThousandsSeparator.$decimalPart"
+        }
+    }
 }

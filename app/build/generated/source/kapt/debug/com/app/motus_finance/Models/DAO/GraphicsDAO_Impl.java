@@ -30,7 +30,7 @@ public final class GraphicsDAO_Impl implements GraphicsDAO {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `graphics_entity` (`id`,`monthly`,`value`) VALUES (nullif(?, 0),?,?)";
+        return "INSERT OR ABORT INTO `graphics_entity` (`id`,`monthly`,`value`,`highestSpendingRating`,`valueSpendingRating`) VALUES (nullif(?, 0),?,?,?,?)";
       }
 
       @Override
@@ -47,13 +47,18 @@ public final class GraphicsDAO_Impl implements GraphicsDAO {
         } else {
           statement.bindDouble(3, entity.getValue());
         }
+        if (entity.getHighestSpendingRating() == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, entity.getHighestSpendingRating());
+        }
+        statement.bindDouble(5, entity.getValueSpendingRating());
       }
     };
   }
 
   @Override
-  public Object insertGraphics(final Graphics graphics,
-      final Continuation<? super Unit> $completion) {
+  public Object insertGraphics(final Graphics graphics, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -67,7 +72,7 @@ public final class GraphicsDAO_Impl implements GraphicsDAO {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @NonNull

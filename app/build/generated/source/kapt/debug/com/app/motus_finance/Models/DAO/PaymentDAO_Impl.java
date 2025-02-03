@@ -74,8 +74,7 @@ public final class PaymentDAO_Impl implements PaymentDAO {
   }
 
   @Override
-  public Object insertPayment(final Payments payments,
-      final Continuation<? super Unit> $completion) {
+  public Object insertPayment(final Payments payments, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -89,12 +88,11 @@ public final class PaymentDAO_Impl implements PaymentDAO {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object updatePayment(final double newPayment,
-      final Continuation<? super Unit> $completion) {
+  public Object updatePayment(final double newPayment, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -115,11 +113,11 @@ public final class PaymentDAO_Impl implements PaymentDAO {
           __preparedStmtOfUpdatePayment.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deletePayment(final Continuation<? super Unit> $completion) {
+  public Object deletePayment(final Continuation<? super Unit> arg0) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -138,7 +136,7 @@ public final class PaymentDAO_Impl implements PaymentDAO {
           __preparedStmtOfDeletePayment.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.app.motus_finance.Models.DAO;
 
 import android.database.Cursor;
+import android.os.CancellationSignal;
 import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
 import androidx.room.EntityInsertionAdapter;
@@ -10,6 +11,7 @@ import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.app.motus_finance.Models.Entities.Expenses;
+import com.app.motus_finance.Models.Entities.HighestSpending;
 import java.lang.Class;
 import java.lang.Double;
 import java.lang.Exception;
@@ -17,6 +19,7 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -174,6 +177,43 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
       _cursor.close();
       _statement.release();
     }
+  }
+
+  @Override
+  public Object getAllSpendingRatings(
+      final Continuation<? super List<HighestSpending>> $completion) {
+    final String _sql = "SELECT classification, SUM(value) as total FROM table_expenses GROUP BY classification ORDER BY total DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<HighestSpending>>() {
+      @Override
+      @NonNull
+      public List<HighestSpending> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfClassification = 0;
+          final int _cursorIndexOfTotal = 1;
+          final List<HighestSpending> _result = new ArrayList<HighestSpending>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final HighestSpending _item;
+            final String _tmpClassification;
+            if (_cursor.isNull(_cursorIndexOfClassification)) {
+              _tmpClassification = null;
+            } else {
+              _tmpClassification = _cursor.getString(_cursorIndexOfClassification);
+            }
+            final double _tmpTotal;
+            _tmpTotal = _cursor.getDouble(_cursorIndexOfTotal);
+            _item = new HighestSpending(_tmpClassification,_tmpTotal);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
   }
 
   @NonNull

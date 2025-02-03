@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.motus_finance.Models.DTO.BankDTO
@@ -17,6 +18,14 @@ import kotlin.math.exp
 
 class BanksViewModel(private val bankService: BankService) : ViewModel() {
     val selectedTab = mutableIntStateOf(0)
+    private val _alertDialog = MutableLiveData(true)
+    val alertDialog: LiveData<Boolean> = _alertDialog
+    private val _showLoading = MutableLiveData(false)
+    val showLoading: LiveData<Boolean> = _showLoading
+
+    fun setAlertDialog(value: Boolean) {
+        _alertDialog.value = value
+    }
     suspend fun insertBank(bankDTO: BankDTO): Boolean {
         if (bankDTO.name == null||
             bankDTO.colorSpentsOrReceived == null||
@@ -29,7 +38,8 @@ class BanksViewModel(private val bankService: BankService) : ViewModel() {
         return bankService.insertBank(bankDTO)
     }
 
-    fun getAllBanks(): LiveData<List<Banks>> = bankService.getAllBanks()
+    fun getAllBanks(): LiveData<List<Banks>> {
+        return bankService.getAllBanks() }
 
     suspend fun updateBalanceWhenAddExpense(bankId: Int, expensesDTO: ExpensesDTO){
         return bankService.updateBalance(bankId, expensesDTO)

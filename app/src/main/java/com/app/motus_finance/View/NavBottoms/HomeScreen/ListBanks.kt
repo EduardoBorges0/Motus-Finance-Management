@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,8 @@ import java.util.Locale
 
 @Composable
 fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
+    var showDialog = bankViewModel.alertDialog.observeAsState(false)
+
     Box(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -58,16 +62,9 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             )
         }
         Text(
-            text = DateUtils.currencyFormat(banks.balance!!.toDouble()) ,
-            modifier = Modifier.padding(20.dp),
-            color = Color.White,
-            fontSize = 18.sp
-        )
-        Text(
             text = banks.date.toString(),
             modifier = Modifier
-                .padding(bottom = 2.dp)
-                .align(Alignment.Center),
+                .padding(26.dp),
             color = Color.White,
             fontSize = 18.sp
         )
@@ -99,8 +96,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
                 containerColor = MainColor
             )
         ) {
-            Text("Adicionar Gastos")
+            Text("Adicionar compra")
         }
     }
-
 }

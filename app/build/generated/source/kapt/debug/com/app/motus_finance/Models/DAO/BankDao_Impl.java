@@ -148,7 +148,7 @@ public final class BankDao_Impl implements BankDao {
   }
 
   @Override
-  public Object insertBank(final Banks banks, final Continuation<? super Unit> $completion) {
+  public Object insertBank(final Banks banks, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -162,11 +162,11 @@ public final class BankDao_Impl implements BankDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteBank(final int id, final Continuation<? super Unit> $completion) {
+  public Object deleteBank(final int id, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -187,11 +187,11 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfDeleteBank.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object updateAllSumToZero(final double sum, final Continuation<? super Unit> $completion) {
+  public Object updateAllSumToZero(final double sum, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -212,12 +212,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateAllSumToZero.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object updateDatePlusMonth(final String date, final int id,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -244,12 +244,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateDatePlusMonth.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateBalance(final int bankId, final double newBalance,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -272,12 +272,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateBalance.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateBankDate(final int bankId, final String newDate,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -304,12 +304,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateBankDate.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateSum(final int bankId, final double sum,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -332,7 +332,7 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateSum.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
@@ -467,7 +467,7 @@ public final class BankDao_Impl implements BankDao {
   }
 
   @Override
-  public Object getBalanceById(final int id, final Continuation<? super Double> $completion) {
+  public Object getBalanceById(final int id, final Continuation<? super Double> arg1) {
     final String _sql = "SELECT balance FROM bank_entity WHERE id = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -495,11 +495,11 @@ public final class BankDao_Impl implements BankDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object sumAllBank(final Continuation<? super Double> $completion) {
+  public Object sumAllBank(final Continuation<? super Double> arg0) {
     final String _sql = "SELECT SUM(sum) FROM bank_entity";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -527,7 +527,7 @@ public final class BankDao_Impl implements BankDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @NonNull

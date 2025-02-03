@@ -48,16 +48,16 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `bank_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `color` TEXT, `img` INTEGER, `balance` REAL, `colorSpentsOrReceived` TEXT, `date` TEXT, `sum` REAL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `table_expenses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bankId` INTEGER, `expenseDescription` TEXT, `value` REAL, `spentOrReceived` TEXT, `fixedOrVariable` TEXT, `date` TEXT, `dueDate` TEXT, `classification` TEXT, `readyForDeletion` INTEGER NOT NULL, FOREIGN KEY(`bankId`) REFERENCES `bank_entity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
         db.execSQL("CREATE TABLE IF NOT EXISTS `payment_table` (`id` INTEGER NOT NULL, `payment` REAL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `dueDate_entity` (`id` INTEGER NOT NULL, `dueDate` TEXT, PRIMARY KEY(`id`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `graphics_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `monthly` TEXT, `value` REAL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `graphics_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `monthly` TEXT, `value` REAL, `highestSpendingRating` TEXT NOT NULL, `valueSpendingRating` REAL NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dcb81c2ea7a7f9f79fdae1623a3d5b2d')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04dc8c47db27c73bd14b882bcfb8a610')");
       }
 
       @Override
@@ -174,10 +174,12 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoDueDateEntity + "\n"
                   + " Found:\n" + _existingDueDateEntity);
         }
-        final HashMap<String, TableInfo.Column> _columnsGraphicsEntity = new HashMap<String, TableInfo.Column>(3);
+        final HashMap<String, TableInfo.Column> _columnsGraphicsEntity = new HashMap<String, TableInfo.Column>(5);
         _columnsGraphicsEntity.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsGraphicsEntity.put("monthly", new TableInfo.Column("monthly", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsGraphicsEntity.put("value", new TableInfo.Column("value", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsGraphicsEntity.put("highestSpendingRating", new TableInfo.Column("highestSpendingRating", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsGraphicsEntity.put("valueSpendingRating", new TableInfo.Column("valueSpendingRating", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysGraphicsEntity = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesGraphicsEntity = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoGraphicsEntity = new TableInfo("graphics_entity", _columnsGraphicsEntity, _foreignKeysGraphicsEntity, _indicesGraphicsEntity);
@@ -189,7 +191,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "dcb81c2ea7a7f9f79fdae1623a3d5b2d", "b63ef583627356c9d3c70192be99e679");
+    }, "04dc8c47db27c73bd14b882bcfb8a610", "bb132d18d025d6b1d5b0139f5ebd5d18");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

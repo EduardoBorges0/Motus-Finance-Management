@@ -8,5 +8,7 @@ import androidx.room.PrimaryKey
 data class Graphics (
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     @ColumnInfo val monthly : String?,
-    @ColumnInfo val value: Double?
+    @ColumnInfo val value: Double?,
+    @ColumnInfo val highestSpendingRating: String,
+    @ColumnInfo val valueSpendingRating: Double
 )

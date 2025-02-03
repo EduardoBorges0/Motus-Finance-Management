@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,6 +32,7 @@ fun MainScreen(bankViewModel: BanksViewModel, paymentsViewModel: PaymentsViewMod
   horizontalAlignment = Alignment.CenterHorizontally
  ) {
   PaymentBox(modifier = Modifier.align(Alignment.Start), paymentsViewModel, navController)
+
   LazyColumn(
    modifier = Modifier.fillMaxWidth()
   ) {

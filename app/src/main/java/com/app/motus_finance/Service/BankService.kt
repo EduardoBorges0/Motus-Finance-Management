@@ -20,6 +20,7 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
             false
         }
     }
+
     fun getAllBanks(): LiveData<List<Banks>> {
         return repositoriesBank.getAllBanks()
     }

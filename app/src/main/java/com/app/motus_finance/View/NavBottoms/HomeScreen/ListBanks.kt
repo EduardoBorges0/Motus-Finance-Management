@@ -38,8 +38,6 @@ import java.util.Locale
 
 @Composable
 fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
-    var showDialog = bankViewModel.alertDialog.observeAsState(false)
-
     Box(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -62,9 +60,17 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             )
         }
         Text(
-            text = banks.date.toString(),
+            text = DateUtils.currencyFormat(banks.balance?.toDouble() ?: 0.0),
             modifier = Modifier
                 .padding(26.dp),
+            color = Color.White,
+            fontSize = 18.sp
+        )
+        Text(
+            text = banks.date.toString(),
+            modifier = Modifier
+                .padding(26.dp)
+                .align(Alignment.Center),
             color = Color.White,
             fontSize = 18.sp
         )

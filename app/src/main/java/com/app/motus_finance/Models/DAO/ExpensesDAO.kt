@@ -19,6 +19,9 @@ interface ExpensesDAO {
     @Query("SELECT classification, SUM(value) as total FROM table_expenses GROUP BY classification ORDER BY total DESC")
     suspend fun getAllSpendingRatings(): List<HighestSpending>
 
+    @Query("SELECT SUM(value) FROM table_expenses WHERE bankId = :id")
+    suspend fun sumBalance(id: Int) : Double
+
 
 
     @Query("DELETE FROM table_expenses WHERE fixedOrVariable = 'Variable' AND bankId= :bankId")

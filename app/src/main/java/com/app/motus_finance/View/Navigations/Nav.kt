@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.Entities.DueDates
 import com.app.motus_finance.Models.Entities.Payments
@@ -18,6 +19,7 @@ import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
 import com.app.motus_finance.Models.Repositories.RepositoriesGraphics
 import com.app.motus_finance.Models.Repositories.RepositoriesPayments
 import com.app.motus_finance.Models.RoomConfig.DatabaseProvider
+import com.app.motus_finance.R
 import com.app.motus_finance.Service.BankService
 import com.app.motus_finance.Service.ExpensesService
 import com.app.motus_finance.Service.GraphicsService

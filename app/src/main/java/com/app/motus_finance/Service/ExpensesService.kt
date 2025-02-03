@@ -20,22 +20,12 @@ class ExpensesService(private val repositoriesExpenses: RepositoriesExpenses, pr
             false
         }
     }
-    suspend fun updateBanksForDueDate(
-        fixedOrVariable: String,
-        id: Int,
-        ) : Double{
-        val date = repositoriesBank.getDatesById(id)
-        val bankDate = DateUtils.stringToLocalDate(date)
-        val bankDatePlusMonth = DateUtils.stringToLocalDate(date).plusMonths(1)
 
-        var sum = 0.0
-        if(bankDate == LocalDate.now()){
-            val getAllExpenses = repositoriesExpenses.getTotalExpenses(fixedOrVariable, id)
-            repositoriesBank.updateSum(id, getAllExpenses ?: 0.0)
-            repositoriesBank.updateDatePlusMonth(bankDatePlusMonth.toString(), id)
-            sum = getAllExpenses ?: 0.0
-            repositoriesExpenses.deleteVariables(id)
-         }
-        return sum
+    suspend fun updateBanksForDueDate(
+        id: Int,
+        ) {
+            val getAllExpenses = repositoriesExpenses.sumBalance(id)
+            Log.d("SOMA TOTQAL", "SOMANDO $getAllExpenses")
+            repositoriesBank.updateBalance(id, getAllExpenses)
     }
 }

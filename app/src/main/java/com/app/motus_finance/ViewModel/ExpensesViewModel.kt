@@ -18,8 +18,7 @@ class ExpensesViewModel(private val expensesService: ExpensesService) : ViewMode
 
         return expensesService.insertExpenses(expensesDTO)
     }
-
-    suspend fun updateBanksForDueDate(id: Int) : Double{
-        return expensesService.updateBanksForDueDate("Variable", id)
+    suspend fun updateBanksForDueDate(id: Int){
+        return expensesService.updateBanksForDueDate(id)
     }
 }

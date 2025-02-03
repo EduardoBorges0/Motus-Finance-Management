@@ -18,5 +18,8 @@ class RepositoriesExpenses(private val expensesDAO: ExpensesDAO) {
     suspend fun deleteVariables(bankId: Int){
         return expensesDAO.deleteVariables(bankId)
     }
+    suspend fun sumBalance(id: Int) : Double{
+        return  expensesDAO.sumBalance(id)
+    }
 
 }

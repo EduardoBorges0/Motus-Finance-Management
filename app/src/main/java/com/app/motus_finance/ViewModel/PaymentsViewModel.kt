@@ -1,5 +1,9 @@
 package com.app.motus_finance.ViewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +16,7 @@ import kotlinx.coroutines.launch
 class PaymentsViewModel(private val paymentsService: PaymentsService) : ViewModel() {
     private val _alertDialog = MutableLiveData(false)
     val alertDialog: LiveData<Boolean> = _alertDialog
+    var selectedItem by mutableStateOf<String?>(null)
 
     fun setAlertDialog(value: Boolean) {
         _alertDialog.value = value

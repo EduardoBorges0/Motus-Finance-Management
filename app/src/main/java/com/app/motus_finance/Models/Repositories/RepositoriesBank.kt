@@ -2,7 +2,6 @@ package com.app.motus_finance.Models.Repositories
 
 import androidx.lifecycle.LiveData
 import com.app.motus_finance.Models.DAO.BankDao
-import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.Entities.Banks
 
 class RepositoriesBank(private val dao: BankDao) {

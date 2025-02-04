@@ -57,7 +57,7 @@ class Nav : ComponentActivity() {
             LaunchedEffect(Unit) {
  }
             Motus_FINANCETheme {
-              SetupNavController(banksViewModel, paymentsViewModel, graphicsViewModel)
+              SetupNavController(banksViewModel, paymentsViewModel, graphicsViewModel, expensesViewModel)
             }
         }
     }
@@ -67,7 +67,7 @@ class Nav : ComponentActivity() {
 fun SetupNavController(
     banksViewModel: BanksViewModel,
     paymentsViewModel: PaymentsViewModel,
-    graphicsViewModel: GraphicsViewModel){
+    graphicsViewModel: GraphicsViewModel, expensesViewModel: ExpensesViewModel){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "main"){
         composable("main") {
@@ -80,7 +80,7 @@ fun SetupNavController(
             AddPayments(navController, paymentsViewModel)
         }
         composable("marketOrSpent") {
-            AddMarketOrSpent(navController)
+            AddMarketOrSpent(navController, paymentsViewModel, expensesViewModel)
         }
     }
 }

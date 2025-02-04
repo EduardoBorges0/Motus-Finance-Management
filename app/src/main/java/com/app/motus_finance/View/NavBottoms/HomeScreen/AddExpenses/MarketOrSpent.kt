@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,12 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MultiSelectChips() {
-    val options = listOf("Supermercado", "Compra")
-    var selectedItem by remember { mutableStateOf<String?>(null) }
+fun MultiSelectChips(paymentsViewModel: PaymentsViewModel) {
+    val selectedItem = paymentsViewModel.selectedItem
 
     Column(modifier = Modifier.fillMaxSize()) {
         FlowRow(
@@ -34,11 +35,11 @@ fun MultiSelectChips() {
                 .padding(top = 130.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            options.forEach { item ->
+            listOf("Supermercado", "Compra").forEach { item ->
                 FilterChip(
                     selected = selectedItem == item,
                     onClick = {
-                        selectedItem = if (selectedItem == item) null else item
+                        paymentsViewModel.selectedItem = if (selectedItem == item) null else item
                     },
                     label = {
                         Text(
@@ -57,5 +58,6 @@ fun MultiSelectChips() {
         }
     }
 }
+
 
 

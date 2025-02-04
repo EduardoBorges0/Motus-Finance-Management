@@ -60,7 +60,7 @@ class BanksServicesTests {
         coEvery { mockRepositoriesBank.updateBalance(any(), any()) } returns Unit
 
         // Act
-        val result = service.updateBalance(bank, expenses)
+        val result = service.updateBalance(15, expenses)
 
         // Assert
         assertEquals(bank.copy(balance = 170.00), result)
@@ -95,7 +95,7 @@ class BanksServicesTests {
         coEvery { mockRepositoriesBank.updateBalance(any(), any()) } returns Unit
 
         // Act
-        val result = service.updateBalance(bank, expenses)
+        val result = service.updateBalance(15, expenses)
 
         // Assert
         assertEquals(bank.copy(balance = 1600.00), result)
@@ -116,7 +116,6 @@ class BanksServicesTests {
             sum = null
         )
 
-        coEvery { mockRepositoriesBank.updateBankDate(any(), any()) } returns LocalDate.now().plusMonths(1).toString()
 
         //Act
         val result = service.updateBankDate(1, bank)

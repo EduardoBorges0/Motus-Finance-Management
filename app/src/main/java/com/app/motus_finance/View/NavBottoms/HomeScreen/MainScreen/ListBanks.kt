@@ -1,4 +1,4 @@
-package com.app.motus_finance.View.NavBottoms.HomeScreen
+package com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen
 
 import android.graphics.Color.parseColor
 import androidx.compose.foundation.background
@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,8 +29,6 @@ import com.app.motus_finance.Models.Entities.Banks
 import com.app.motus_finance.UtilityClass.DateUtils
 import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
 import com.app.motus_finance.ViewModel.BanksViewModel
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {

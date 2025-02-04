@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.motus_finance.Models.Entities.NavigationBarBottom
 import com.app.motus_finance.R
-import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen
+import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen.MainScreen
 import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
 import com.app.motus_finance.ViewModel.BanksViewModel
 import com.app.motus_finance.ViewModel.PaymentsViewModel
@@ -85,7 +85,7 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: P
             }
             FloatingActionButton(
                 onClick = {
-
+                   navController.navigate("marketOrSpent")
                 },
                 modifier = Modifier
                     .align(Alignment.Center)

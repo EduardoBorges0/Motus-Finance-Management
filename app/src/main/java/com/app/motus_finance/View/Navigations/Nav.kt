@@ -24,6 +24,8 @@ import com.app.motus_finance.Service.BankService
 import com.app.motus_finance.Service.ExpensesService
 import com.app.motus_finance.Service.GraphicsService
 import com.app.motus_finance.Service.PaymentsService
+import com.app.motus_finance.View.NavBottoms.HomeScreen.AddExpenses.AddMarketOrSpent
+import com.app.motus_finance.View.NavBottoms.HomeScreen.AddExpenses.MultiSelectChips
 import com.app.motus_finance.View.NavBottoms.HomeScreen.AddPayments.AddPayments
 import com.app.motus_finance.View.Navigations.ui.theme.Motus_FINANCETheme
 import com.app.motus_finance.ViewModel.BanksViewModel
@@ -76,6 +78,9 @@ fun SetupNavController(
         }
         composable("addPayments") {
             AddPayments(navController, paymentsViewModel)
+        }
+        composable("marketOrSpent") {
+            AddMarketOrSpent(navController)
         }
     }
 }

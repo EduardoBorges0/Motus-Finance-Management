@@ -1,4 +1,4 @@
-package com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme
+package com.app.motus_finance.View.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,15 +1,16 @@
 package com.app.motus_finance.Models.Repositories
 
 import androidx.lifecycle.LiveData
-import com.app.motus_finance.Models.DAO.BankDao
-import com.app.motus_finance.Models.Entities.Banks
+import com.app.motus_finance.Models.DAO.MarketDAO
+import com.app.motus_finance.Models.Entities.Market
 
-class RepositoriesBank(private val dao: BankDao) {
 
-    suspend fun insertBank(banks: Banks){
-        return dao.insertBank(banks)
+class RepositoriesMarket(private val dao: MarketDAO) {
+
+    suspend fun insertBank(market: Market){
+        return dao.insertBank(market)
     }
-    fun getAllBanks() : LiveData<List<Banks>>{
+    fun getAllBanks() : LiveData<List<Market>>{
         return dao.getAllBanks()
     }
 

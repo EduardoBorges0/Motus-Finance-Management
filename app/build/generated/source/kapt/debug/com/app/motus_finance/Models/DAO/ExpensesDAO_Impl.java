@@ -102,8 +102,7 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
   }
 
   @Override
-  public Object insertExpenses(final Expenses expenses,
-      final Continuation<? super Unit> $completion) {
+  public Object insertExpenses(final Expenses expenses, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -117,11 +116,11 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteVariables(final int bankId, final Continuation<? super Unit> $completion) {
+  public Object deleteVariables(final int bankId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -142,7 +141,7 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           __preparedStmtOfDeleteVariables.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -180,8 +179,7 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
   }
 
   @Override
-  public Object getAllSpendingRatings(
-      final Continuation<? super List<HighestSpending>> $completion) {
+  public Object getAllSpendingRatings(final Continuation<? super List<HighestSpending>> arg0) {
     final String _sql = "SELECT classification, SUM(value) as total FROM table_expenses GROUP BY classification ORDER BY total DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -213,11 +211,11 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @Override
-  public Object sumBalance(final int id, final Continuation<? super Double> $completion) {
+  public Object sumBalance(final int id, final Continuation<? super Double> arg1) {
     final String _sql = "SELECT SUM(value) FROM table_expenses WHERE bankId = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -247,7 +245,7 @@ public final class ExpensesDAO_Impl implements ExpensesDAO {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @NonNull

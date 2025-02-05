@@ -9,32 +9,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.app.motus_finance.Models.DTO.BankDTO
-import com.app.motus_finance.Models.DTO.ExpensesDTO
-import com.app.motus_finance.Models.Entities.DueDates
-import com.app.motus_finance.Models.Entities.Payments
-import com.app.motus_finance.Models.Repositories.RepositoriesBank
+import com.app.motus_finance.Models.Repositories.RepositoriesMarket
 import com.app.motus_finance.Models.Repositories.RepositoriesDueDates
 import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
 import com.app.motus_finance.Models.Repositories.RepositoriesGraphics
 import com.app.motus_finance.Models.Repositories.RepositoriesPayments
 import com.app.motus_finance.Models.RoomConfig.DatabaseProvider
-import com.app.motus_finance.R
-import com.app.motus_finance.Service.BankService
+import com.app.motus_finance.Service.MarketService
 import com.app.motus_finance.Service.ExpensesService
 import com.app.motus_finance.Service.GraphicsService
 import com.app.motus_finance.Service.PaymentsService
-import com.app.motus_finance.View.NavBottoms.HomeScreen.AddExpenses.AddMarketOrSpent
-import com.app.motus_finance.View.NavBottoms.HomeScreen.AddExpenses.MultiSelectChips
-import com.app.motus_finance.View.NavBottoms.HomeScreen.AddPayments.AddPayments
-import com.app.motus_finance.View.Navigations.ui.theme.Motus_FINANCETheme
-import com.app.motus_finance.ViewModel.BanksViewModel
+import com.app.motus_finance.View.NavBottoms.HomeScreen.InsertMarketOrShopping.MainMarketOrShopping
+import com.app.motus_finance.View.NavBottoms.HomeScreen.InsertPayment.InsertPayment
+import com.app.motus_finance.View.ui.theme.Motus_FINANCETheme
+import com.app.motus_finance.ViewModel.MarketViewModel
 import com.app.motus_finance.ViewModel.ExpensesViewModel
 import com.app.motus_finance.ViewModel.GraphicsViewModel
 import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 class Nav : ComponentActivity() {
-    private lateinit var banksViewModel: BanksViewModel
+    private lateinit var banksViewModel: MarketViewModel
     private lateinit var expensesViewModel: ExpensesViewModel
     private lateinit var paymentsViewModel: PaymentsViewModel
     private lateinit var graphicsViewModel: GraphicsViewModel
@@ -49,10 +43,10 @@ class Nav : ComponentActivity() {
 
 
 
-        banksViewModel = BanksViewModel(BankService(RepositoriesBank(bankDAO)))
-        expensesViewModel = ExpensesViewModel(ExpensesService(RepositoriesExpenses(expenseDAO), RepositoriesBank(bankDAO)))
+        banksViewModel = MarketViewModel(MarketService(RepositoriesMarket(bankDAO)))
+        expensesViewModel = ExpensesViewModel(ExpensesService(RepositoriesExpenses(expenseDAO), RepositoriesMarket(bankDAO)))
         paymentsViewModel = PaymentsViewModel(PaymentsService(RepositoriesPayments(paymentsDAO)))
-        graphicsViewModel = GraphicsViewModel(GraphicsService(RepositoriesGraphics(graphicsDAO), RepositoriesDueDates(DueDatesDAO), RepositoriesExpenses(expenseDAO), RepositoriesBank(bankDAO)))
+        graphicsViewModel = GraphicsViewModel(GraphicsService(RepositoriesGraphics(graphicsDAO), RepositoriesDueDates(DueDatesDAO), RepositoriesExpenses(expenseDAO), RepositoriesMarket(bankDAO)))
         setContent {
             LaunchedEffect(Unit) {
  }
@@ -65,7 +59,7 @@ class Nav : ComponentActivity() {
 
 @Composable
 fun SetupNavController(
-    banksViewModel: BanksViewModel,
+    banksViewModel: MarketViewModel,
     paymentsViewModel: PaymentsViewModel,
     graphicsViewModel: GraphicsViewModel, expensesViewModel: ExpensesViewModel){
     val navController = rememberNavController()
@@ -76,11 +70,11 @@ fun SetupNavController(
             paymentsViewModel, navController
             )
         }
-        composable("addPayments") {
-            AddPayments(navController, paymentsViewModel)
+        composable("insertPayment") {
+            InsertPayment(navController, paymentsViewModel)
         }
-        composable("marketOrSpent") {
-            AddMarketOrSpent(navController, paymentsViewModel, expensesViewModel)
+        composable("marketOrShopping") {
+            MainMarketOrShopping(navController, paymentsViewModel, expensesViewModel)
         }
     }
 }

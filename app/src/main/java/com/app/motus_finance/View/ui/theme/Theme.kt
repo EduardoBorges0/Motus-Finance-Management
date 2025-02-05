@@ -1,4 +1,4 @@
-package com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme
+package com.app.motus_finance.View.ui.theme
 
 import android.app.Activity
 import android.os.Build

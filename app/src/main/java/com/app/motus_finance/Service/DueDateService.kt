@@ -1,13 +1,12 @@
 package com.app.motus_finance.Service
 
-import android.util.Log
 import com.app.motus_finance.Models.DTO.DueDatesDTO
 import com.app.motus_finance.Models.DTO.toEntity
-import com.app.motus_finance.Models.Repositories.RepositoriesBank
+import com.app.motus_finance.Models.Repositories.RepositoriesMarket
 import com.app.motus_finance.Models.Repositories.RepositoriesDueDates
 import com.app.motus_finance.UtilityClass.DateUtils
 
-class DueDateService(private val repositoriesBank: RepositoriesBank,
+class DueDateService(private val repositoriesBank: RepositoriesMarket,
                      private val repositoriesDueDates: RepositoriesDueDates) {
     suspend fun insertDueDate(){
         val dueDates = repositoriesBank.getAllDates()

@@ -1,18 +1,11 @@
-package com.app.motus_finance.View.NavBottoms.HomeScreen.AddPayments
+package com.app.motus_finance.View.NavBottoms.HomeScreen.InsertPayment
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -31,14 +24,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.app.motus_finance.UtilityClass.DateUtils
 import com.app.motus_finance.UtilityClass.DateUtils.formatToCurrency
 import com.app.motus_finance.View.UtilsComposable.ArrowBack
+import com.app.motus_finance.View.UtilsComposable.ButtonBottomScreen
 import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 
 @Composable
-fun AddPayments(navController: NavController, paymentsViewModel: PaymentsViewModel) {
+fun InsertPayment(navController: NavController, paymentsViewModel: PaymentsViewModel) {
     var inputText by remember { mutableStateOf("0.00") }
 
     Box (modifier = Modifier.fillMaxSize()) {
@@ -70,21 +63,16 @@ fun AddPayments(navController: NavController, paymentsViewModel: PaymentsViewMod
                 )
             )
         }
-        Button(onClick = {
-            val sanitizedValue = inputText.replace(".", "").replace(",", ".") // Remove pontos e ajusta para um formato válido
-            val numericValue = sanitizedValue.toDoubleOrNull() ?: 0.0
-            paymentsViewModel.insertPayments(numericValue)
+        ButtonBottomScreen(
+            buttonText = "Adicionar pagamento",
+            onClick = {
+                val sanitizedValue = inputText.replace(".", "").replace(",", ".") // Remove pontos e ajusta para um formato válido
+                val numericValue = sanitizedValue.toDoubleOrNull() ?: 0.0
+                paymentsViewModel.insertPayments(numericValue)
 
-            navController.popBackStack()
-        },
-            modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
-            .height(70.dp),
-            shape = RoundedCornerShape(0.dp)
-        ) {
-            Text("efr")
-        }
+                navController.popBackStack()            },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 

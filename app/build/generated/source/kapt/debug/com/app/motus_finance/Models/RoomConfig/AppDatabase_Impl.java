@@ -11,14 +11,14 @@ import androidx.room.util.DBUtil;
 import androidx.room.util.TableInfo;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
-import com.app.motus_finance.Models.DAO.BankDao;
-import com.app.motus_finance.Models.DAO.BankDao_Impl;
 import com.app.motus_finance.Models.DAO.DueDatesDAO;
 import com.app.motus_finance.Models.DAO.DueDatesDAO_Impl;
 import com.app.motus_finance.Models.DAO.ExpensesDAO;
 import com.app.motus_finance.Models.DAO.ExpensesDAO_Impl;
 import com.app.motus_finance.Models.DAO.GraphicsDAO;
 import com.app.motus_finance.Models.DAO.GraphicsDAO_Impl;
+import com.app.motus_finance.Models.DAO.MarketDAO;
+import com.app.motus_finance.Models.DAO.MarketDAO_Impl;
 import com.app.motus_finance.Models.DAO.PaymentDAO;
 import com.app.motus_finance.Models.DAO.PaymentDAO_Impl;
 import java.lang.Class;
@@ -35,7 +35,7 @@ import java.util.Set;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public final class AppDatabase_Impl extends AppDatabase {
-  private volatile BankDao _bankDao;
+  private volatile MarketDAO _marketDAO;
 
   private volatile ExpensesDAO _expensesDAO;
 
@@ -48,21 +48,21 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(5) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `bank_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `color` TEXT, `img` INTEGER, `balance` REAL, `colorSpentsOrReceived` TEXT, `date` TEXT, `sum` REAL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `table_expenses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bankId` INTEGER, `expenseDescription` TEXT, `value` REAL, `spentOrReceived` TEXT, `fixedOrVariable` TEXT, `date` TEXT, `dueDate` TEXT, `classification` TEXT, `readyForDeletion` INTEGER NOT NULL, FOREIGN KEY(`bankId`) REFERENCES `bank_entity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `market_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `color` TEXT, `img` INTEGER, `balance` REAL, `colorSpentsOrReceived` TEXT, `date` TEXT, `sum` REAL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `table_expenses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bankId` INTEGER, `expenseDescription` TEXT, `value` REAL, `spentOrReceived` TEXT, `fixedOrVariable` TEXT, `date` TEXT, `dueDate` TEXT, `classification` TEXT, `readyForDeletion` INTEGER NOT NULL, FOREIGN KEY(`bankId`) REFERENCES `market_entity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
         db.execSQL("CREATE TABLE IF NOT EXISTS `payment_table` (`id` INTEGER NOT NULL, `payment` REAL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `dueDate_entity` (`id` INTEGER NOT NULL, `dueDate` TEXT, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `graphics_entity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `monthly` TEXT, `value` REAL, `highestSpendingRating` TEXT NOT NULL, `valueSpendingRating` REAL NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04dc8c47db27c73bd14b882bcfb8a610')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c78d55f4b60aa2b69105963abe330102')");
       }
 
       @Override
       public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS `bank_entity`");
+        db.execSQL("DROP TABLE IF EXISTS `market_entity`");
         db.execSQL("DROP TABLE IF EXISTS `table_expenses`");
         db.execSQL("DROP TABLE IF EXISTS `payment_table`");
         db.execSQL("DROP TABLE IF EXISTS `dueDate_entity`");
@@ -111,23 +111,23 @@ public final class AppDatabase_Impl extends AppDatabase {
       @NonNull
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsBankEntity = new HashMap<String, TableInfo.Column>(8);
-        _columnsBankEntity.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("name", new TableInfo.Column("name", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("color", new TableInfo.Column("color", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("img", new TableInfo.Column("img", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("balance", new TableInfo.Column("balance", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("colorSpentsOrReceived", new TableInfo.Column("colorSpentsOrReceived", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("date", new TableInfo.Column("date", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsBankEntity.put("sum", new TableInfo.Column("sum", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysBankEntity = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesBankEntity = new HashSet<TableInfo.Index>(0);
-        final TableInfo _infoBankEntity = new TableInfo("bank_entity", _columnsBankEntity, _foreignKeysBankEntity, _indicesBankEntity);
-        final TableInfo _existingBankEntity = TableInfo.read(db, "bank_entity");
-        if (!_infoBankEntity.equals(_existingBankEntity)) {
-          return new RoomOpenHelper.ValidationResult(false, "bank_entity(com.app.motus_finance.Models.Entities.Banks).\n"
-                  + " Expected:\n" + _infoBankEntity + "\n"
-                  + " Found:\n" + _existingBankEntity);
+        final HashMap<String, TableInfo.Column> _columnsMarketEntity = new HashMap<String, TableInfo.Column>(8);
+        _columnsMarketEntity.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("name", new TableInfo.Column("name", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("color", new TableInfo.Column("color", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("img", new TableInfo.Column("img", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("balance", new TableInfo.Column("balance", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("colorSpentsOrReceived", new TableInfo.Column("colorSpentsOrReceived", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("date", new TableInfo.Column("date", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMarketEntity.put("sum", new TableInfo.Column("sum", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysMarketEntity = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesMarketEntity = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoMarketEntity = new TableInfo("market_entity", _columnsMarketEntity, _foreignKeysMarketEntity, _indicesMarketEntity);
+        final TableInfo _existingMarketEntity = TableInfo.read(db, "market_entity");
+        if (!_infoMarketEntity.equals(_existingMarketEntity)) {
+          return new RoomOpenHelper.ValidationResult(false, "market_entity(com.app.motus_finance.Models.Entities.Market).\n"
+                  + " Expected:\n" + _infoMarketEntity + "\n"
+                  + " Found:\n" + _existingMarketEntity);
         }
         final HashMap<String, TableInfo.Column> _columnsTableExpenses = new HashMap<String, TableInfo.Column>(10);
         _columnsTableExpenses.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
@@ -141,7 +141,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         _columnsTableExpenses.put("classification", new TableInfo.Column("classification", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTableExpenses.put("readyForDeletion", new TableInfo.Column("readyForDeletion", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysTableExpenses = new HashSet<TableInfo.ForeignKey>(1);
-        _foreignKeysTableExpenses.add(new TableInfo.ForeignKey("bank_entity", "CASCADE", "NO ACTION", Arrays.asList("bankId"), Arrays.asList("id")));
+        _foreignKeysTableExpenses.add(new TableInfo.ForeignKey("market_entity", "CASCADE", "NO ACTION", Arrays.asList("bankId"), Arrays.asList("id")));
         final HashSet<TableInfo.Index> _indicesTableExpenses = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoTableExpenses = new TableInfo("table_expenses", _columnsTableExpenses, _foreignKeysTableExpenses, _indicesTableExpenses);
         final TableInfo _existingTableExpenses = TableInfo.read(db, "table_expenses");
@@ -191,7 +191,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "04dc8c47db27c73bd14b882bcfb8a610", "bb132d18d025d6b1d5b0139f5ebd5d18");
+    }, "c78d55f4b60aa2b69105963abe330102", "279ceac4e03d1a5adebed903d668f94f");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -202,7 +202,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "bank_entity","table_expenses","payment_table","dueDate_entity","graphics_entity");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "market_entity","table_expenses","payment_table","dueDate_entity","graphics_entity");
   }
 
   @Override
@@ -218,7 +218,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       if (_supportsDeferForeignKeys) {
         _db.execSQL("PRAGMA defer_foreign_keys = TRUE");
       }
-      _db.execSQL("DELETE FROM `bank_entity`");
+      _db.execSQL("DELETE FROM `market_entity`");
       _db.execSQL("DELETE FROM `table_expenses`");
       _db.execSQL("DELETE FROM `payment_table`");
       _db.execSQL("DELETE FROM `dueDate_entity`");
@@ -240,7 +240,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   @NonNull
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
-    _typeConvertersMap.put(BankDao.class, BankDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(MarketDAO.class, MarketDAO_Impl.getRequiredConverters());
     _typeConvertersMap.put(ExpensesDAO.class, ExpensesDAO_Impl.getRequiredConverters());
     _typeConvertersMap.put(PaymentDAO.class, PaymentDAO_Impl.getRequiredConverters());
     _typeConvertersMap.put(DueDatesDAO.class, DueDatesDAO_Impl.getRequiredConverters());
@@ -264,15 +264,15 @@ public final class AppDatabase_Impl extends AppDatabase {
   }
 
   @Override
-  public BankDao bankDao() {
-    if (_bankDao != null) {
-      return _bankDao;
+  public MarketDAO bankDao() {
+    if (_marketDAO != null) {
+      return _marketDAO;
     } else {
       synchronized(this) {
-        if(_bankDao == null) {
-          _bankDao = new BankDao_Impl(this);
+        if(_marketDAO == null) {
+          _marketDAO = new MarketDAO_Impl(this);
         }
-        return _bankDao;
+        return _marketDAO;
       }
     }
   }

@@ -31,19 +31,18 @@ fun PaymentBox(
         paymentsViewModel.getPayment()
     }
     Box(modifier = modifier.padding(bottom = 30.dp)) {
-
         OutlinedButton(
             onClick = {
                 if(payment.value == null){
-                    navController.navigate("addPayments")
+                    navController.navigate("insertPayment")
                 }else{
                   paymentsViewModel.setAlertDialog(true)
                 }
             },
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.width(150.dp).height(50.dp)
+            modifier = Modifier.width(150.dp).height(if(payment.value == null ) 55.dp else 50.dp)
         ) {
-            Text(payment.value?.let { DateUtils.currencyFormat(it) } ?: "Adicionar pagamento",
+            Text(payment.value?.let { DateUtils.currencyFormat(it) } ?: "Quanto você pode gastar?",
                 fontSize = 17.sp)
         }
     }
@@ -53,6 +52,7 @@ fun PaymentBox(
         onConfirm = {
             paymentsViewModel.deletePayment()
             paymentsViewModel.setAlertDialog(false)
-        }
+        },
+        "Você tem certeza que deseja deletar o pagamento?"
     )
 }

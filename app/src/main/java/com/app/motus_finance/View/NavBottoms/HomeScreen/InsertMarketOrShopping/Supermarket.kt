@@ -1,18 +1,11 @@
-package com.app.motus_finance.View.NavBottoms.HomeScreen.AddExpenses
+package com.app.motus_finance.View.NavBottoms.HomeScreen.InsertMarketOrShopping
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -30,7 +23,6 @@ import com.app.motus_finance.ViewModel.ExpensesViewModel
 @Composable
 fun SupermarketComposable(modifier: Modifier, expensesViewModel: ExpensesViewModel){
     var marketName by remember { mutableStateOf("") }
-    var marketDate by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -41,7 +33,7 @@ fun SupermarketComposable(modifier: Modifier, expensesViewModel: ExpensesViewMod
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 56.dp, vertical = 20.dp)
-                .border(border = BorderStroke(1.dp, Color.Black),
+                .border(border = BorderStroke(0.5.dp, Color.Black),
                     shape = RoundedCornerShape(8.dp)),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,

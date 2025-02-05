@@ -1,22 +1,17 @@
 package com.app.motus_finance.ViewModel
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
-import com.app.motus_finance.Models.DTO.toEntity
-import com.app.motus_finance.Models.Entities.Banks
-import com.app.motus_finance.Service.BankService
+import com.app.motus_finance.Models.DTO.MarketDTO
+import com.app.motus_finance.Models.Entities.Market
+import com.app.motus_finance.Service.MarketService
 import kotlinx.coroutines.launch
-import kotlin.math.exp
 
-class BanksViewModel(private val bankService: BankService) : ViewModel() {
+class MarketViewModel(private val bankService: MarketService) : ViewModel() {
     val selectedTab = mutableIntStateOf(0)
     private val _alertDialog = MutableLiveData(true)
     val alertDialog: LiveData<Boolean> = _alertDialog
@@ -26,19 +21,19 @@ class BanksViewModel(private val bankService: BankService) : ViewModel() {
     fun setAlertDialog(value: Boolean) {
         _alertDialog.value = value
     }
-    suspend fun insertBank(bankDTO: BankDTO): Boolean {
-        if (bankDTO.name == null||
-            bankDTO.colorSpentsOrReceived == null||
-            bankDTO.img == null||
-            bankDTO.balance == null||
-            bankDTO.date == null||
-            bankDTO.color == null
+    suspend fun insertBank(marketDTO: MarketDTO): Boolean {
+        if (marketDTO.name == null||
+            marketDTO.colorSpentsOrReceived == null||
+            marketDTO.img == null||
+            marketDTO.balance == null||
+            marketDTO.date == null||
+            marketDTO.color == null
             ) return false
 
-        return bankService.insertBank(bankDTO)
+        return bankService.insertBank(marketDTO)
     }
 
-    fun getAllBanks(): LiveData<List<Banks>> {
+    fun getAllBanks(): LiveData<List<Market>> {
         return bankService.getAllBanks() }
 
     suspend fun updateBalanceWhenAddExpense(bankId: Int, expensesDTO: ExpensesDTO){

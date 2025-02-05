@@ -1,8 +1,8 @@
 package com.app.motus_finance.Models.DTO
 
-import com.app.motus_finance.Models.Entities.Banks
+import com.app.motus_finance.Models.Entities.Market
 
-data class BankDTO (
+data class MarketDTO (
     val name: String?,
     val color: String?,
     val img: Int?,
@@ -11,8 +11,8 @@ data class BankDTO (
     val date: String?,
     val sum: Double?
 )
-fun Banks.toDTO(): BankDTO {
-    return BankDTO(
+fun Market.toDTO(): MarketDTO {
+    return MarketDTO(
         name = this.name,
         color = this.color,
         img = this.img,
@@ -22,8 +22,8 @@ fun Banks.toDTO(): BankDTO {
         sum = this.sum
     )
 }
-fun BankDTO.toEntity(): Banks {
-    return Banks(
+fun MarketDTO.toEntity(): Market {
+    return Market(
         name = this.name,
         color = this.color,
         img = this.img,

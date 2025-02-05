@@ -13,7 +13,7 @@ import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.app.motus_finance.Models.Entities.Banks;
+import com.app.motus_finance.Models.Entities.Market;
 import java.lang.Class;
 import java.lang.Double;
 import java.lang.Exception;
@@ -30,10 +30,10 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 
 @SuppressWarnings({"unchecked", "deprecation"})
-public final class BankDao_Impl implements BankDao {
+public final class MarketDAO_Impl implements MarketDAO {
   private final RoomDatabase __db;
 
-  private final EntityInsertionAdapter<Banks> __insertionAdapterOfBanks;
+  private final EntityInsertionAdapter<Market> __insertionAdapterOfMarket;
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteBank;
 
@@ -47,18 +47,18 @@ public final class BankDao_Impl implements BankDao {
 
   private final SharedSQLiteStatement __preparedStmtOfUpdateSum;
 
-  public BankDao_Impl(@NonNull final RoomDatabase __db) {
+  public MarketDAO_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
-    this.__insertionAdapterOfBanks = new EntityInsertionAdapter<Banks>(__db) {
+    this.__insertionAdapterOfMarket = new EntityInsertionAdapter<Market>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `bank_entity` (`id`,`name`,`color`,`img`,`balance`,`colorSpentsOrReceived`,`date`,`sum`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `market_entity` (`id`,`name`,`color`,`img`,`balance`,`colorSpentsOrReceived`,`date`,`sum`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
-          @NonNull final Banks entity) {
+          @NonNull final Market entity) {
         statement.bindLong(1, entity.getId());
         if (entity.getName() == null) {
           statement.bindNull(2);
@@ -101,7 +101,7 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "DELETE FROM bank_entity WHERE id= ?";
+        final String _query = "DELETE FROM market_entity WHERE id= ?";
         return _query;
       }
     };
@@ -109,7 +109,7 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE bank_entity SET sum = ?";
+        final String _query = "UPDATE market_entity SET sum = ?";
         return _query;
       }
     };
@@ -117,7 +117,7 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE bank_entity SET date = ? WHERE id= ?";
+        final String _query = "UPDATE market_entity SET date = ? WHERE id= ?";
         return _query;
       }
     };
@@ -125,7 +125,7 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE bank_entity SET balance = ? WHERE id = ?";
+        final String _query = "UPDATE market_entity SET balance = ? WHERE id = ?";
         return _query;
       }
     };
@@ -133,7 +133,7 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE bank_entity SET date = ? WHERE id = ?";
+        final String _query = "UPDATE market_entity SET date = ? WHERE id = ?";
         return _query;
       }
     };
@@ -141,32 +141,32 @@ public final class BankDao_Impl implements BankDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE bank_entity SET sum = ? WHERE id = ?";
+        final String _query = "UPDATE market_entity SET sum = ? WHERE id = ?";
         return _query;
       }
     };
   }
 
   @Override
-  public Object insertBank(final Banks banks, final Continuation<? super Unit> $completion) {
+  public Object insertBank(final Market banks, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfBanks.insert(banks);
+          __insertionAdapterOfMarket.insert(banks);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteBank(final int id, final Continuation<? super Unit> $completion) {
+  public Object deleteBank(final int id, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -187,11 +187,11 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfDeleteBank.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object updateAllSumToZero(final double sum, final Continuation<? super Unit> $completion) {
+  public Object updateAllSumToZero(final double sum, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -212,12 +212,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateAllSumToZero.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object updateDatePlusMonth(final String date, final int id,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -244,12 +244,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateDatePlusMonth.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateBalance(final int bankId, final double newBalance,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -272,12 +272,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateBalance.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateBankDate(final int bankId, final String newDate,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -304,12 +304,12 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateBankDate.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateSum(final int bankId, final double sum,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -332,17 +332,17 @@ public final class BankDao_Impl implements BankDao {
           __preparedStmtOfUpdateSum.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
-  public LiveData<List<Banks>> getAllBanks() {
-    final String _sql = "SELECT * FROM bank_entity";
+  public LiveData<List<Market>> getAllBanks() {
+    final String _sql = "SELECT * FROM market_entity";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
-    return __db.getInvalidationTracker().createLiveData(new String[] {"bank_entity"}, false, new Callable<List<Banks>>() {
+    return __db.getInvalidationTracker().createLiveData(new String[] {"market_entity"}, false, new Callable<List<Market>>() {
       @Override
       @Nullable
-      public List<Banks> call() throws Exception {
+      public List<Market> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
@@ -353,9 +353,9 @@ public final class BankDao_Impl implements BankDao {
           final int _cursorIndexOfColorSpentsOrReceived = CursorUtil.getColumnIndexOrThrow(_cursor, "colorSpentsOrReceived");
           final int _cursorIndexOfDate = CursorUtil.getColumnIndexOrThrow(_cursor, "date");
           final int _cursorIndexOfSum = CursorUtil.getColumnIndexOrThrow(_cursor, "sum");
-          final List<Banks> _result = new ArrayList<Banks>(_cursor.getCount());
+          final List<Market> _result = new ArrayList<Market>(_cursor.getCount());
           while (_cursor.moveToNext()) {
-            final Banks _item;
+            final Market _item;
             final int _tmpId;
             _tmpId = _cursor.getInt(_cursorIndexOfId);
             final String _tmpName;
@@ -400,7 +400,7 @@ public final class BankDao_Impl implements BankDao {
             } else {
               _tmpSum = _cursor.getDouble(_cursorIndexOfSum);
             }
-            _item = new Banks(_tmpId,_tmpName,_tmpColor,_tmpImg,_tmpBalance,_tmpColorSpentsOrReceived,_tmpDate,_tmpSum);
+            _item = new Market(_tmpId,_tmpName,_tmpColor,_tmpImg,_tmpBalance,_tmpColorSpentsOrReceived,_tmpDate,_tmpSum);
             _result.add(_item);
           }
           return _result;
@@ -418,7 +418,7 @@ public final class BankDao_Impl implements BankDao {
 
   @Override
   public List<String> getAllDates() {
-    final String _sql = "SELECT date FROM bank_entity";
+    final String _sql = "SELECT date FROM market_entity";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
@@ -442,7 +442,7 @@ public final class BankDao_Impl implements BankDao {
 
   @Override
   public String getDatesById(final int id) {
-    final String _sql = "SELECT date FROM bank_entity WHERE id = ?";
+    final String _sql = "SELECT date FROM market_entity WHERE id = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     _statement.bindLong(_argIndex, id);
@@ -467,8 +467,8 @@ public final class BankDao_Impl implements BankDao {
   }
 
   @Override
-  public Object getBalanceById(final int id, final Continuation<? super Double> $completion) {
-    final String _sql = "SELECT balance FROM bank_entity WHERE id = ?";
+  public Object getBalanceById(final int id, final Continuation<? super Double> arg1) {
+    final String _sql = "SELECT balance FROM market_entity WHERE id = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     _statement.bindLong(_argIndex, id);
@@ -495,12 +495,12 @@ public final class BankDao_Impl implements BankDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object sumAllBank(final Continuation<? super Double> $completion) {
-    final String _sql = "SELECT SUM(sum) FROM bank_entity";
+  public Object sumAllBank(final Continuation<? super Double> arg0) {
+    final String _sql = "SELECT SUM(sum) FROM market_entity";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
     return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<Double>() {
@@ -527,7 +527,7 @@ public final class BankDao_Impl implements BankDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @NonNull

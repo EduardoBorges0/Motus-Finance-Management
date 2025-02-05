@@ -25,24 +25,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.app.motus_finance.Models.Entities.Banks
+import com.app.motus_finance.Models.Entities.Market
 import com.app.motus_finance.UtilityClass.DateUtils
-import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
-import com.app.motus_finance.ViewModel.BanksViewModel
+import com.app.motus_finance.View.ui.theme.MainColor
+import com.app.motus_finance.ViewModel.MarketViewModel
 
 @Composable
-fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
+fun MarketList(market: Market, bankViewModel: MarketViewModel) {
     Box(
         modifier = Modifier
             .padding(top = 20.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(
-                Color(parseColor(banks.color))
+                Color(parseColor(market.color))
             )
     ) {
         IconButton(onClick = {
-            bankViewModel.deleteBanks(banks.id)
+            bankViewModel.deleteBanks(market.id)
         },
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -54,14 +54,14 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             )
         }
         Text(
-            text = DateUtils.currencyFormat(banks.balance?.toDouble() ?: 0.0),
+            text = DateUtils.currencyFormat(market.balance?.toDouble() ?: 0.0),
             modifier = Modifier
                 .padding(26.dp),
             color = Color.White,
             fontSize = 18.sp
         )
         Text(
-            text = banks.date.toString(),
+            text = market.date.toString(),
             modifier = Modifier
                 .padding(26.dp)
                 .align(Alignment.Center),
@@ -69,7 +69,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
             fontSize = 18.sp
         )
         AsyncImage(
-            model = banks.img,
+            model = market.img,
             contentDescription = "icon bank",
             modifier = Modifier
                 .size(60.dp)
@@ -77,7 +77,7 @@ fun ListBanks(banks: Banks, bankViewModel: BanksViewModel) {
                 .align(Alignment.TopCenter)
         )
         Text(
-            text = banks.name.toString(),
+            text = market.name.toString(),
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth()

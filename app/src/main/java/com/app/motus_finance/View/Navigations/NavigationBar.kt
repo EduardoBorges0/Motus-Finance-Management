@@ -28,12 +28,13 @@ import androidx.navigation.NavController
 import com.app.motus_finance.Models.Entities.NavigationBarBottom
 import com.app.motus_finance.R
 import com.app.motus_finance.View.NavBottoms.HomeScreen.MainScreen.MainScreen
-import com.app.motus_finance.View.NavBottoms.HomeScreen.ui.theme.MainColor
-import com.app.motus_finance.ViewModel.BanksViewModel
+import com.app.motus_finance.View.ui.theme.MainColor
+import com.app.motus_finance.View.ui.theme.secondaryColor
+import com.app.motus_finance.ViewModel.MarketViewModel
 import com.app.motus_finance.ViewModel.PaymentsViewModel
 
 @Composable
-fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: PaymentsViewModel, navController: NavController){
+fun NavigationBarComposable(banksViewModel: MarketViewModel, paymentsViewModel: PaymentsViewModel, navController: NavController){
     val itemsNavigationBottom = listOf(
         NavigationBarBottom(
             title = "Home",
@@ -69,7 +70,8 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: P
                         },
                         colors = NavigationBarItemDefaults.colors(
                             unselectedIconColor = Color.White,
-                            indicatorColor = Color.Transparent
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = secondaryColor
                         ),
                         icon = {
                             Icon(
@@ -85,7 +87,7 @@ fun NavigationBarComposable(banksViewModel: BanksViewModel, paymentsViewModel: P
             }
             FloatingActionButton(
                 onClick = {
-                   navController.navigate("marketOrSpent")
+                   navController.navigate("marketOrShopping")
                 },
                 modifier = Modifier
                     .align(Alignment.Center)

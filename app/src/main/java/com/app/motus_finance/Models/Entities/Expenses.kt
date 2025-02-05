@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "table_expenses",
     foreignKeys = [
         ForeignKey(
-            entity = Banks::class,
+            entity = Market::class,
             parentColumns = ["id"],
             childColumns = ["bankId"],
             onDelete = ForeignKey.CASCADE

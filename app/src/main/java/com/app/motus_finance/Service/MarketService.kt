@@ -1,19 +1,18 @@
 package com.app.motus_finance.Service
 
 import androidx.lifecycle.LiveData
-import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
+import com.app.motus_finance.Models.DTO.MarketDTO
 import com.app.motus_finance.Models.DTO.toEntity
-import com.app.motus_finance.Models.Entities.Banks
-import com.app.motus_finance.Models.Repositories.RepositoriesBank
-import com.app.motus_finance.Models.Repositories.RepositoriesDueDates
+import com.app.motus_finance.Models.Entities.Market
+import com.app.motus_finance.Models.Repositories.RepositoriesMarket
 import com.app.motus_finance.UtilityClass.DateUtils.stringToLocalDate
 import java.time.LocalDate
 
-class BankService(private val repositoriesBank: RepositoriesBank) {
-    suspend fun insertBank(bankDTO: BankDTO): Boolean {
+class MarketService(private val repositoriesBank: RepositoriesMarket) {
+    suspend fun insertBank(marketDTO: MarketDTO): Boolean {
         return try {
-                repositoriesBank.insertBank(bankDTO.toEntity())
+                repositoriesBank.insertBank(marketDTO.toEntity())
                 true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -21,7 +20,7 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
         }
     }
 
-    fun getAllBanks(): LiveData<List<Banks>> {
+    fun getAllBanks(): LiveData<List<Market>> {
         return repositoriesBank.getAllBanks()
     }
     suspend fun updateSum(bankId: Int, sum: Double){
@@ -56,14 +55,14 @@ class BankService(private val repositoriesBank: RepositoriesBank) {
     }
 
 
-    suspend fun updateBankDate(bankId: Int, bankDTO: BankDTO): String {
-        val date = stringToLocalDate(bankDTO.date.toString())
+    suspend fun updateBankDate(bankId: Int, marketDTO: MarketDTO): String {
+        val date = stringToLocalDate(marketDTO.date.toString())
         return if (date == LocalDate.now()) {
             val newDate = date.plusMonths(1)
             repositoriesBank.updateBankDate(bankId, newDate.toString())
             newDate.toString()
         } else {
-            bankDTO.toEntity().date.toString()
+            marketDTO.toEntity().date.toString()
         }
     }
 }

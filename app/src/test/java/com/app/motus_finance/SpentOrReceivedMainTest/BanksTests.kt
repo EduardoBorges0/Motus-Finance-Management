@@ -1,13 +1,10 @@
 package com.app.motus_finance.SpentOrReceivedMainTest
 
 import com.app.motus_finance.Models.DTO.BankDTO
-import com.app.motus_finance.Models.DTO.ExpensesDTO
-import com.app.motus_finance.Service.BankService
-import com.app.motus_finance.ViewModel.BanksViewModel
-import io.mockk.Runs
+import com.app.motus_finance.Service.MarketService
+import com.app.motus_finance.ViewModel.MarketViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.just
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
@@ -20,14 +17,14 @@ import org.junit.Test
 
 class BanksTests {
     private val testDispatcher = Dispatchers.Unconfined
-    private lateinit var mockService: BankService
-    private lateinit var viewModel: BanksViewModel
+    private lateinit var mockService: MarketService
+    private lateinit var viewModel: MarketViewModel
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         mockService = mockk()
-        viewModel = BanksViewModel(mockService)
+        viewModel = MarketViewModel(mockService)
     }
 
     @After

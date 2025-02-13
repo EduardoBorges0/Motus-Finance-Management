@@ -2,7 +2,7 @@ package com.app.motus_finance.SpentOrReceivedMainTest.ServicesTests
 
 import com.app.motus_finance.Models.Repositories.RepositoriesMarket
 import com.app.motus_finance.Models.Repositories.RepositoriesDueDates
-import com.app.motus_finance.Service.DueDateService
+import com.app.motus_finance.domain.usecases.DueDateService
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.resetMain

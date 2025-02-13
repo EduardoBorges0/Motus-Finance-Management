@@ -1,15 +1,13 @@
 package com.app.motus_finance.SpentOrReceivedMainTest.ServicesTests
 
 import com.app.motus_finance.Models.Repositories.RepositoriesExpenses
-import com.app.motus_finance.Service.ExpensesService
-import com.app.motus_finance.ViewModel.ExpensesViewModel
+import com.app.motus_finance.domain.usecases.ExpensesService
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
 
 class ExpensesServicesTests {
     private val testDispatcher = Dispatchers.Unconfined // Use o dispatcher apropriado para testes

@@ -1,8 +1,8 @@
 package com.app.motus_finance.SpentOrReceivedMainTest
 
 import com.app.motus_finance.Models.DTO.ExpensesDTO
-import com.app.motus_finance.Service.ExpensesService
-import com.app.motus_finance.ViewModel.ExpensesViewModel
+import com.app.motus_finance.domain.usecases.ExpensesService
+import com.app.motus_finance.presentation.viewmodel.ExpensesViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

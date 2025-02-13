@@ -3,7 +3,7 @@ package com.app.motus_finance.SpentOrReceivedMainTest.ServicesTests
 import com.app.motus_finance.Models.DTO.BankDTO
 import com.app.motus_finance.Models.DTO.ExpensesDTO
 import com.app.motus_finance.Models.Repositories.RepositoriesMarket
-import com.app.motus_finance.Service.MarketService
+import com.app.motus_finance.domain.usecases.MarketUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,13 +20,13 @@ import java.time.LocalDate
 class BanksServicesTests {
     private val testDispatcher = Dispatchers.Unconfined
     private lateinit var mockRepositoriesBank: RepositoriesMarket
-    private lateinit var service: MarketService
+    private lateinit var service: MarketUseCase
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         mockRepositoriesBank = mockk()
-        service = MarketService(mockRepositoriesBank)
+        service = MarketUseCase(mockRepositoriesBank)
     }
 
     @After

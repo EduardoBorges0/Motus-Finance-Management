@@ -1,8 +1,8 @@
 package com.app.motus_finance.SpentOrReceivedMainTest
 
 import com.app.motus_finance.Models.DTO.BankDTO
-import com.app.motus_finance.Service.MarketService
-import com.app.motus_finance.ViewModel.MarketViewModel
+import com.app.motus_finance.domain.usecases.MarketUseCase
+import com.app.motus_finance.presentation.viewmodel.MarketViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import org.junit.Test
 
 class BanksTests {
     private val testDispatcher = Dispatchers.Unconfined
-    private lateinit var mockService: MarketService
+    private lateinit var mockService: MarketUseCase
     private lateinit var viewModel: MarketViewModel
 
     @Before

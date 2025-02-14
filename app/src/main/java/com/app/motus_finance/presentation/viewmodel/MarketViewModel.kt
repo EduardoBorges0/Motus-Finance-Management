@@ -37,7 +37,8 @@ class MarketViewModel @Inject constructor(private val marketUseCase: MarketUseCa
     }
 
     fun getAllBanks(): LiveData<List<Market>> {
-        return marketUseCase.getAllBanks() }
+        return marketUseCase.getAllBanks()
+    }
 
     suspend fun updateBalanceWhenAddExpense(bankId: Int, expensesDTO: ExpensesDTO){
         return marketUseCase.updateBalance(bankId, expensesDTO)

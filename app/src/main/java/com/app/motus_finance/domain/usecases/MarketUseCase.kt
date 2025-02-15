@@ -6,7 +6,7 @@ import com.app.motus_finance.data.repositories.RepositoriesMarket
 import com.app.motus_finance.domain.dto.ExpensesDTO
 import com.app.motus_finance.domain.dto.MarketDTO
 import com.app.motus_finance.domain.dto.toEntity
-import com.app.motus_finance.presentation.UtilityClass.DateUtils.stringToLocalDate
+import com.app.motus_finance.presentation.UtilityClass.UtilityClass
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -57,7 +57,7 @@ class MarketUseCase @Inject constructor(private val repositoriesBank: Repositori
 
 
     suspend fun updateBankDate(bankId: Int, marketDTO: MarketDTO): String {
-        val date = stringToLocalDate(marketDTO.date.toString())
+        val date = UtilityClass.stringToLocalDate(marketDTO.date.toString())
         return if (date == LocalDate.now()) {
             val newDate = date.plusMonths(1)
             repositoriesBank.updateBankDate(bankId, newDate.toString())

@@ -34,7 +34,7 @@ import com.app.motus_finance.presentation.viewmodel.MarketViewModel
 import com.app.motus_finance.presentation.viewmodel.PaymentsViewModel
 
 @Composable
-fun NavigationBarComposable(banksViewModel: MarketViewModel, paymentsViewModel: PaymentsViewModel, navController: NavController){
+fun NavigationBarComposable(marketViewModel: MarketViewModel, paymentsViewModel: PaymentsViewModel, navController: NavController){
     val itemsNavigationBottom = listOf(
         NavigationBarBottom(
             title = "Home",
@@ -64,9 +64,9 @@ fun NavigationBarComposable(banksViewModel: MarketViewModel, paymentsViewModel: 
             ){
                 itemsNavigationBottom.forEachIndexed{ index, item ->
                     NavigationBarItem(
-                        selected = banksViewModel.selectedTab.value == index,
+                        selected = marketViewModel.selectedTab.value == index,
                         onClick = {
-                            banksViewModel.selectedTab.value = index
+                            marketViewModel.selectedTab.value = index
                         },
                         colors = NavigationBarItemDefaults.colors(
                             unselectedIconColor = Color.White,
@@ -75,7 +75,7 @@ fun NavigationBarComposable(banksViewModel: MarketViewModel, paymentsViewModel: 
                         ),
                         icon = {
                             Icon(
-                                imageVector = if(index == banksViewModel.selectedTab.value){
+                                imageVector = if(index == marketViewModel.selectedTab.value){
                                     item.selectedIcon
                                 }else{
                                     item.unselectedIcon
@@ -108,8 +108,8 @@ fun NavigationBarComposable(banksViewModel: MarketViewModel, paymentsViewModel: 
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                when (banksViewModel.selectedTab.value) {
-                    0 -> MainScreen(banksViewModel, paymentsViewModel, navController)
+                when (marketViewModel.selectedTab.value) {
+                    0 -> MainScreen(marketViewModel, paymentsViewModel, navController)
                 }
             }
         })

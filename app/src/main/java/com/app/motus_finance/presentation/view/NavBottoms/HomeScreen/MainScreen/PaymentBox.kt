@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.app.motus_finance.presentation.UtilityClass.DateUtils
+import com.app.motus_finance.presentation.UtilityClass.UtilityClass
 import com.app.motus_finance.presentation.view.UtilsComposable.AlertDialogComposable
 import com.app.motus_finance.presentation.viewmodel.PaymentsViewModel
 
@@ -42,7 +42,7 @@ fun PaymentBox(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.width(150.dp).height(if(payment.value == null ) 55.dp else 50.dp)
         ) {
-            Text(payment.value?.let { DateUtils.currencyFormat(it) } ?: "Quanto você pode gastar?",
+            Text(payment.value?.let { UtilityClass.currencyFormat(it) } ?: "Quanto você pode gastar?",
                 fontSize = 17.sp)
         }
     }

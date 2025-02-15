@@ -4,7 +4,7 @@ import com.app.motus_finance.data.repositories.RepositoriesDueDates
 import com.app.motus_finance.data.repositories.RepositoriesMarket
 import com.app.motus_finance.domain.dto.DueDatesDTO
 import com.app.motus_finance.domain.dto.toEntity
-import com.app.motus_finance.presentation.UtilityClass.DateUtils
+import com.app.motus_finance.presentation.UtilityClass.UtilityClass
 import javax.inject.Inject
 
 class DueDateUseCase @Inject constructor(private val repositoriesBank: RepositoriesMarket,
@@ -12,7 +12,7 @@ class DueDateUseCase @Inject constructor(private val repositoriesBank: Repositor
 ) {
     suspend fun insertDueDate(){
         val dueDates = repositoriesBank.getAllDates()
-        val plusDay = DateUtils.stringToLocalDate(dueDates.max().toString()).plusDays(1)
+        val plusDay = UtilityClass.stringToLocalDate(dueDates.max().toString()).plusDays(1)
         val dueDatesDTO = DueDatesDTO(
             dueDate = plusDay.toString()
         )

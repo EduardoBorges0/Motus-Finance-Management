@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.motus_finance.presentation.view.NavBottoms.HomeScreen.InsertMarketOrShopping.InsertMarket.InsertMarket
 import com.app.motus_finance.presentation.view.NavBottoms.HomeScreen.InsertMarketOrShopping.MainMarketOrShopping
 import com.app.motus_finance.presentation.view.NavBottoms.HomeScreen.InsertPayment.InsertPayment
 import com.app.motus_finance.presentation.view.ui.theme.Motus_FINANCETheme
@@ -21,8 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class Nav : ComponentActivity() {
-    // Usando o Hilt para injetar as dependências
-    private val banksViewModel: MarketViewModel by viewModels()
+    private val marketViewModel: MarketViewModel by viewModels()
     private val expensesViewModel: ExpensesViewModel by viewModels()
     private val paymentsViewModel: PaymentsViewModel by viewModels()
     private val graphicsViewModel: GraphicsViewModel by viewModels()
@@ -30,10 +30,8 @@ class Nav : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LaunchedEffect(Unit) {
- }
             Motus_FINANCETheme {
-              SetupNavController(banksViewModel, paymentsViewModel, graphicsViewModel, expensesViewModel)
+              SetupNavController(marketViewModel, paymentsViewModel, graphicsViewModel, expensesViewModel)
             }
         }
     }
@@ -41,7 +39,7 @@ class Nav : ComponentActivity() {
 
 @Composable
 fun SetupNavController(
-    banksViewModel: MarketViewModel,
+    marketViewModel: MarketViewModel,
     paymentsViewModel: PaymentsViewModel,
     graphicsViewModel: GraphicsViewModel, expensesViewModel: ExpensesViewModel
 ){
@@ -49,7 +47,7 @@ fun SetupNavController(
     NavHost(navController = navController, startDestination = "main"){
         composable("main") {
             NavigationBarComposable(
-            banksViewModel,
+            marketViewModel,
             paymentsViewModel, navController
             )
         }
@@ -57,7 +55,11 @@ fun SetupNavController(
             InsertPayment(navController, paymentsViewModel)
         }
         composable("marketOrShopping") {
-            MainMarketOrShopping(navController, paymentsViewModel, expensesViewModel)
+            MainMarketOrShopping(navController, paymentsViewModel, marketViewModel = marketViewModel)
+        }
+        composable("insertMarket/{name}"){
+            val name = it.arguments?.getString("name")
+            InsertMarket(name, marketViewModel, navController)
         }
     }
 }

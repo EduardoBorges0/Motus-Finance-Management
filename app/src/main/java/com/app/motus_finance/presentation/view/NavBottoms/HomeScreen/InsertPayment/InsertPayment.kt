@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.app.motus_finance.presentation.UtilityClass.DateUtils.formatToCurrency
+import com.app.motus_finance.presentation.UtilityClass.UtilityClass
 import com.app.motus_finance.presentation.view.UtilsComposable.ArrowBack
 import com.app.motus_finance.presentation.view.UtilsComposable.ButtonBottomScreen
 import com.app.motus_finance.presentation.viewmodel.PaymentsViewModel
@@ -43,7 +43,7 @@ fun InsertPayment(navController: NavController, paymentsViewModel: PaymentsViewM
             TextField(
                 value = inputText,
                 onValueChange = {
-                    inputText = formatToCurrency(it)
+                    inputText = UtilityClass.formatToCurrency(it)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,

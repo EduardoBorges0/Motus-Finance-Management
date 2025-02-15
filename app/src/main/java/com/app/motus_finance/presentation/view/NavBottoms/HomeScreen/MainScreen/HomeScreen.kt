@@ -40,4 +40,3 @@ fun MainScreen(bankViewModel: MarketViewModel, paymentsViewModel: PaymentsViewMo
   }
  }
 }
-

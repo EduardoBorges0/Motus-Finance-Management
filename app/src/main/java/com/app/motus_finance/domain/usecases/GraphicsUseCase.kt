@@ -6,7 +6,7 @@ import com.app.motus_finance.data.repositories.RepositoriesGraphics
 import com.app.motus_finance.data.repositories.RepositoriesMarket
 import com.app.motus_finance.domain.dto.GraphicsDTO
 import com.app.motus_finance.domain.dto.ToEntity
-import com.app.motus_finance.presentation.UtilityClass.DateUtils
+import com.app.motus_finance.presentation.UtilityClass.UtilityClass
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class GraphicsUseCase @Inject constructor(
 
     suspend fun insertGraphics(){
         val dueDate = repositoriesDueDates.getDueDate()
-        val lastDay = DateUtils.stringToLocalDate(dueDate)
+        val lastDay = UtilityClass.stringToLocalDate(dueDate)
         val getAllSpendingRatings = repositoriesExpenses.getHighestSpendingRating()?.get(0)
 
         if(lastDay == LocalDate.now()){
